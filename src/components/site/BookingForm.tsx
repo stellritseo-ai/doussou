@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from "react";
-import { Check, Mail, MapPin, Phone, Clock } from "lucide-react";
+import { Check, Mail, MapPin, Phone, Clock, Sparkles, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button, Reveal, SectionHeading } from "./primitives";
 import { CONTACT, SERVICES } from "./data";
 
 type Values = {
@@ -43,7 +42,7 @@ function validate(v: Values) {
 }
 
 const fieldCls =
-  "w-full rounded-lg border border-border bg-card px-4 py-3 text-[0.92rem] text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-plum focus:ring-1 focus:ring-plum";
+  "w-full rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] px-4 py-3.5 text-sm text-[#2B231D] outline-none transition-all placeholder:text-[#8C7A6B]/60 focus:border-[#C48D46] focus:bg-white focus:ring-2 focus:ring-[#C48D46]/20 font-medium";
 
 function Field({
   label,
@@ -62,12 +61,12 @@ function Field({
     <div className={className}>
       <label
         htmlFor={htmlFor}
-        className="eyebrow mb-2 block text-[0.58rem] text-muted-foreground"
+        className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#5C5046]"
       >
         {label}
       </label>
       {children}
-      {error && <p className="mt-1.5 text-xs text-destructive">{error}</p>}
+      {error && <p className="mt-1.5 text-xs font-semibold text-rose-600">{error}</p>}
     </div>
   );
 }
@@ -91,95 +90,121 @@ export function BookingForm() {
   };
 
   return (
-    <section id="booking" className="border-t border-border bg-ivory py-24 lg:py-36">
-      <div className="shell grid gap-16 lg:grid-cols-[0.85fr_1fr] lg:gap-24">
-        <div id="contact" className="scroll-mt-32">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Booking & Contact"
-              title={
-                <>
-                  Let&rsquo;s Create
-                  <br />
-                  <span className="italic">Your Look.</span>
-                </>
-              }
-              intro="Send a request and we'll confirm your appointment within one business day."
-            />
-          </Reveal>
+    <section id="booking" className="relative w-full overflow-hidden bg-[#FAF8F5] py-16 lg:py-24 border-t border-[#E8DFC8]">
+      {/* Ambient background glows */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-20 top-20 h-[500px] w-[500px] rounded-full bg-[#DCD4FD]/30 blur-[130px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 bottom-10 h-[500px] w-[500px] rounded-full bg-[#FCE0D4]/40 blur-[130px]"
+      />
 
-          <Reveal delay={100} className="mt-12 space-y-7">
-            <div className="flex gap-4 border-b border-border pb-6">
-              <Phone size={17} className="mt-1 shrink-0 text-magenta" />
-              <div>
-                <p className="eyebrow text-[0.58rem] text-muted-foreground">Phone</p>
-                <a
-                  href={CONTACT.phoneHref}
-                  className="mt-1 block text-[1.05rem] text-plum-deep transition-colors hover:text-magenta"
-                >
-                  {CONTACT.phone}
-                </a>
-              </div>
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid gap-12 lg:grid-cols-[0.85fr_1fr] lg:gap-16 items-start">
+          
+          {/* Left Column: Contact Details */}
+          <div id="contact" className="scroll-mt-32">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#C48D46]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#C48D46] border border-[#C48D46]/30 mb-4">
+              <Sparkles size={13} className="text-[#C48D46]" />
+              <span>Booking & Inquiries</span>
             </div>
-            <div className="flex gap-4 border-b border-border pb-6">
-              <Mail size={17} className="mt-1 shrink-0 text-magenta" />
-              <div>
-                <p className="eyebrow text-[0.58rem] text-muted-foreground">Email</p>
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="mt-1 block text-[1.05rem] text-plum-deep transition-colors hover:text-magenta"
-                >
-                  {CONTACT.email}
-                </a>
+
+            <h2 className="font-display text-3xl font-normal leading-tight text-[#2B231D] sm:text-4xl lg:text-[2.75rem]">
+              Let&rsquo;s Create <span className="font-serif italic text-[#C48D46]">Your Look.</span>
+            </h2>
+
+            <p className="mt-4 text-base text-[#5C5046] font-medium leading-relaxed max-w-lg">
+              Send an appointment request and our master stylists will confirm your date and time within 24 hours.
+            </p>
+
+            {/* Studio Info Cards */}
+            <div className="mt-10 space-y-4">
+              <div className="flex items-center gap-4 rounded-[20px] bg-white p-5 border border-[#E8DFC8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] transition-all hover:border-[#C48D46]/40">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#BA1296]/10 text-[#BA1296]">
+                  <Phone size={20} />
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#8C7A6B]">Direct Phone</p>
+                  <a
+                    href={CONTACT.phoneHref}
+                    className="mt-0.5 block font-bold text-[#2B231D] hover:text-[#C48D46] transition-colors"
+                  >
+                    {CONTACT.phone}
+                  </a>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-4 border-b border-border pb-6">
-              <MapPin size={17} className="mt-1 shrink-0 text-magenta" />
-              <div>
-                <p className="eyebrow text-[0.58rem] text-muted-foreground">Location</p>
-                <p className="mt-1 text-[1.05rem] text-plum-deep">{CONTACT.city}</p>
+
+              <div className="flex items-center gap-4 rounded-[20px] bg-white p-5 border border-[#E8DFC8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] transition-all hover:border-[#C48D46]/40">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#BA1296]/10 text-[#BA1296]">
+                  <Mail size={20} />
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#8C7A6B]">Studio Email</p>
+                  <a
+                    href={`mailto:${CONTACT.email}`}
+                    className="mt-0.5 block font-bold text-[#2B231D] hover:text-[#C48D46] transition-colors"
+                  >
+                    {CONTACT.email}
+                  </a>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-4">
-              <Clock size={17} className="mt-1 shrink-0 text-magenta" />
-              <div className="w-full">
-                <p className="eyebrow text-[0.58rem] text-muted-foreground">Hours</p>
-                <ul className="mt-2 space-y-1.5">
+
+              <div className="flex items-center gap-4 rounded-[20px] bg-white p-5 border border-[#E8DFC8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] transition-all hover:border-[#C48D46]/40">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#BA1296]/10 text-[#BA1296]">
+                  <MapPin size={20} />
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#8C7A6B]">Studio Location</p>
+                  <p className="mt-0.5 font-bold text-[#2B231D]">{CONTACT.city}</p>
+                </div>
+              </div>
+
+              <div className="rounded-[20px] bg-white p-6 border border-[#E8DFC8] shadow-[0_4px_16px_rgba(0,0,0,0.02)]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#BA1296]/10 text-[#BA1296]">
+                    <Clock size={18} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-[#2B231D]">Studio Hours</p>
+                    <p className="text-xs text-[#8C7A6B]">Appointments & Walk-ins</p>
+                  </div>
+                </div>
+                <ul className="space-y-2 text-xs">
                   {CONTACT.hours.map((h) => (
                     <li
                       key={h.day}
-                      className="flex justify-between gap-6 text-[0.92rem] text-foreground/80"
+                      className="flex justify-between items-center border-b border-[#E8DFC8]/50 pb-2 last:border-0 last:pb-0 text-[#2B231D] font-medium"
                     >
-                      <span>{h.day}</span>
-                      <span className="text-muted-foreground">{h.time}</span>
+                      <span className="font-semibold">{h.day}</span>
+                      <span className="text-[#8C7A6B]">{h.time}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
-          </Reveal>
-        </div>
+          </div>
 
-        <Reveal delay={80}>
-          <div className="rounded-[18px] border border-border bg-card p-7 sm:p-10">
+          {/* Right Column: Appointment Form Card */}
+          <div className="rounded-[28px] border border-[#E8DFC8] bg-white p-7 sm:p-10 shadow-xl relative">
             {sent ? (
-              <div className="flex min-h-[420px] flex-col items-center justify-center text-center">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-plum text-primary-foreground">
-                  <Check size={22} />
-                </span>
-                <h3 className="mt-6 font-display text-3xl text-plum-deep">
-                  Request Received
+              <div className="flex min-h-[440px] flex-col items-center justify-center text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#16857B] text-white shadow-lg">
+                  <Check size={28} />
+                </div>
+                <h3 className="mt-6 font-display text-3xl font-bold text-[#2B231D]">
+                  Request Received!
                 </h3>
-                <p className="mt-3 max-w-sm text-[0.95rem] leading-relaxed text-muted-foreground">
-                  Thank you — we&rsquo;ll be in touch within one business day to
-                  confirm your appointment.
+                <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#5C5046] font-medium">
+                  Thank you — our team will contact you within 24 hours to confirm your appointment details.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSent(false)}
-                  className="eyebrow mt-8 text-[0.6rem] text-magenta underline underline-offset-4"
+                  className="mt-8 rounded-full bg-[#C48D46]/10 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-[#C48D46] hover:bg-[#C48D46] hover:text-white transition-all"
                 >
-                  Send another request
+                  Submit Another Request
                 </button>
               </div>
             ) : (
@@ -195,6 +220,7 @@ export function BookingForm() {
                     placeholder="Amara"
                   />
                 </Field>
+
                 <Field label="Last Name" htmlFor="lastName" error={errors.lastName}>
                   <input
                     id="lastName"
@@ -206,6 +232,7 @@ export function BookingForm() {
                     placeholder="Johnson"
                   />
                 </Field>
+
                 <Field label="Phone" htmlFor="phone" error={errors.phone}>
                   <input
                     id="phone"
@@ -218,6 +245,7 @@ export function BookingForm() {
                     placeholder="(612) 555-0147"
                   />
                 </Field>
+
                 <Field label="Email" htmlFor="email" error={errors.email}>
                   <input
                     id="email"
@@ -230,6 +258,7 @@ export function BookingForm() {
                     placeholder="you@email.com"
                   />
                 </Field>
+
                 <Field
                   label="Select Service"
                   htmlFor="service"
@@ -254,6 +283,7 @@ export function BookingForm() {
                     <option value="Kids Braiding">Kids Braiding</option>
                   </select>
                 </Field>
+
                 <Field label="Preferred Date" htmlFor="date" error={errors.date}>
                   <input
                     id="date"
@@ -263,6 +293,7 @@ export function BookingForm() {
                     onChange={set("date")}
                   />
                 </Field>
+
                 <Field label="Preferred Time" htmlFor="time" error={errors.time}>
                   <input
                     id="time"
@@ -272,8 +303,9 @@ export function BookingForm() {
                     onChange={set("time")}
                   />
                 </Field>
+
                 <Field
-                  label="Message"
+                  label="Additional Notes / Style Request"
                   htmlFor="message"
                   error={errors.message}
                   className="sm:col-span-2"
@@ -285,18 +317,24 @@ export function BookingForm() {
                     className={cn(fieldCls, "resize-none")}
                     value={values.message}
                     onChange={set("message")}
-                    placeholder="Tell us about the style you have in mind…"
+                    placeholder="Tell us about the hair braiding style you have in mind…"
                   />
                 </Field>
-                <div className="sm:col-span-2">
-                  <Button type="submit" className="w-full sm:w-auto">
-                    Request Appointment
-                  </Button>
+
+                <div className="sm:col-span-2 mt-2">
+                  <button
+                    type="submit"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#C48D46] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:bg-[#b07d3b] hover:scale-[1.01] active:scale-[0.99]"
+                  >
+                    <Send size={16} />
+                    <span>Submit Appointment Request</span>
+                  </button>
                 </div>
               </form>
             )}
           </div>
-        </Reveal>
+
+        </div>
       </div>
     </section>
   );

@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Header } from "@/components/site/Header";
 import { Hero } from "@/components/site/Hero";
-import { Intro } from "@/components/site/Intro";
 import { About } from "@/components/site/About";
+import { Intro } from "@/components/site/Intro";
 import { Services } from "@/components/site/Services";
 import { Transformation } from "@/components/site/Transformation";
 import { WhyChooseUs } from "@/components/site/WhyChooseUs";
@@ -14,27 +14,28 @@ import { BookingForm } from "@/components/site/BookingForm";
 import { Footer } from "@/components/site/Footer";
 import { CONTACT, FAQS } from "@/components/site/data";
 
-const TITLE = "Fadi Fashion | Hair Braiding Salon in Bloomington, MN";
+const TITLE = "Doussou Quality Braiding | Hair Braiding Salon in Glen Burnie, MD";
 const DESCRIPTION =
-  "Premier African hair braiding in Bloomington, Minnesota. Knotless braids, box braids, cornrows, locs and natural styling by experienced stylists. Book today.";
+  "Doussou Quality Braiding - Premier African hair braiding studio located at 337 S Hospital Dr, Glen Burnie, MD 21061. Knotless braids, box braids, cornrows, locs and natural styling. Book today.";
 
 const schema = [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
-    name: "Fadi Fashion",
+    name: "Doussou Quality Braiding",
     description: DESCRIPTION,
     telephone: CONTACT.phone,
     email: CONTACT.email,
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Bloomington",
-      addressRegion: "MN",
-      postalCode: "55425",
+      streetAddress: "337 S Hospital Dr",
+      addressLocality: "Glen Burnie",
+      addressRegion: "MD",
+      postalCode: "21061",
       addressCountry: "US",
     },
-    areaServed: "Bloomington, Minnesota",
+    areaServed: "Glen Burnie, Maryland",
     openingHours: ["Mo-Fr 08:00-19:00", "Sa 08:00-18:00"],
     aggregateRating: {
       "@type": "AggregateRating",
@@ -53,7 +54,7 @@ const schema = [
         "Wash & Treatments",
       ].map((name) => ({
         "@type": "Offer",
-        itemOffered: { "@type": "Service", name, areaServed: "Bloomington, MN" },
+        itemOffered: { "@type": "Service", name, areaServed: "Glen Burnie, MD" },
       })),
     },
   },
@@ -76,7 +77,7 @@ export const Route = createFileRoute("/")({
       {
         name: "keywords",
         content:
-          "hair braiding Bloomington MN, African hair braiding Bloomington, knotless braids Bloomington MN, box braids Bloomington, cornrow braids Minnesota, braiding salon Bloomington Minnesota",
+          "hair braiding Glen Burnie MD, African hair braiding Glen Burnie, knotless braids Glen Burnie MD, box braids Glen Burnie, cornrow braids Maryland, braiding salon Glen Burnie Maryland",
       },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
@@ -100,9 +101,9 @@ function Index() {
       <Header />
       <main>
         <Hero />
-        <Intro />
         <About />
         <Services />
+        <Intro />
         <Transformation />
         <WhyChooseUs />
         <Gallery />

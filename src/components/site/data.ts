@@ -8,11 +8,19 @@ import bridal from "@/assets/style-bridal.jpg";
 import treatment from "@/assets/style-treatment.jpg";
 
 export const CONTACT = {
-  phone: "(612) 555-0147",
-  phoneHref: "tel:+16125550147",
-  email: "hello@fadifashion.com",
-  city: "Bloomington, Minnesota",
-  address: "Bloomington, MN 55425",
+  name: "Doussou Quality Braiding",
+  phone: "(301) 523-8593",
+  phoneHref: "tel:+13015238593",
+  email: "doussoukabba@gmail.com",
+  city: "Glen Burnie, Maryland",
+  address: "337 S Hospital Dr, Glen Burnie, MD 21061",
+  fullAddress: "337 S Hospital Dr, Glen Burnie, MD, United States, 21061",
+  socials: {
+    facebook: "https://www.facebook.com/p/Doussou-Quality-Braiding-100041383156533/",
+    tiktok: "https://www.tiktok.com/@doussouqualitybraiding?fbclid=IwY2xjawTnBtBwZG9mAWV4dG4DYWVtAjEwAGJyaWQRMXRJWGdqTW12T3ZjblNQR1hzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeQusziexbcwUTQWD6YydsYPmzILZGXItpqqrv24ZQtDQOpQgbTLvIzJE9SrU_aem_khCs1tcq7VDD1U9k5DWbNg",
+    instagram: "https://www.instagram.com/doussouweb/?hl=en",
+    google: "https://www.google.com/search?q=Doussou+Quality+Braiding&oq=Doussou+Quality+Braiding&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIICAEQRRgnGDsyCAgCEAAYFhgeMg0IAxAAGIYDGIAEGIoFMg0IBBAAGIYDGIAEGIoFMgYIBRBFGDwyBggGEEUYPTIGCAcQRRg80gEHMzM3ajBqN6gCALACAA&sourceid=chrome&source=chrome.ob&ie=UTF-8",
+  },
   hours: [
     { day: "Monday – Friday", time: "8:00 AM – 7:00 PM" },
     { day: "Saturday", time: "8:00 AM – 6:00 PM" },
@@ -60,7 +68,7 @@ export const SERVICES = [
 ];
 
 export const GALLERY = [
-  { src: knotless, alt: "Knotless braids with half-up bun styled in Bloomington MN", label: "Knotless Half-Up", category: "Knotless", span: "tall" },
+  { src: knotless, alt: "Knotless braids with half-up bun styled in Glen Burnie MD", label: "Knotless Half-Up", category: "Knotless", span: "tall" },
   { src: cornrows, alt: "Feed-in cornrow braids straight back", label: "Feed-In Cornrows", category: "Cornrows", span: "short" },
   { src: boxbraids, alt: "Long jumbo box braids styled over the shoulder", label: "Waist-Length Box Braids", category: "Box Braids", span: "tall" },
   { src: bridal, alt: "Bridal braided updo with gold hair jewellery", label: "Bridal Braided Updo", category: "Special Occasion", span: "short" },
@@ -91,7 +99,7 @@ export const REASONS = [
 ];
 
 export const TESTIMONIALS = [
-  { name: "Amara", stars: 5, quote: "The most comfortable knotless braids I have ever had. Six weeks in and they still look like day one. Fadi takes real pride in the work." },
+  { name: "Amara", stars: 5, quote: "The most comfortable knotless braids I have ever had. Six weeks in and they still look like day one. The team takes real pride in the work." },
   { name: "Jasmine", stars: 5, quote: "Immaculate parts, zero tension and such a warm space. I drove from Saint Paul and I would happily do it again every month." },
   { name: "Dee", stars: 5, quote: "She listened to exactly what I wanted, then made it better. My cornrows were flawless for my sister's wedding." },
   { name: "Nia", stars: 5, quote: "My daughter is nervous about getting her hair done and she was completely at ease. Gentle, patient and beautiful results." },
@@ -99,8 +107,8 @@ export const TESTIMONIALS = [
 
 export const FAQS = [
   {
-    q: "Where is Fadi Fashion located?",
-    a: "Fadi Fashion is a premier hair braiding studio serving Bloomington, Minnesota and the wider Twin Cities area.",
+    q: "Where is Doussou Quality Braiding located?",
+    a: "Doussou Quality Braiding is located at 337 S Hospital Dr, Glen Burnie, MD 21061, serving Anne Arundel County and the wider Maryland area.",
   },
   {
     q: "What braiding services do you offer?",

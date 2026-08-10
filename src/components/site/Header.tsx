@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Clock, Facebook, Instagram } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "./primitives";
+import logo from "@/assets/logo.png";
 import { CONTACT } from "./data";
 
 const NAV = [
   { label: "Home", href: "#top" },
-  { label: "About", href: "#about" },
+  { label: "About Us", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Gallery", href: "#gallery" },
   { label: "Reviews", href: "#reviews" },
-  { label: "Contact", href: "#contact" },
+  { label: "Booking", href: "#booking" },
+  { label: "Contact Us", href: "#contact" },
 ];
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState("Home");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -33,66 +35,87 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div
-        className={cn(
-          "hidden bg-plum-deep text-ivory/70 transition-all duration-500 md:block",
-          scrolled ? "max-h-0 overflow-hidden opacity-0" : "max-h-12 opacity-100",
-        )}
-      >
-        <div className="shell flex h-9 items-center justify-between">
-          <p className="eyebrow text-[0.62rem] text-ivory/60">
-            Premier Hair Braiding in Bloomington, Minnesota
-          </p>
-          <a
-            href={CONTACT.phoneHref}
-            className="eyebrow text-[0.62rem] text-champagne transition-colors hover:text-ivory"
-          >
-            {CONTACT.phone}
-          </a>
+      {/* Top Bar */}
+      <div className="hidden bg-plum-deep text-ivory md:block">
+        <div className="mx-auto flex h-[40px] max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 text-[13px] font-medium tracking-wide opacity-90">
+            <Clock size={14} />
+            <span>Business hours :- 9:30 am to 8:30pm Mon to Sat</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 text-[13px] font-medium">
+              <button className="flex items-center gap-1.5 opacity-90 transition-opacity hover:opacity-100">
+                <span className="text-base leading-none">🇺🇸</span> English
+              </button>
+              <button className="flex items-center gap-1.5 opacity-60 transition-opacity hover:opacity-100">
+                <span className="text-base leading-none">🇫🇷</span> French
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <a href="#" className="flex h-[24px] w-[24px] items-center justify-center rounded-full border border-ivory/80 transition-colors hover:bg-ivory hover:text-plum-deep">
+                <Facebook size={12} strokeWidth={2.5} />
+              </a>
+              <a href="#" className="flex h-[24px] w-[24px] items-center justify-center rounded-full border border-ivory/80 transition-colors hover:bg-ivory hover:text-plum-deep">
+                <Instagram size={12} strokeWidth={2.5} />
+              </a>
+              <a href="#" className="flex h-[24px] w-[24px] items-center justify-center rounded-full border border-ivory/80 transition-colors hover:bg-ivory hover:text-plum-deep">
+                <span className="text-[11px] font-bold leading-none">G</span>
+              </a>
+              <a href="#" className="flex h-[24px] w-[24px] items-center justify-center rounded-full border border-ivory/80 transition-colors hover:bg-ivory hover:text-plum-deep">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-[11px] w-[11px]">
+                  <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
+      {/* Main Navigation */}
       <div
         className={cn(
-          "border-b transition-all duration-500",
-          scrolled
-            ? "border-border/60 bg-background/80 backdrop-blur-xl"
-            : "border-transparent bg-background/0",
+          "bg-background transition-all duration-300 border-b border-border/40",
+          scrolled ? "shadow-md" : "shadow-sm"
         )}
       >
         <nav
           aria-label="Primary"
-          className={cn(
-            "shell flex items-center justify-between transition-all duration-500",
-            scrolled ? "h-16" : "h-20 lg:h-24",
-          )}
+          className="mx-auto flex h-[88px] max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-8"
         >
-          <a href="#top" className="group flex flex-col leading-none">
-            <span className="font-display text-[1.45rem] tracking-[0.02em] text-plum-deep">
-              Fadi <span className="italic text-magenta">Fashion</span>
-            </span>
-            <span className="eyebrow mt-1 text-[0.56rem] text-muted-foreground">
-              Hair Braiding Studio
-            </span>
+          <a href="#top" className="flex items-center">
+            <img src={logo} alt="Doussou Quality Braiding" className="h-[68px] lg:h-[74px] w-auto object-contain transition-transform duration-300 hover:scale-105" />
           </a>
 
-          <ul className="hidden items-center gap-9 lg:flex">
-            {NAV.map((item) => (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  className="relative text-[0.82rem] font-medium tracking-[0.04em] text-foreground/75 transition-colors hover:text-plum after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-magenta after:transition-all after:duration-300 hover:after:w-full"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+          <ul className="hidden items-center gap-1 xl:gap-2 lg:flex ml-auto mr-4">
+            {NAV.map((item) => {
+              const isActive = activeItem === item.label;
+              return (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    onClick={() => setActiveItem(item.label)}
+                    className={cn(
+                      "rounded-full px-4 py-2 text-[14px] font-semibold transition-all duration-300 inline-block",
+                      isActive
+                        ? "bg-magenta text-ivory shadow-md scale-105"
+                        : "text-foreground/85 hover:bg-plum-deep hover:text-ivory hover:scale-105 hover:shadow-md active:scale-95"
+                    )}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="hidden lg:block">
-            <Button href="#booking" className="px-6 py-3">
-              Book Appointment
-            </Button>
+            <a
+              href={CONTACT.phoneHref}
+              className="flex items-center gap-2 rounded-full bg-magenta px-4 py-2 text-[14px] font-bold tracking-wide text-ivory transition-all hover:bg-plum-deep hover:scale-105 shadow-sm"
+            >
+              <Phone size={15} fill="currentColor" />
+              {CONTACT.phone}
+            </a>
           </div>
 
           <button
@@ -100,48 +123,82 @@ export function Header() {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-border text-plum-deep lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-plum-deep lg:hidden"
           >
-            {open ? <X size={18} /> : <Menu size={18} />}
+            {open ? <X size={24} /> : <Menu size={24} />}
           </button>
         </nav>
       </div>
 
+      {/* Mobile Overlay Menu */}
       <div
         className={cn(
-          "fixed inset-0 z-40 origin-top bg-background pt-20 transition-all duration-500 lg:hidden",
+          "fixed inset-0 top-[88px] md:top-[128px] z-40 bg-white/50 backdrop-blur-[40px] transition-all duration-500 lg:hidden overflow-y-auto border-t border-white/40 shadow-2xl",
           open
-            ? "pointer-events-auto opacity-100 translate-y-0"
-            : "pointer-events-none -translate-y-3 opacity-0",
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0 delay-150",
         )}
       >
-        <div className="shell flex h-full flex-col justify-between py-8">
-          <ul className="space-y-1">
-            {NAV.map((item, i) => (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  style={{ transitionDelay: `${open ? i * 45 + 60 : 0}ms` }}
-                  className={cn(
-                    "block border-b border-border/70 py-4 font-display text-3xl text-plum-deep transition-all duration-500",
-                    open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
-                  )}
+        <div className="mx-auto flex min-h-full max-w-[1400px] flex-col justify-between px-6 pb-12 pt-10">
+          <ul className="flex flex-col gap-6 sm:gap-8">
+            {NAV.map((item, i) => {
+              const isActive = activeItem === item.label;
+              return (
+                <li 
+                  key={item.label}
+                  className="transform transition-all duration-[600ms] cubic-bezier(0.16,1,0.3,1)"
+                  style={{ 
+                    transitionDelay: `${open ? 150 + i * 60 : 0}ms`,
+                    opacity: open ? 1 : 0, 
+                    transform: open ? 'translateX(0)' : 'translateX(30px)'
+                  }}
                 >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+                  <a
+                    href={item.href}
+                    onClick={() => {
+                      setActiveItem(item.label);
+                      setOpen(false);
+                    }}
+                    className={cn(
+                      "group flex items-center justify-between font-display text-4xl sm:text-5xl transition-colors tracking-tight",
+                      isActive
+                        ? "text-[#C48D46] italic font-serif"
+                        : "text-[#2B231D] hover:text-[#C48D46]"
+                    )}
+                  >
+                    <span>{item.label}</span>
+                    {isActive && (
+                      <span className="h-[2px] w-12 sm:w-16 bg-[#C48D46] rounded-full animate-[fadeLeft_0.5s_ease-out_both]" />
+                    )}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
-          <div className="space-y-4">
-            <Button href="#booking" className="w-full" onClick={() => setOpen(false)}>
-              Book Appointment
-            </Button>
+          
+          <div 
+            className="mt-14 flex flex-col items-center space-y-8 transition-all duration-700"
+            style={{
+              transitionDelay: `${open ? 500 : 0}ms`,
+              opacity: open ? 1 : 0,
+              transform: open ? 'translateY(0)' : 'translateY(20px)'
+            }}
+          >
+            <div className="flex gap-8">
+              <a href={CONTACT.socials.instagram} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-full bg-white/40 text-[#2B231D] border border-white/50 backdrop-blur-md shadow-sm transition-all hover:bg-[#BA1296] hover:text-white hover:scale-110 hover:border-transparent">
+                <Instagram size={24} strokeWidth={1.5} />
+              </a>
+              <a href={CONTACT.socials.facebook} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-full bg-white/40 text-[#2B231D] border border-white/50 backdrop-blur-md shadow-sm transition-all hover:bg-[#BA1296] hover:text-white hover:scale-110 hover:border-transparent">
+                <Facebook size={24} strokeWidth={1.5} />
+              </a>
+            </div>
+
             <a
               href={CONTACT.phoneHref}
-              className="flex items-center justify-center gap-2 text-sm text-muted-foreground"
+              className="group flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#C48D46] to-[#A87432] py-4.5 text-base font-bold tracking-wide text-white shadow-lg shadow-[#C48D46]/20 transition-all hover:scale-[1.02] hover:shadow-[#C48D46]/40"
             >
-              <Phone size={14} /> {CONTACT.phone}
+              <Phone size={18} fill="currentColor" className="transition-transform group-hover:scale-110" />
+              <span>Call to Book: {CONTACT.phone}</span>
             </a>
           </div>
         </div>

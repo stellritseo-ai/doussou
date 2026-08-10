@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import logo from "../assets/logo.png";
 
 function NotFoundComponent() {
   return (
@@ -77,21 +78,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Fadi Fashion | Premier Hair Braiding, Bloomington MN" },
+      { title: "Doussou Quality Braiding | Premier Hair Braiding, Glen Burnie MD" },
       {
         name: "description",
         content:
-          "Premier African hair braiding studio in Bloomington, Minnesota.",
+          "Doussou Quality Braiding - Premier African hair braiding studio located at 337 S Hospital Dr, Glen Burnie, MD 21061.",
       },
-      { name: "author", content: "Fadi Fashion" },
+      { name: "author", content: "Doussou Quality Braiding" },
       {
         property: "og:title",
-        content: "Fadi Fashion | Premier Hair Braiding, Bloomington MN",
+        content: "Doussou Quality Braiding | Premier Hair Braiding, Glen Burnie MD",
       },
       {
         property: "og:description",
         content:
-          "Premier African hair braiding studio in Bloomington, Minnesota.",
+          "Doussou Quality Braiding - Premier African hair braiding studio located at 337 S Hospital Dr, Glen Burnie, MD 21061.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -111,7 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: logo, type: "image/png" },
     ],
   }),
   shellComponent: RootShell,
