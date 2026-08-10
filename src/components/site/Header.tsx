@@ -109,13 +109,13 @@ export function Header() {
 
       <div
         className={cn(
-          "fixed inset-x-0 top-16 bottom-0 z-40 origin-top bg-background transition-all duration-400 lg:hidden",
+          "fixed inset-0 z-40 origin-top bg-background pt-20 transition-all duration-500 lg:hidden",
           open
             ? "pointer-events-auto opacity-100 translate-y-0"
             : "pointer-events-none -translate-y-3 opacity-0",
         )}
       >
-        <div className="shell flex h-full flex-col justify-between py-10">
+        <div className="shell flex h-full flex-col justify-between py-8">
           <ul className="space-y-1">
             {NAV.map((item, i) => (
               <li key={item.label}>

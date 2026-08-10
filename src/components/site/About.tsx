@@ -16,11 +16,9 @@ export function About() {
               className="h-[420px] w-full object-cover sm:h-[560px] lg:h-[680px]"
             />
           </div>
-          <div className="absolute -right-4 top-10 hidden rotate-90 origin-right lg:block">
-            <p className="eyebrow text-[0.58rem] text-muted-foreground">
-              Est. Bloomington, Minnesota
-            </p>
-          </div>
+          <p className="eyebrow mt-5 text-[0.58rem] text-muted-foreground">
+            Est. Bloomington, Minnesota
+          </p>
         </Reveal>
 
         <div className="order-1 lg:order-2">

@@ -111,6 +111,12 @@ function Index() {
         <BookingForm />
       </main>
       <Footer />
+      <a
+        href="#booking"
+        className="fixed inset-x-4 bottom-4 z-40 flex items-center justify-center rounded-lg bg-plum px-6 py-3.5 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-primary-foreground shadow-[0_12px_30px_-14px_var(--plum-deep)] lg:hidden"
+      >
+        Book Appointment
+      </a>
     </div>
   );
 }
