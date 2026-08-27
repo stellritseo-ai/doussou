@@ -164,8 +164,8 @@ export function Hero() {
                   <Sparkles size={18} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold leading-tight">{HERO_IMAGES[currentImage].title}</p>
-                  <p className="text-[10px] font-medium text-[#5C5046]">{HERO_IMAGES[currentImage].tag}</p>
+                  <p className="text-xs font-bold leading-tight">{HERO_IMAGES[currentImage]?.title}</p>
+                  <p className="text-[10px] font-medium text-[#5C5046]">{HERO_IMAGES[currentImage]?.tag}</p>
                 </div>
               </div>
             </div>

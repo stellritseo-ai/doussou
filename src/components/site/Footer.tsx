@@ -1,22 +1,23 @@
 import logo from "@/assets/logo.png";
+import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, Music2, MapPin, Phone, Mail, ArrowUp } from "lucide-react";
 import { CONTACT } from "./data";
 
 const NAV = [
-  { label: "About Us", href: "#about" },
-  { label: "Our Services", href: "#services" },
-  { label: "Style Gallery", href: "#gallery" },
-  { label: "Client Reviews", href: "#reviews" },
-  { label: "Book Appointment", href: "#booking" },
+  { label: "About Us", href: "/about", isLink: true },
+  { label: "Our Services", href: "/services", isLink: true },
+  { label: "Style Gallery", href: "/#gallery", isLink: false },
+  { label: "Client Reviews", href: "/reviews", isLink: true },
+  { label: "Book Appointment", href: "/booking", isLink: true },
 ];
 
 const SERVICE_LINKS = [
-  "Knotless Braids",
-  "African Hair Braiding",
-  "Feed-In Cornrows",
-  "Box Braids",
-  "Locs & Extensions",
-  "Scalp & Wash Rituals",
+  { label: "Knotless Braids", href: "/services#braids-twists" },
+  { label: "African Hair Braiding", href: "/services#braids-twists" },
+  { label: "Feed-In Cornrows", href: "/services#braids-twists" },
+  { label: "Box Braids", href: "/services#braids-twists" },
+  { label: "Locs & Extensions", href: "/services#locs-extensions" },
+  { label: "Scalp & Wash Rituals", href: "/services#natural-treatments" },
 ];
 
 export function Footer() {
@@ -30,9 +31,9 @@ export function Footer() {
           
           {/* Col 1: Brand & Logo */}
           <div className="space-y-6">
-            <a href="#top" className="inline-block">
+            <Link to="/" className="inline-block">
               <img src={logo} alt="Doussou Quality Braiding" className="h-[74px] w-auto object-contain" />
-            </a>
+            </Link>
             <p className="text-sm leading-relaxed text-white/70 max-w-sm font-medium">
               Premier African hair braiding studio in Glen Burnie, Maryland. Protective, precise styling crafted for your beauty.
             </p>
@@ -66,12 +67,21 @@ export function Footer() {
             <ul className="space-y-3 text-sm font-medium">
               {NAV.map((n) => (
                 <li key={n.label}>
-                  <a
-                    href={n.href}
-                    className="text-white/70 transition-colors hover:text-[#C48D46]"
-                  >
-                    {n.label}
-                  </a>
+                  {n.isLink ? (
+                    <Link
+                      to={n.href}
+                      className="text-white/70 transition-colors hover:text-[#C48D46]"
+                    >
+                      {n.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={n.href}
+                      className="text-white/70 transition-colors hover:text-[#C48D46]"
+                    >
+                      {n.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -84,12 +94,12 @@ export function Footer() {
             </h4>
             <ul className="space-y-3 text-sm font-medium">
               {SERVICE_LINKS.map((s) => (
-                <li key={s}>
+                <li key={s.label}>
                   <a
-                    href="#services"
+                    href={s.href}
                     className="text-white/70 transition-colors hover:text-[#C48D46]"
                   >
-                    {s}
+                    {s.label}
                   </a>
                 </li>
               ))}

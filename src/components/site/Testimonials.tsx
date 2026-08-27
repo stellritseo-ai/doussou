@@ -1,4 +1,5 @@
-import { Star, Sparkles, CheckCircle2 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Star, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 
 const ROW_1_REVIEWS = [
   {
@@ -178,6 +179,17 @@ export function Testimonials() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* View All Reviews Button */}
+      <div className="mt-10 text-center relative z-10">
+        <Link
+          to="/reviews"
+          className="inline-flex items-center gap-2 rounded-full bg-[#C48D46] px-8 py-3.5 text-sm font-bold text-white shadow-md transition-all duration-300 hover:bg-[#A87432] hover:scale-105"
+        >
+          <span>Read All 100+ Verified Reviews</span>
+          <ArrowRight size={16} />
+        </Link>
       </div>
     </section>
   );

@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Sparkles, Calendar } from "lucide-react";
 import { SERVICES } from "./data";
 
@@ -111,6 +112,17 @@ export function Services() {
               </div>
             </article>
           ))}
+        </div>
+
+        {/* View Full Services Guide Button */}
+        <div className="mt-12 text-center">
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 rounded-full bg-[#C48D46] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:bg-[#A87432] hover:scale-105"
+          >
+            <span>View Full Services &amp; Pricing Guide</span>
+            <ArrowUpRight size={16} />
+          </Link>
         </div>
       </div>
     </section>
