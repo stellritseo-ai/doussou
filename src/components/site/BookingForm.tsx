@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Check, Mail, MapPin, Phone, Clock, Sparkles, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CONTACT, SERVICES } from "./data";
+import { CONTACT, SERVICES, BOOKING_SERVICES_BY_CATEGORY } from "./data";
 
 type Values = {
   firstName: string;
@@ -267,20 +267,20 @@ export function BookingForm() {
                 >
                   <select
                     id="service"
-                    className={cn(fieldCls, "appearance-none")}
+                    className={cn(fieldCls, "appearance-none bg-white cursor-pointer")}
                     value={values.service}
                     onChange={set("service")}
                   >
-                    <option value="">Choose a service…</option>
-                    {SERVICES.map((s) => (
-                      <option key={s.name} value={s.name}>
-                        {s.name}
-                      </option>
+                    <option value="">Choose a service from our full salon menu…</option>
+                    {BOOKING_SERVICES_BY_CATEGORY.map((group) => (
+                      <optgroup key={group.category} label={`— ${group.category} —`}>
+                        {group.services.map((s) => (
+                          <option key={s.name} value={`${s.name} (${s.price})`}>
+                            {s.name} – {s.price}
+                          </option>
+                        ))}
+                      </optgroup>
                     ))}
-                    <option value="Special Occasion / Wedding">
-                      Special Occasion / Wedding
-                    </option>
-                    <option value="Kids Braiding">Kids Braiding</option>
                   </select>
                 </Field>
 

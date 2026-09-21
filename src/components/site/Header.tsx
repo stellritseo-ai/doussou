@@ -19,13 +19,14 @@ export function Header() {
   const isReviewsPage = pathname === "/reviews" || pathname.startsWith("/reviews");
   const isBookingPage = pathname === "/booking" || pathname.startsWith("/booking");
   const isContactPage = pathname === "/contact" || pathname.startsWith("/contact");
-  const isDedicatedPage = isAboutPage || isServicesPage || isReviewsPage || isBookingPage || isContactPage;
+  const isGalleryPage = pathname === "/gallery" || pathname.startsWith("/gallery");
+  const isDedicatedPage = isAboutPage || isServicesPage || isReviewsPage || isBookingPage || isContactPage || isGalleryPage;
 
   const NAV = [
     { label: "Home", href: "/", isLink: true },
     { label: "About Us", href: "/about", isLink: true },
     { label: "Services", href: "/services", isLink: true },
-    { label: "Gallery", href: isDedicatedPage ? "/#gallery" : "#gallery", isLink: false },
+    { label: "Gallery", href: "/gallery", isLink: true },
     { label: "Reviews", href: "/reviews", isLink: true },
     { label: "Booking", href: "/booking", isLink: true },
     { label: "Contact Us", href: "/contact", isLink: true },

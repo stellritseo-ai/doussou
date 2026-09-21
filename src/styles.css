@@ -7,6 +7,7 @@
 @theme {
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --color-plum: var(--plum);
   --color-plum-deep: var(--plum-deep);
   --color-magenta: var(--magenta);

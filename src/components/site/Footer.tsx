@@ -6,7 +6,7 @@ import { CONTACT } from "./data";
 const NAV = [
   { label: "About Us", href: "/about", isLink: true },
   { label: "Our Services", href: "/services", isLink: true },
-  { label: "Style Gallery", href: "/#gallery", isLink: false },
+  { label: "Style Gallery", href: "/gallery", isLink: true },
   { label: "Client Reviews", href: "/reviews", isLink: true },
   { label: "Book Appointment", href: "/booking", isLink: true },
 ];

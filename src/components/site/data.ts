@@ -67,6 +67,78 @@ export const SERVICES = [
   },
 ];
 
+export const BOOKING_SERVICES_BY_CATEGORY = [
+  {
+    category: "Braids & Knotless",
+    services: [
+      { name: "Small Knotless Braids", price: "$250" },
+      { name: "14\" Knotless Braids Medi", price: "$180" },
+      { name: "18\" Boho Knotless", price: "$190" },
+      { name: "Goddess Knotless", price: "$180+" },
+      { name: "Bohemian Braid Medium", price: "$240" },
+      { name: "Box Braids", price: "$200-$220" },
+      { name: "Box Braids Large", price: "$250" },
+      { name: "French Curls", price: "$180+" },
+      { name: "French Braid", price: "$80" },
+      { name: "Feed-In Cornrows", price: "$85-$150" },
+      { name: "Stitch Braids / Cornrows", price: "$90-$160" },
+      { name: "Men's Braids / Cornrows", price: "$65-$120" },
+      { name: "Kids Braids", price: "$65-$100" },
+    ],
+  },
+  {
+    category: "Twists & Locs",
+    services: [
+      { name: "Barrel Twist", price: "$80-$100" },
+      { name: "Two Strand Twists", price: "$70-$85" },
+      { name: "Comb Twists", price: "$65-$85" },
+      { name: "Kinky Twists", price: "$200-$220" },
+      { name: "Senegal Twists", price: "$200-$240" },
+      { name: "Senegal Twists Medium", price: "$260-$280" },
+      { name: "18\" Senegalese", price: "$190+" },
+      { name: "20\" Senegalese", price: "$200+" },
+      { name: "Dread Locks", price: "$100" },
+      { name: "Lock Start", price: "$85-$120" },
+      { name: "Lock Maintenance", price: "$80-$100" },
+      { name: "Lock Extension", price: "$200-$300" },
+      { name: "Faux Locks", price: "$200-$280" },
+      { name: "Inter Loc", price: "$300+" },
+      { name: "Butterfly Locs / Soft Locs", price: "$180-$260" },
+    ],
+  },
+  {
+    category: "Natural Hair & Care",
+    services: [
+      { name: "Braids Natural", price: "$65-$85" },
+      { name: "Single Braid Natural Hair", price: "$60" },
+      { name: "Wash", price: "$30" },
+      { name: "Hair Wash & Deep Conditioning", price: "$45-$65" },
+      { name: "Undo Braids + Wash/Blow Dry (Natural Hair)", price: "$40" },
+      { name: "Undo Braids + Wash/Blow Dry (Extensions)", price: "$120" },
+    ],
+  },
+  {
+    category: "Extensions & Wigs",
+    services: [
+      { name: "Crochet", price: "$100-$120" },
+      { name: "Weaving Extension", price: "$120-$160" },
+      { name: "Wig Install", price: "$80-$85" },
+    ],
+  },
+  {
+    category: "Specialty & Consultation",
+    services: [
+      { name: "Special Occasion / Wedding Updo", price: "$150+" },
+      { name: "Consultation Only", price: "Free" },
+      { name: "Other Custom Style", price: "Varies" },
+    ],
+  },
+];
+
+export const ALL_BOOKING_SERVICES_LIST = BOOKING_SERVICES_BY_CATEGORY.flatMap(
+  (group) => group.services.map((s) => `${s.name} (${s.price})`)
+);
+
 export const GALLERY = [
   { src: knotless, alt: "Knotless braids with half-up bun styled in Glen Burnie MD", label: "Knotless Half-Up", category: "Knotless", span: "tall" },
   { src: cornrows, alt: "Feed-in cornrow braids straight back", label: "Feed-In Cornrows", category: "Cornrows", span: "short" },

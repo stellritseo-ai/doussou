@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { BookingForm } from "@/components/site/BookingForm";
@@ -13,128 +13,511 @@ import {
   ChevronRight,
   Sparkle,
   Clock,
-  DollarSign,
   Heart,
   ShieldCheck,
   Star,
   Layers,
   Crown,
-  Sparkles as SparklesIcon,
   Smile,
   Check,
   Info,
   ArrowRight,
   Tag,
-  Gift,
+  Search,
+  X,
+  LayoutGrid,
+  List,
+  MapPin,
 } from "lucide-react";
 
-import knotlessImg from "@/assets/style-knotless.jpg";
-import boxbraidsImg from "@/assets/style-boxbraids.jpg";
-import cornrowsImg from "@/assets/style-cornrows.jpg";
-import locsImg from "@/assets/style-locs.jpg";
-import naturalImg from "@/assets/style-natural.jpg";
-import treatmentImg from "@/assets/style-treatment.jpg";
-import kidsImg from "@/assets/style-kids.jpg";
-import bridalImg from "@/assets/style-bridal.jpg";
-import bookingImg from "@/assets/booking-cta.jpg";
+import goddessKnotlessImg from "@/assets/services/goddess-knotless.jpg";
+import singleBraidNaturalImg from "@/assets/services/single-braid-natural.jpg";
+import bohoKnotless18Img from "@/assets/services/boho-knotless-18.jpg";
+import frenchCurlsImg from "@/assets/services/french-curls.jpg";
+import senegaleseTwist18Img from "@/assets/services/senegalese-twist-18.jpg";
+import senegaleseTwist20Img from "@/assets/services/senegalese-twist-20.jpg";
+import interLocImg from "@/assets/services/inter-loc.jpg";
+import knotlessBraids14Img from "@/assets/services/knotless-braids-14.jpg";
+import barrelTwistImg from "@/assets/services/barrel-twist.jpg";
+import combTwistsImg from "@/assets/services/comb-twists.jpg";
+import crochetImg from "@/assets/services/crochet.jpg";
+import fauxLocsImg from "@/assets/services/faux-locs.jpg";
+import kinkyTwistsImg from "@/assets/services/kinky-twists.jpg";
 
-const PAGE_TITLE = "Our Services | Hair Braiding & Protective Styles in Glen Burnie, MD";
+import boxbraidsImg from "@/assets/style-boxbraids.jpg";
+import knotlessImg from "@/assets/style-knotless.jpg";
+import locsImg from "@/assets/style-locs.jpg";
+import kidsImg from "@/assets/style-kids.jpg";
+import treatmentImg from "@/assets/style-treatment.jpg";
+import bridalImg from "@/assets/style-bridal.jpg";
+import transformationImg from "@/assets/transformation.jpg";
+import cornrowsImg from "@/assets/style-cornrows.jpg";
+
+const PAGE_TITLE = "Our Services & Price List – Doussou Quality Braiding | Glen Burnie, MD";
 const PAGE_DESCRIPTION =
-  "Explore our full range of professional hair braiding services at Doussou Quality Braiding. From Knotless Braids to Locs, discover pricing and book your appointment today.";
+  "Explore transparent upfront pricing and complete hair braiding services at Doussou Quality Braiding in Glen Burnie, MD. Over 6 years of professional artistry. View all service cards, prices, and book online.";
 
 const schema = [
   {
     "@context": "https://schema.org",
-    "@type": "Service",
-    name: "Doussou Quality Braiding Services",
+    "@type": "HairSalon",
+    name: "Doussou Quality Braiding",
     description: PAGE_DESCRIPTION,
-    provider: {
-      "@type": "HairSalon",
-      name: "Doussou Quality Braiding",
-      telephone: CONTACT.phone,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: "337 S Hospital Dr",
-        addressLocality: "Glen Burnie",
-        addressRegion: "MD",
-        postalCode: "21061",
-        addressCountry: "US",
-      },
+    telephone: CONTACT.phone,
+    email: CONTACT.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "337 S Hospital Dr",
+      addressLocality: "Glen Burnie",
+      addressRegion: "MD",
+      postalCode: "21061",
+      addressCountry: "US",
     },
-    areaServed: "Glen Burnie, Maryland",
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Hair Braiding & Protective Styles Catalog",
-      itemListElement: [
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Knotless Braids" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Box Braids" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Feed-In Cornrows" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Senegalese Twists" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Boho Braids" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Stitch Braids" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Kids Braiding" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Faux Locs" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Starter Locs" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Microlocs" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Extension Services" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Natural Hair Styling" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Wash & Treatments" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Special Occasion Updos" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Deluxe Hair Packages" } },
-      ],
-    },
+    areaServed: "Glen Burnie, Baltimore, Annapolis, and surrounding Maryland areas",
+  },
+];
+
+// Complete 24-Item Price List matching Image 1
+export interface SalonPriceItem {
+  id: string;
+  name: string;
+  price: string;
+  category: "Braids" | "Twists & Locs" | "Natural & Care" | "Extensions & Wigs";
+  highlighted: boolean;
+  note?: string;
+  isPopular?: boolean;
+}
+
+export const SALON_PRICE_LIST: SalonPriceItem[] = [
+  { id: "barrel-twist", name: "Barrel Twist", price: "$80-$100", category: "Twists & Locs", highlighted: true, isPopular: true },
+  { id: "bohemian-braid-medium", name: "Bohemian Braid Medium", price: "$240", category: "Braids", highlighted: false },
+  { id: "box-braids", name: "Box Braids", price: "$200-$220", category: "Braids", highlighted: true, isPopular: true },
+  { id: "box-braids-large", name: "Box Braids Large", price: "$250", category: "Braids", highlighted: false },
+  { id: "braids-natural", name: "Braids Natural", price: "$65-$85", category: "Natural & Care", highlighted: true },
+  { id: "comb-twists", name: "Comb Twists", price: "$65 -$85", category: "Twists & Locs", highlighted: false },
+  { id: "crochet", name: "Crochet", price: "$100-$120", category: "Extensions & Wigs", highlighted: true, isPopular: true },
+  { id: "dread-locks", name: "Dread Locks", price: "$100", category: "Twists & Locs", highlighted: false },
+  { id: "faux-locks", name: "Faux Locks", price: "$200-$280", category: "Twists & Locs", highlighted: true, isPopular: true },
+  { id: "french-braid", name: "French Braid", price: "$80", category: "Braids", highlighted: false },
+  { id: "kids-braids", name: "Kids Braids", price: "$65-$100", category: "Braids", highlighted: true },
+  { id: "kinky-twists", name: "Kinky Twists", price: "$200-$220", category: "Twists & Locs", highlighted: false },
+  { id: "lock-extension", name: "Lock Extension", price: "$200-$300", category: "Twists & Locs", highlighted: true, note: "Supply your own hair", isPopular: true },
+  { id: "lock-maintenance", name: "Lock Maintenance", price: "$80-$100", category: "Twists & Locs", highlighted: false },
+  { id: "lock-start", name: "Lock Start", price: "$85-$120", category: "Twists & Locs", highlighted: true },
+  { id: "senegal-twists", name: "Senegal Twists", price: "$200-$240", category: "Twists & Locs", highlighted: false },
+  { id: "senegal-twists-medium", name: "Senegal Twists Medium", price: "$260-$280", category: "Twists & Locs", highlighted: true, isPopular: true },
+  { id: "small-knotless-braids", name: "Small Knotless Braids", price: "$250", category: "Braids", highlighted: false, isPopular: true },
+  { id: "two-strand-twists", name: "Two Strand Twists", price: "$70 -$85", category: "Twists & Locs", highlighted: true },
+  { id: "undo-braids-extensions", name: "Undo Braids + Wash/Blow Dry (Extensions)", price: "$120", category: "Natural & Care", highlighted: false },
+  { id: "undo-braids-natural-hair", name: "Undo Braids + Wash/Blow Dry (Natural Hair)", price: "$40", category: "Natural & Care", highlighted: true },
+  { id: "wash", name: "Wash", price: "$30", category: "Natural & Care", highlighted: false },
+  { id: "weaving-extension", name: "Weaving Extension", price: "$120 -$160", category: "Extensions & Wigs", highlighted: true },
+  { id: "wig-install", name: "Wig Install", price: "$80-$85", category: "Extensions & Wigs", highlighted: false },
+];
+
+export const EXAMPLES_SHOWCASE = [
+  { name: "Goddess Knotless", price: "$180+", image: goddessKnotlessImg },
+  { name: "Single Braid Natural", price: "$60", image: singleBraidNaturalImg },
+  { name: "18\" Boho Knotless", price: "$190", image: bohoKnotless18Img },
+  { name: "French Curls", price: "$180+", image: frenchCurlsImg },
+  { name: "18\" Senegalese", price: "$190+", image: senegaleseTwist18Img },
+  { name: "20\" Senegalese", price: "$200+", image: senegaleseTwist20Img },
+  { name: "Inter Loc", price: "$300+", image: interLocImg },
+  { name: "14\" Knotless Medi", price: "$180", image: knotlessBraids14Img },
+];
+
+export const PRICE_CATEGORIES = [
+  "All",
+  "Braids",
+  "Twists & Locs",
+  "Natural & Care",
+  "Extensions & Wigs",
+] as const;
+
+// Complete list of ALL services as visual cards with Inter font
+export interface ServiceItem {
+  id: string;
+  name: string;
+  price: string;
+  category: "Braids" | "Twists & Locs" | "Natural Hair" | "Extensions" | "Wash & Care" | "Kids";
+  image: string;
+  tag: string;
+  blurb: string;
+  highlighted?: boolean;
+}
+
+export const ALL_SERVICES: ServiceItem[] = [
+  {
+    id: "goddess-knotless",
+    name: "Goddess Knotless",
+    price: "$180+",
+    category: "Braids",
+    image: goddessKnotlessImg,
+    tag: "Signature",
+    blurb: "Featherlight knotless braids with cascading curly bohemian tendrils.",
+    highlighted: true,
+  },
+  {
+    id: "small-knotless-braids",
+    name: "Small Knotless Braids",
+    price: "$250",
+    category: "Braids",
+    image: knotlessImg,
+    tag: "High Demand",
+    blurb: "Intricate, fine-parted small knotless braids for maximum density and flow.",
+    highlighted: false,
+  },
+  {
+    id: "14-knotless-braids-medi",
+    name: '14" Knotless Braids Medi',
+    price: "$180",
+    category: "Braids",
+    image: knotlessBraids14Img,
+    tag: "Chic & Light",
+    blurb: "Shoulder-length medium knotless braids adorned with beads and cuffs.",
+    highlighted: true,
+  },
+  {
+    id: "18-inch-boho-knotless",
+    name: "18 Inch Boho Knotless",
+    price: "$190",
+    category: "Braids",
+    image: bohoKnotless18Img,
+    tag: "Trending",
+    blurb: "18-inch knotless braids infused with textured wavy curls throughout.",
+    highlighted: true,
+  },
+  {
+    id: "bohemian-braid-medium",
+    name: "Bohemian Braid Medium",
+    price: "$240",
+    category: "Braids",
+    image: bohoKnotless18Img,
+    tag: "Client Favorite",
+    blurb: "Full-bodied bohemian braids with soft, romantic curls along the length.",
+    highlighted: false,
+  },
+  {
+    id: "box-braids",
+    name: "Box Braids",
+    price: "$200-$220",
+    category: "Braids",
+    image: boxbraidsImg,
+    tag: "Classic",
+    blurb: "Timeless versatile box braids with clean, neat parting grids.",
+    highlighted: true,
+  },
+  {
+    id: "box-braids-large",
+    name: "Box Braids Large",
+    price: "$250",
+    category: "Braids",
+    image: boxbraidsImg,
+    tag: "Bold Style",
+    blurb: "Chunky statement box braids installed quickly with even tension.",
+    highlighted: false,
+  },
+  {
+    id: "french-curls",
+    name: "French Curls",
+    price: "$180+",
+    category: "Braids",
+    image: frenchCurlsImg,
+    tag: "Bouncy & Glam",
+    blurb: "Sleek braids transitioning into bouncy, voluminous spiral curls.",
+    highlighted: true,
+  },
+  {
+    id: "french-braid",
+    name: "French Braid",
+    price: "$80",
+    category: "Braids",
+    image: cornrowsImg,
+    tag: "Clean & Sleek",
+    blurb: "Elegant scalp French braiding for a smooth, refined daily look.",
+    highlighted: false,
+  },
+  {
+    id: "single-braid-natural-hair",
+    name: "Single Braid Natural Hair",
+    price: "$60",
+    category: "Natural Hair",
+    image: singleBraidNaturalImg,
+    tag: "Natural Care",
+    blurb: "Clean individual braids on natural hair with precision scalp parting.",
+    highlighted: false,
+  },
+  {
+    id: "braids-natural",
+    name: "Braids Natural",
+    price: "$65-$85",
+    category: "Natural Hair",
+    image: singleBraidNaturalImg,
+    tag: "Gentle Care",
+    blurb: "Protective natural hair braiding preserving hair health and edges.",
+    highlighted: true,
+  },
+  {
+    id: "kids-braids",
+    name: "Kids Braids",
+    price: "$65-$100",
+    category: "Kids",
+    image: kidsImg,
+    tag: "Gentle for Kids",
+    blurb: "Patient, tension-free styling for children with beads and colorful accessories.",
+    highlighted: true,
+  },
+  {
+    id: "18-senegalese-twist",
+    name: '18" Senegalese Twist',
+    price: "$190+",
+    category: "Twists & Locs",
+    image: senegaleseTwist18Img,
+    tag: "Smooth & Silky",
+    blurb: "Silky 18-inch two-strand rope twists styled for effortless elegance.",
+    highlighted: false,
+  },
+  {
+    id: "20-senegalese-twist",
+    name: '20" Senegalese Twist',
+    price: "$200+",
+    category: "Twists & Locs",
+    image: senegaleseTwist20Img,
+    tag: "Statement Length",
+    blurb: "Extra-long 20-inch twists crafted with even tension and clean parts.",
+    highlighted: false,
+  },
+  {
+    id: "senegal-twists",
+    name: "Senegal Twists",
+    price: "$200-$240",
+    category: "Twists & Locs",
+    image: senegaleseTwist18Img,
+    tag: "Classic Twists",
+    blurb: "Smooth, lustrous rope twists with featherlight feel and natural movement.",
+    highlighted: false,
+  },
+  {
+    id: "senegal-twists-medium",
+    name: "Senegal Twists Medium",
+    price: "$260-$280",
+    category: "Twists & Locs",
+    image: senegaleseTwist20Img,
+    tag: "Full Volume",
+    blurb: "Medium-diameter Senegalese rope twists with uniform neatness and shine.",
+    highlighted: true,
+  },
+  {
+    id: "barrel-twist",
+    name: "Barrel Twist",
+    price: "$80-$100",
+    category: "Twists & Locs",
+    image: barrelTwistImg,
+    tag: "Sculpted Updo",
+    blurb: "Intricate barrel roll twists along the scalp, ideal for natural hair and locs.",
+    highlighted: true,
+  },
+  {
+    id: "comb-twists",
+    name: "Comb Twists",
+    price: "$65-$85",
+    category: "Twists & Locs",
+    image: combTwistsImg,
+    tag: "Coil Definition",
+    blurb: "Neat, uniform single-strand comb coils that define natural texture perfectly.",
+    highlighted: false,
+  },
+  {
+    id: "two-strand-twists",
+    name: "Two Strand Twists",
+    price: "$70-$85",
+    category: "Twists & Locs",
+    image: barrelTwistImg,
+    tag: "Versatile",
+    blurb: "Juicy, defined two-strand twists that look stunning worn down or pinned up.",
+    highlighted: true,
+  },
+  {
+    id: "kinky-twists",
+    name: "Kinky Twists",
+    price: "$200-$220",
+    category: "Twists & Locs",
+    image: kinkyTwistsImg,
+    tag: "Textured Look",
+    blurb: "Natural-textured protective twists with curled or tapered ends.",
+    highlighted: false,
+  },
+  {
+    id: "inter-loc",
+    name: "Inter Loc",
+    price: "$300+",
+    category: "Twists & Locs",
+    image: interLocImg,
+    tag: "Specialist",
+    blurb: "Professional interlocking technique for neat, long-lasting loc establishment.",
+    highlighted: true,
+  },
+  {
+    id: "dread-locks",
+    name: "Dread Locks",
+    price: "$100",
+    category: "Twists & Locs",
+    image: locsImg,
+    tag: "Loc Craft",
+    blurb: "Expert palm rolling, retwisting, and maintenance for healthy mature locs.",
+    highlighted: false,
+  },
+  {
+    id: "faux-locks",
+    name: "Faux Locks",
+    price: "$200-$280",
+    category: "Twists & Locs",
+    image: fauxLocsImg,
+    tag: "Glamorous Locs",
+    blurb: "Gorgeous faux loc extensions offering the loc aesthetic without commitment.",
+    highlighted: true,
+  },
+  {
+    id: "lock-start",
+    name: "Lock Start",
+    price: "$85-$120",
+    category: "Twists & Locs",
+    image: combTwistsImg,
+    tag: "New Journey",
+    blurb: "Begin your loc journey with precision grid parting and healthy starter coils.",
+    highlighted: true,
+  },
+  {
+    id: "lock-maintenance",
+    name: "Lock Maintenance",
+    price: "$80-$100",
+    category: "Twists & Locs",
+    image: interLocImg,
+    tag: "Retwist & Refresh",
+    blurb: "Thorough wash, scalp treatment, and neat retwist for clean, tight roots.",
+    highlighted: false,
+  },
+  {
+    id: "lock-extension",
+    name: "Lock Extension",
+    price: "$200-$300",
+    category: "Twists & Locs",
+    image: interLocImg,
+    tag: "Supply Your Hair",
+    blurb: "Seamless loc extensions for instant length and density (supply your own hair).",
+    highlighted: true,
+  },
+  {
+    id: "crochet",
+    name: "Crochet",
+    price: "$100-$120",
+    category: "Extensions",
+    image: crochetImg,
+    tag: "Quick & Voluminous",
+    blurb: "Speedy, protective crochet install featuring curls, twists, or faux locs.",
+    highlighted: true,
+  },
+  {
+    id: "weaving-extension",
+    name: "Weaving Extension",
+    price: "$120-$160",
+    category: "Extensions",
+    image: bridalImg,
+    tag: "Flawless Sew-In",
+    blurb: "Secure, flat braid-down foundation with seamless track installation.",
+    highlighted: true,
+  },
+  {
+    id: "wig-install",
+    name: "Wig Install",
+    price: "$80-$85",
+    category: "Extensions",
+    image: transformationImg,
+    tag: "Melted Hairline",
+    blurb: "Lace customization, bleaching, pluck, and invisible melt for a natural finish.",
+    highlighted: false,
+  },
+  {
+    id: "undo-braids-extensions",
+    name: "Undo Braids + Wash/Blow Dry (Extensions)",
+    price: "$120",
+    category: "Wash & Care",
+    image: treatmentImg,
+    tag: "Complete Reset",
+    blurb: "Gentle takedown of extension braids followed by deep wash and blowout.",
+    highlighted: false,
+  },
+  {
+    id: "undo-braids-natural-hair",
+    name: "Undo Braids + Wash/Blow Dry (Natural Hair)",
+    price: "$40",
+    category: "Wash & Care",
+    image: treatmentImg,
+    tag: "Hair Refresh",
+    blurb: "Careful takedown of natural braids, clarifying shampoo, conditioner, and dry.",
+    highlighted: true,
+  },
+  {
+    id: "wash",
+    name: "Wash",
+    price: "$30",
+    category: "Wash & Care",
+    image: treatmentImg,
+    tag: "Scalp Clarifying",
+    blurb: "Invigorating scalp cleanse, hydrating shampoo, and nourishing rinse.",
+    highlighted: false,
   },
 ];
 
 const CATEGORIES = [
-  { id: "all", label: "All Services", icon: Sparkles },
-  { id: "braids-twists", label: "Braids & Twists", icon: Scissors },
-  { id: "locs-extensions", label: "Locs & Extensions", icon: Layers },
-  { id: "natural-treatments", label: "Natural & Treatments", icon: Heart },
-  { id: "special-occasions", label: "Special Occasions & Packages", icon: Crown },
-  { id: "addons-policies", label: "Add-Ons & Policies", icon: Info },
+  "All",
+  "Braids",
+  "Twists & Locs",
+  "Natural Hair",
+  "Extensions",
+  "Wash & Care",
+  "Kids",
 ];
 
 const WHY_BOOK_WITH_US = [
   {
-    feature: "Master Braiders",
-    benefit: "Years of expertise in African hair braiding and protective styles",
+    feature: "6+ Years Professional Experience",
+    benefit: "Led by master-level African hair braiders with 6+ years of professional artistry.",
     icon: Scissors,
   },
   {
-    feature: "Hair Health Focus",
-    benefit: "Tension-free techniques and scalp-first care",
+    feature: "Hair Health & Scalp First",
+    benefit: "Tension-free parting and gentle techniques that protect your natural hair and edges.",
     icon: Heart,
   },
   {
-    feature: "Clean Studio",
-    benefit: "Relaxing, hygienic environment designed for comfort",
-    icon: ShieldCheck,
+    feature: "Flexible Fast Scheduling",
+    benefit: "Book online anytime — we can often accommodate requests as early as one hour before!",
+    icon: Clock,
   },
   {
-    feature: "5.0 ★ Rating",
-    benefit: "Trusted by 3,000+ happy clients across Maryland",
-    icon: Star,
-  },
-  {
-    feature: "Customizable",
-    benefit: "Styles tailored to your preference, texture, and lifestyle",
+    feature: "Styles for Men & Women",
+    benefit: "Complete range of protective styles, individual braids, locs, and twists for everyone.",
     icon: Crown,
   },
   {
-    feature: "All Ages Welcome",
-    benefit: "Gentle, patient services for adults and children",
-    icon: Smile,
+    feature: "5.0 ★ Rated Studio",
+    benefit: "Trusted by hundreds of delighted clients in Glen Burnie, Baltimore, and surrounding Maryland areas.",
+    icon: Star,
+  },
+  {
+    feature: "Clean & Relaxing Salon",
+    benefit: "Sanitary, peaceful environment dedicated to your supreme comfort and pampering.",
+    icon: ShieldCheck,
   },
 ];
 
 const UNIVERSAL_ADDONS = [
-  { name: "Hair Wash & Deep Condition", price: "+$25 – $35", detail: "Thorough cleanse and restorative moisture mask" },
+  { name: "Hair Wash & Deep Condition", price: "+$30", detail: "Thorough cleanse and restorative moisture hydration" },
   { name: "Scalp Oil Treatment", price: "+$15", detail: "Nourishing botanical oils massaged into the scalp" },
-  { name: "Braid Spray & Shine", price: "+$10", detail: "Long-lasting moisture and high-gloss sheen finish" },
-  { name: "Beads, Cuffs & Accessories", price: "+$10 – $30", detail: "Gold/silver filigree cuffs, wooden beads, cowrie shells" },
-  { name: "Color Accents", price: "+$20 – $40", detail: "Blended highlights, ombré tips, or custom color pops" },
-  { name: "Hair Jewelry", price: "+$10 – $25", detail: "Bridal rings, metallic wraps, and decorative wire" },
+  { name: "Braid Spray & High Shine", price: "+$10", detail: "Long-lasting hydration and glossy sheen finish" },
+  { name: "Beads, Cuffs & Accessories", price: "+$10 – $25", detail: "Gold/silver filigree cuffs, wooden beads, cowrie shells" },
+  { name: "Extra Length / Boho Curls", price: "+$20 – $40", detail: "Waist-length extension or additional curly hair tendrils" },
   { name: "Edge Control & Finishing", price: "+$5 – $10", detail: "Sleek, firm-hold edge styling without white residue" },
 ];
 
@@ -146,14 +529,12 @@ export const Route = createFileRoute("/services")({
       {
         name: "keywords",
         content:
-          "Hair braiding services Glen Burnie MD, Knotless braids prices Maryland, Box braids pricing, Feed-in cornrows Glen Burnie, Locs installation Glen Burnie, Senegalese twists, Boho braids, Kids braiding MD",
+          "Hair braiding Glen Burnie, Doussou Quality Braiding services, Knotless braids Glen Burnie MD, Box braids prices, Boho knotless, French curls braids, Senegalese twist, Inter loc Glen Burnie, Hair braiding prices",
       },
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/services" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -165,35 +546,48 @@ export const Route = createFileRoute("/services")({
 });
 
 function ServicesPage() {
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const scrollToCategory = (id: string) => {
-    setActiveCategory(id);
-    if (id === "all") {
-      window.scrollTo({ top: 380, behavior: "smooth" });
-    } else {
-      const el = document.getElementById(id);
-      if (el) {
-        const offset = 140;
-        const bodyRect = document.body.getBoundingClientRect().top;
-        const elementRect = el.getBoundingClientRect().top;
-        const elementPosition = elementRect - bodyRect;
-        const offsetPosition = elementPosition - offset;
-        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-      }
-    }
-  };
+  // State for the Transparent Upfront Pricing / Salon Price List Table
+  const [priceSearchQuery, setPriceSearchQuery] = useState("");
+  const [priceCategory, setPriceCategory] = useState<string>("All");
+
+  const filteredServices = useMemo(() => {
+    return ALL_SERVICES.filter((item) => {
+      const matchesCategory =
+        selectedCategory === "All" || item.category === selectedCategory;
+      const matchesSearch =
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.price.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.blurb.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [searchQuery, selectedCategory]);
+
+  const filteredPriceList = useMemo(() => {
+    return SALON_PRICE_LIST.filter((item) => {
+      const matchesCat =
+        priceCategory === "All" || item.category === priceCategory;
+      const matchesSearch =
+        item.name.toLowerCase().includes(priceSearchQuery.toLowerCase()) ||
+        item.price.toLowerCase().includes(priceSearchQuery.toLowerCase()) ||
+        item.category.toLowerCase().includes(priceSearchQuery.toLowerCase()) ||
+        (item.note && item.note.toLowerCase().includes(priceSearchQuery.toLowerCase()));
+      return matchesCat && matchesSearch;
+    });
+  }, [priceSearchQuery, priceCategory]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-[#BA1296] selection:text-white">
+    <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-[#BA1296] selection:text-white">
       <Header />
 
       <main className="pt-28 lg:pt-36">
         {/* ========================================================================= */}
-        {/* HERO / HEADER SECTION */}
+        {/* HERO SECTION (Matches Booking Page Luxury Editorial Design) */}
         {/* ========================================================================= */}
         <section className="relative overflow-hidden bg-[#FAF8F5] pb-14 pt-8 lg:pb-20 lg:pt-12 border-b border-[#E8DFC8]/70">
-          {/* Ambient Lighting Orbs */}
           <div
             aria-hidden
             className="pointer-events-none absolute -left-32 -top-20 h-[550px] w-[550px] rounded-full bg-[#DCD4FD]/50 blur-[130px]"
@@ -204,7 +598,7 @@ function ServicesPage() {
           />
 
           <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 relative z-10">
-            {/* Breadcrumb Navigation */}
+            {/* Breadcrumbs */}
             <nav
               aria-label="Breadcrumb"
               className="mb-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8C7A6B]"
@@ -216,1297 +610,606 @@ function ServicesPage() {
               <span className="text-[#2B231D] font-bold">Services</span>
             </nav>
 
-            <div className="text-center max-w-3xl mx-auto">
+            <div className="max-w-4xl mx-auto text-center">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#C48D46]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#C48D46] border border-[#C48D46]/30 mb-5 shadow-xs">
-                <Sparkles size={13} className="text-[#C48D46]" />
-                <span>Premier Hair Braiding &amp; Protective Styles</span>
+                <Scissors size={13} className="text-[#C48D46]" />
+                <span>Professional Hair Braiding &amp; Styling</span>
               </div>
 
               <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.6rem] font-normal leading-[1.12] tracking-tight text-[#2B231D]">
-                Signature Hair{" "}
-                <span className="font-serif italic text-[#C48D46]">Braiding Services</span>
+                Our Services –{" "}
+                <span className="font-serif italic text-[#C48D46]">Doussou Quality Braiding</span>
               </h1>
 
-              <p className="mt-5 text-lg sm:text-xl font-serif italic text-[#2B231D] leading-relaxed">
-                From timeless classics to modern statement styles, discover a protective look
-                tailored for you. Each service is crafted with precision, comfort, and your hair
-                health in mind.
+              <p className="mt-5 text-lg sm:text-xl font-serif italic text-[#2B231D] leading-relaxed max-w-2xl mx-auto">
+                Premium Hair Braiding &amp; Styling in Glen Burnie, MD
               </p>
 
-              <p className="mt-4 text-sm sm:text-base text-[#5C5046] font-medium leading-relaxed max-w-2xl mx-auto">
-                At Doussou Quality Braiding, we offer a comprehensive range of professional hair
-                services designed to celebrate your natural beauty. Whether you're looking for a chic
-                everyday style or a stunning look for a special occasion, our master braiders are
-                here to bring your vision to life. Browse our services below, select your perfect
-                style, and book with confidence.
+              <p className="mt-4 text-sm sm:text-base text-[#5C5046] font-medium leading-relaxed max-w-3xl mx-auto">
+                At Doussou Quality Braiding, we combine authentic West African braiding heritage with modern scalp-friendly techniques for women, men, and children. Whether you seek knotless braids, stitch cornrows, loc maintenance, or custom twists, experience flawless artistry that protects your edges and lasts for weeks.
               </p>
-
-              {/* Quick Trust Highlights */}
-              <div className="mt-8 flex flex-wrap justify-center items-center gap-3 text-xs font-bold text-[#2B231D]">
-                <span className="flex items-center gap-1.5 rounded-full bg-white px-4 py-2 border border-[#E8DFC8] shadow-2xs">
-                  <CheckCircle2 size={15} className="text-[#C48D46]" />
-                  Tension-Free Parting
-                </span>
-                <span className="flex items-center gap-1.5 rounded-full bg-white px-4 py-2 border border-[#E8DFC8] shadow-2xs">
-                  <CheckCircle2 size={15} className="text-[#C48D46]" />
-                  Hair Extensions Included
-                </span>
-                <span className="flex items-center gap-1.5 rounded-full bg-white px-4 py-2 border border-[#E8DFC8] shadow-2xs">
-                  <CheckCircle2 size={15} className="text-[#C48D46]" />
-                  5.0 ★ Rated Master Braiders
-                </span>
-              </div>
             </div>
 
-            {/* Category Navigation Pills */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-2.5">
-              {CATEGORIES.map((cat) => {
-                const IconComponent = cat.icon;
-                const isActive = activeCategory === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => scrollToCategory(cat.id)}
-                    className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold transition-all duration-300 ${
-                      isActive
-                        ? "bg-[#C48D46] text-white shadow-md scale-105"
-                        : "bg-white text-[#2B231D] border border-[#E8DFC8] hover:border-[#C48D46] hover:bg-[#FAF8F5]"
-                    }`}
-                  >
-                    <IconComponent size={15} />
-                    <span>{cat.label}</span>
-                  </button>
-                );
-              })}
+            {/* Quick Service Channels Grid */}
+            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl mx-auto">
+              <a
+                href="#all-services-grid"
+                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-[#E8DFC8] shadow-xs transition-all hover:border-[#C48D46] hover:shadow-md hover:-translate-y-1"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#C48D46]/15 text-[#C48D46]">
+                  <Scissors size={20} />
+                </div>
+                <div className="text-left">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-[#2B231D]">
+                    32 Service Cards
+                  </h2>
+                  <p className="text-[11px] text-[#8C7A6B]">Explore All Styles &amp; Details</p>
+                </div>
+              </a>
+
+              <a
+                href="#price-list"
+                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-[#E8DFC8] shadow-xs transition-all hover:border-[#BA1296] hover:shadow-md hover:-translate-y-1"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#BA1296]/15 text-[#BA1296]">
+                  <Tag size={20} />
+                </div>
+                <div className="text-left">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-[#2B231D]">
+                    Price List Table
+                  </h2>
+                  <p className="text-[11px] text-[#8C7A6B]">24 Upfront Salon Prices</p>
+                </div>
+              </a>
+
+              <Link
+                to="/booking"
+                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-[#E8DFC8] shadow-xs transition-all hover:border-[#16857B] hover:shadow-md hover:-translate-y-1"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#16857B]/15 text-[#16857B]">
+                  <Calendar size={20} />
+                </div>
+                <div className="text-left">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-[#2B231D]">
+                    Online Booking
+                  </h2>
+                  <p className="text-[11px] text-[#8C7A6B]">Instant Appointment Slots</p>
+                </div>
+              </Link>
+
+              <a
+                href={CONTACT.phoneHref}
+                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-[#E8DFC8] shadow-xs transition-all hover:border-[#2B231D] hover:shadow-md hover:-translate-y-1"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2B231D]/10 text-[#2B231D]">
+                  <Phone size={20} />
+                </div>
+                <div className="text-left">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-[#2B231D]">
+                    Call / Text Studio
+                  </h2>
+                  <p className="text-[11px] text-[#8C7A6B]">{CONTACT.phone}</p>
+                </div>
+              </a>
+            </div>
+
+            {/* Trust Assurance Strip */}
+            <div className="mt-10 pt-6 border-t border-[#E8DFC8]/70 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs font-bold text-[#2B231D]">
+              <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2 border border-[#E8DFC8] shadow-xs">
+                <Star size={14} className="text-[#C48D46] fill-[#C48D46]" />
+                <span>5.0 ★ Google Rated</span>
+              </div>
+              <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2 border border-[#E8DFC8] shadow-xs">
+                <CheckCircle2 size={15} className="text-[#C48D46]" />
+                <span>Upfront Transparent Pricing</span>
+              </div>
+              <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2 border border-[#E8DFC8] shadow-xs">
+                <ShieldCheck size={15} className="text-[#C48D46]" />
+                <span>100% Tension-Free Scalp Care</span>
+              </div>
+              <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2 border border-[#E8DFC8] shadow-xs">
+                <Sparkles size={15} className="text-[#C48D46]" />
+                <span>Walk-Ins Welcome by Notice</span>
+              </div>
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* CATEGORY 1: BRAIDS & TWISTS */}
+        {/* ALL SERVICES CARDS GRID (Using Font Inter on every card) */}
         {/* ========================================================================= */}
         <section
-          id="braids-twists"
-          className="relative overflow-hidden bg-white py-16 lg:py-24 border-b border-[#E8DFC8]"
+          id="all-services-grid"
+          className="relative overflow-hidden bg-neutral-50/60 pb-16 pt-8 lg:pb-24 lg:pt-12 scroll-mt-24 border-t border-purple-100/60"
         >
-          <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-            {/* Category Header */}
-            <div className="mb-14 border-b border-[#E8DFC8] pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#BA1296]/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.15em] text-[#BA1296] border border-[#BA1296]/20 mb-3">
-                  <Scissors size={13} className="text-[#BA1296]" />
-                  <span>Category 01</span>
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-normal leading-tight text-[#2B231D]">
-                  Braids &amp; <span className="font-serif italic text-[#C48D46]">Twists</span>
-                </h2>
-              </div>
-              <p className="text-sm font-medium text-[#5C5046] max-w-md">
-                Precision parted, tension-free protective styles installed with gentle, scalp-first
-                care for long-lasting beauty and natural hair growth.
-              </p>
-            </div>
-
-            <div className="space-y-16 lg:space-y-24">
-              {/* ---------------- 1. Knotless Braids ---------------- */}
-              <div className="rounded-[32px] bg-[#FAF8F5] border border-[#E8DFC8] p-6 sm:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
-                <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12 items-start">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="inline-block rounded-full bg-[#BA1296] px-3.5 py-1 text-xs font-bold text-white uppercase tracking-wider">
-                        Signature Style
-                      </span>
-                      <span className="text-xs font-bold text-[#C48D46] uppercase tracking-wider">
-                        Featherlight &amp; Tension-Free
-                      </span>
-                    </div>
-
-                    <h3 className="font-display text-3xl sm:text-4xl font-bold text-[#2B231D]">
-                      Knotless Braids
-                    </h3>
-
-                    <p className="mt-4 text-base sm:text-lg leading-relaxed text-[#5C5046] font-normal">
-                      Our signature knotless braids are the ultimate in protective styling. Using a
-                      unique feed-in technique that eliminates the bulky knot at the root, these
-                      braids lie flat against your scalp for a natural, seamless look. They are
-                      featherlight, tension-free, and allow for effortless movement. Perfect for any
-                      occasion, knotless braids are gentle on your edges and promote healthy hair
-                      growth.
-                    </p>
-
-                    {/* What's Included */}
-                    <div className="mt-6 rounded-2xl bg-white p-5 border border-[#E8DFC8]">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#2B231D] mb-3 flex items-center gap-1.5">
-                        <Sparkle size={13} className="text-[#C48D46]" />
-                        What's Included:
-                      </h4>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-[#5C5046] font-medium">
-                        <li className="flex items-center gap-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Initial scalp consultation
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Hair wash &amp; conditioning (add-on)
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Custom braid size (small, medium, large)
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Choice of length (shoulder, mid-back, waist)
-                        </li>
-                        <li className="flex items-center gap-2 sm:col-span-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Edge control and polished finishing
-                        </li>
-                      </ul>
-                    </div>
-
-                    {/* Add-ons Pill List */}
-                    <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
-                      <span className="rounded-full bg-white px-3 py-1.5 border border-[#E8DFC8] text-[#2B231D]">
-                        Wash &amp; Condition: +$25
-                      </span>
-                      <span className="rounded-full bg-white px-3 py-1.5 border border-[#E8DFC8] text-[#2B231D]">
-                        Scalp Oil Treatment: +$15
-                      </span>
-                      <span className="rounded-full bg-white px-3 py-1.5 border border-[#E8DFC8] text-[#2B231D]">
-                        Beads &amp; Accessories: +$10-$25
-                      </span>
-                      <span className="rounded-full bg-white px-3 py-1.5 border border-[#E8DFC8] text-[#2B231D]">
-                        Boho Curls: +$30
-                      </span>
-                    </div>
-
-                    <div className="mt-8">
-                      <a
-                        href="#booking"
-                        className="inline-flex items-center gap-2 rounded-full bg-[#C48D46] px-8 py-3.5 text-sm font-bold text-white shadow-md hover:bg-[#A87432] transition-all hover:scale-105"
-                      >
-                        <Calendar size={16} />
-                        <span>Book Knotless Braids Now</span>
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Pricing Table Card */}
-                  <div className="rounded-2xl bg-white border border-[#E8DFC8] p-5 sm:p-6 shadow-sm">
-                    <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-3 mb-4">
-                      <h4 className="font-display text-xl font-bold text-[#2B231D]">
-                        Knotless Pricing Table
-                      </h4>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C7A6B]">
-                        Size × Length
-                      </span>
-                    </div>
-
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs sm:text-sm">
-                        <thead>
-                          <tr className="border-b border-[#E8DFC8] text-[#8C7A6B] uppercase font-bold text-[10px] tracking-wider">
-                            <th className="pb-2">Size</th>
-                            <th className="pb-2">Length</th>
-                            <th className="pb-2">Price</th>
-                            <th className="pb-2">Duration</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#E8DFC8]/50 font-medium text-[#2B231D]">
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#BA1296]">Small</td>
-                            <td className="py-2.5">Shoulder</td>
-                            <td className="py-2.5 font-bold">$250 – $300</td>
-                            <td className="py-2.5 text-[#5C5046]">5-6 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#BA1296]">Small</td>
-                            <td className="py-2.5">Mid-Back</td>
-                            <td className="py-2.5 font-bold">$300 – $350</td>
-                            <td className="py-2.5 text-[#5C5046]">6-7 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#BA1296]">Small</td>
-                            <td className="py-2.5">Waist-Length</td>
-                            <td className="py-2.5 font-bold">$350 – $400</td>
-                            <td className="py-2.5 text-[#5C5046]">7-8 hrs</td>
-                          </tr>
-                          <tr className="bg-[#FAF8F5]">
-                            <td className="py-2.5 font-bold text-[#C48D46]">Medium</td>
-                            <td className="py-2.5">Shoulder</td>
-                            <td className="py-2.5 font-bold">$200 – $240</td>
-                            <td className="py-2.5 text-[#5C5046]">4-5 hrs</td>
-                          </tr>
-                          <tr className="bg-[#FAF8F5]">
-                            <td className="py-2.5 font-bold text-[#C48D46]">Medium</td>
-                            <td className="py-2.5">Mid-Back</td>
-                            <td className="py-2.5 font-bold">$240 – $280</td>
-                            <td className="py-2.5 text-[#5C5046]">5-6 hrs</td>
-                          </tr>
-                          <tr className="bg-[#FAF8F5]">
-                            <td className="py-2.5 font-bold text-[#C48D46]">Medium</td>
-                            <td className="py-2.5">Waist-Length</td>
-                            <td className="py-2.5 font-bold">$280 – $320</td>
-                            <td className="py-2.5 text-[#5C5046]">6-7 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#5C5046]">Large</td>
-                            <td className="py-2.5">Shoulder</td>
-                            <td className="py-2.5 font-bold">$160 – $200</td>
-                            <td className="py-2.5 text-[#5C5046]">3-4 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#5C5046]">Large</td>
-                            <td className="py-2.5">Mid-Back</td>
-                            <td className="py-2.5 font-bold">$200 – $240</td>
-                            <td className="py-2.5 text-[#5C5046]">4-5 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#5C5046]">Large</td>
-                            <td className="py-2.5">Waist-Length</td>
-                            <td className="py-2.5 font-bold">$240 – $280</td>
-                            <td className="py-2.5 text-[#5C5046]">5-6 hrs</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ---------------- 2. Box Braids ---------------- */}
-              <div className="rounded-[32px] bg-white border border-[#E8DFC8] p-6 sm:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.03)]">
-                <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12 items-start">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="inline-block rounded-full bg-[#C48D46] px-3.5 py-1 text-xs font-bold text-white uppercase tracking-wider">
-                        Timeless Classic
-                      </span>
-                      <span className="text-xs font-bold text-[#8C7A6B] uppercase tracking-wider">
-                        Classic. Versatile. Timeless.
-                      </span>
-                    </div>
-
-                    <h3 className="font-display text-3xl sm:text-4xl font-bold text-[#2B231D]">
-                      Box Braids
-                    </h3>
-
-                    <p className="mt-4 text-base sm:text-lg leading-relaxed text-[#5C5046] font-normal">
-                      Box braids are a beloved classic for a reason. Whether you prefer them jumbo
-                      and bold or small and intricate, these versatile braids offer endless styling
-                      possibilities. At Doussou Quality Braiding, we take pride in clean, precise
-                      parting and even tension throughout. Our box braids are durable, long-lasting,
-                      and designed to suit your unique style and personality.
-                    </p>
-
-                    {/* What's Included */}
-                    <div className="mt-6 rounded-2xl bg-[#FAF8F5] p-5 border border-[#E8DFC8]">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#2B231D] mb-3 flex items-center gap-1.5">
-                        <Sparkle size={13} className="text-[#C48D46]" />
-                        What's Included:
-                      </h4>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-[#5C5046] font-medium">
-                        <li className="flex items-center gap-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Hair consultation &amp; style selection
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Custom parting pattern (Square, Triangle)
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Choice of thickness &amp; length
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Neat finishing &amp; edge control
-                        </li>
-                        <li className="flex items-center gap-2 sm:col-span-2">
-                          <Check size={14} className="text-[#16857B] shrink-0" />
-                          Comprehensive aftercare tips
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
-                      <span className="rounded-full bg-[#FAF8F5] px-3 py-1.5 border border-[#E8DFC8] text-[#2B231D]">
-                        Wash &amp; Condition: +$25
-                      </span>
-                      <span className="rounded-full bg-[#FAF8F5] px-3 py-1.5 border border-[#E8DFC8] text-[#2B231D]">
-                        Braid Spray &amp; Shine: +$10
-                      </span>
-                      <span className="rounded-full bg-[#FAF8F5] px-3 py-1.5 border border-[#E8DFC8] text-[#2B231D]">
-                        Beads, Cuffs &amp; Accessories: +$10-$30
-                      </span>
-                      <span className="rounded-full bg-[#FAF8F5] px-3 py-1.5 border border-[#E8DFC8] text-[#2B231D]">
-                        Updo Styling: +$25-$50
-                      </span>
-                    </div>
-
-                    <div className="mt-8">
-                      <a
-                        href="#booking"
-                        className="inline-flex items-center gap-2 rounded-full bg-[#BA1296] px-8 py-3.5 text-sm font-bold text-white shadow-md hover:bg-[#960d77] transition-all hover:scale-105"
-                      >
-                        <Calendar size={16} />
-                        <span>Book Box Braids Now</span>
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Pricing Table Card */}
-                  <div className="rounded-2xl bg-[#FAF8F5] border border-[#E8DFC8] p-5 sm:p-6 shadow-sm">
-                    <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-3 mb-4">
-                      <h4 className="font-display text-xl font-bold text-[#2B231D]">
-                        Box Braids Pricing Table
-                      </h4>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C7A6B]">
-                        Size × Length
-                      </span>
-                    </div>
-
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs sm:text-sm">
-                        <thead>
-                          <tr className="border-b border-[#E8DFC8] text-[#8C7A6B] uppercase font-bold text-[10px] tracking-wider">
-                            <th className="pb-2">Size</th>
-                            <th className="pb-2">Length</th>
-                            <th className="pb-2">Price</th>
-                            <th className="pb-2">Duration</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#E8DFC8]/50 font-medium text-[#2B231D]">
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#BA1296]">Small (Micro)</td>
-                            <td className="py-2.5">Shoulder</td>
-                            <td className="py-2.5 font-bold">$280 – $340</td>
-                            <td className="py-2.5 text-[#5C5046]">6-8 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#BA1296]">Small (Micro)</td>
-                            <td className="py-2.5">Mid-Back</td>
-                            <td className="py-2.5 font-bold">$340 – $400</td>
-                            <td className="py-2.5 text-[#5C5046]">8-10 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#BA1296]">Small (Micro)</td>
-                            <td className="py-2.5">Waist-Length</td>
-                            <td className="py-2.5 font-bold">$400 – $480</td>
-                            <td className="py-2.5 text-[#5C5046]">10-12 hrs</td>
-                          </tr>
-                          <tr className="bg-white">
-                            <td className="py-2.5 font-bold text-[#C48D46]">Medium</td>
-                            <td className="py-2.5">Shoulder</td>
-                            <td className="py-2.5 font-bold">$200 – $240</td>
-                            <td className="py-2.5 text-[#5C5046]">4-5 hrs</td>
-                          </tr>
-                          <tr className="bg-white">
-                            <td className="py-2.5 font-bold text-[#C48D46]">Medium</td>
-                            <td className="py-2.5">Mid-Back</td>
-                            <td className="py-2.5 font-bold">$240 – $280</td>
-                            <td className="py-2.5 text-[#5C5046]">5-6 hrs</td>
-                          </tr>
-                          <tr className="bg-white">
-                            <td className="py-2.5 font-bold text-[#C48D46]">Medium</td>
-                            <td className="py-2.5">Waist-Length</td>
-                            <td className="py-2.5 font-bold">$280 – $340</td>
-                            <td className="py-2.5 text-[#5C5046]">6-7 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#5C5046]">Large (Jumbo)</td>
-                            <td className="py-2.5">Shoulder</td>
-                            <td className="py-2.5 font-bold">$140 – $180</td>
-                            <td className="py-2.5 text-[#5C5046]">3-4 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#5C5046]">Large (Jumbo)</td>
-                            <td className="py-2.5">Mid-Back</td>
-                            <td className="py-2.5 font-bold">$180 – $220</td>
-                            <td className="py-2.5 text-[#5C5046]">4-5 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2.5 font-bold text-[#5C5046]">Large (Jumbo)</td>
-                            <td className="py-2.5">Waist-Length</td>
-                            <td className="py-2.5 font-bold">$220 – $260</td>
-                            <td className="py-2.5 text-[#5C5046]">5-6 hrs</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ---------------- 3. Feed-In Cornrows & 4. Senegalese Twists (2-Col Grid) ---------------- */}
-              <div className="grid gap-8 lg:grid-cols-2">
-                {/* Feed-In Cornrows */}
-                <div className="rounded-[28px] bg-[#FAF8F5] border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-[#C48D46] uppercase tracking-wider">
-                      Precision Patterns &amp; Clean Lines
-                    </span>
-                    <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                      Feed-In Cornrows
-                    </h3>
-                    <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                      Cornrows are the epitome of precision and cultural heritage. Our feed-in
-                      technique creates a seamless look by gradually adding hair extensions for
-                      crisp sculpted parts and sharp lines that last for weeks.
-                    </p>
-
-                    <div className="mt-4 rounded-xl bg-white p-4 border border-[#E8DFC8] text-xs">
-                      <p className="font-bold text-[#2B231D] mb-1">What's Included:</p>
-                      <p className="text-[#5C5046]">
-                        Consultation, custom pattern (straight, curved, geometric), feed-in extensions,
-                        crisp parting &amp; edge finishing.
-                      </p>
-                    </div>
-
-                    {/* Pricing Table */}
-                    <div className="mt-5 overflow-x-auto">
-                      <table className="w-full text-left text-xs">
-                        <thead>
-                          <tr className="border-b border-[#E8DFC8] text-[#8C7A6B] uppercase font-bold text-[10px]">
-                            <th className="pb-1.5">Style Complexity</th>
-                            <th className="pb-1.5">Price Range</th>
-                            <th className="pb-1.5">Duration</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#E8DFC8]/50 font-medium">
-                          <tr>
-                            <td className="py-2 font-semibold text-[#2B231D]">Simple (Straight-back)</td>
-                            <td className="py-2 font-bold text-[#C48D46]">$80 – $120</td>
-                            <td className="py-2 text-[#5C5046]">1.5-2.5 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-semibold text-[#2B231D]">Medium (Zig-zag, Curved)</td>
-                            <td className="py-2 font-bold text-[#C48D46]">$120 – $180</td>
-                            <td className="py-2 text-[#5C5046]">2.5-3.5 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-semibold text-[#2B231D]">Complex (Intricate Patterns)</td>
-                            <td className="py-2 font-bold text-[#C48D46]">$180 – $250</td>
-                            <td className="py-2 text-[#5C5046]">3.5-5 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-semibold text-[#2B231D]">With Beads/Accessories</td>
-                            <td className="py-2 font-bold text-[#C48D46]">$150 – $220</td>
-                            <td className="py-2 text-[#5C5046]">3-4 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-semibold text-[#2B231D]">Half Cornrows / Half Loose</td>
-                            <td className="py-2 font-bold text-[#C48D46]">$100 – $150</td>
-                            <td className="py-2 text-[#5C5046]">2-3 hrs</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                    <a
-                      href="#booking"
-                      className="inline-flex items-center gap-2 rounded-full bg-[#C48D46] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#A87432] transition-all"
-                    >
-                      <Calendar size={14} />
-                      <span>Book Feed-In Cornrows Now</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Senegalese Twists */}
-                <div className="rounded-[28px] bg-[#FAF8F5] border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-[#BA1296] uppercase tracking-wider">
-                      Elegant &amp; Defined Twists
-                    </span>
-                    <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                      Senegalese Twists
-                    </h3>
-                    <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                      Senegalese twists feature smooth, rope-like twists offering a sleek and
-                      sophisticated finish. Created using premium hair, they are lightweight,
-                      versatile, and heat-sealed for a polished look that lasts.
-                    </p>
-
-                    <div className="mt-4 rounded-xl bg-white p-4 border border-[#E8DFC8] text-xs">
-                      <p className="font-bold text-[#2B231D] mb-1">What's Included:</p>
-                      <p className="text-[#5C5046]">
-                        Consultation, custom twist size &amp; length, heat setting for smooth finish,
-                        and clean edge styling.
-                      </p>
-                    </div>
-
-                    {/* Pricing Table */}
-                    <div className="mt-5 overflow-x-auto">
-                      <table className="w-full text-left text-xs">
-                        <thead>
-                          <tr className="border-b border-[#E8DFC8] text-[#8C7A6B] uppercase font-bold text-[10px]">
-                            <th className="pb-1.5">Size</th>
-                            <th className="pb-1.5">Length</th>
-                            <th className="pb-1.5">Price</th>
-                            <th className="pb-1.5">Duration</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#E8DFC8]/50 font-medium">
-                          <tr>
-                            <td className="py-2 font-bold text-[#BA1296]">Small</td>
-                            <td className="py-2">Shoulder / Mid-Back / Waist</td>
-                            <td className="py-2 font-bold text-[#2B231D]">$200 – $350</td>
-                            <td className="py-2 text-[#5C5046]">4-7 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-bold text-[#C48D46]">Medium</td>
-                            <td className="py-2">Shoulder / Mid-Back / Waist</td>
-                            <td className="py-2 font-bold text-[#2B231D]">$160 – $300</td>
-                            <td className="py-2 text-[#5C5046]">3-6 hrs</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-bold text-[#5C5046]">Large</td>
-                            <td className="py-2">Shoulder / Mid-Back</td>
-                            <td className="py-2 font-bold text-[#2B231D]">$120 – $200</td>
-                            <td className="py-2 text-[#5C5046]">2.5-4 hrs</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                    <a
-                      href="#booking"
-                      className="inline-flex items-center gap-2 rounded-full bg-[#BA1296] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#960d77] transition-all"
-                    >
-                      <Calendar size={14} />
-                      <span>Book Senegalese Twists Now</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* ---------------- 5. Boho Braids, 6. Stitch Braids, 7. Kids Braiding (3-Col Grid) ---------------- */}
-              <div className="grid gap-8 lg:grid-cols-3">
-                {/* Boho Braids */}
-                <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-7 flex flex-col justify-between shadow-sm">
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#BA1296]">
-                      Trendy &amp; Effortlessly Chic
-                    </span>
-                    <h3 className="font-display text-2xl font-bold text-[#2B231D] mt-1">
-                      Boho Braids
-                    </h3>
-                    <p className="mt-2 text-xs sm:text-sm text-[#5C5046] leading-relaxed">
-                      Blends classic knotless/box braids with playful wavy/curly strands for a
-                      carefree, bohemian vacation look with volume.
-                    </p>
-
-                    <div className="mt-4 space-y-1.5 text-xs font-medium border-t border-[#E8DFC8] pt-3">
-                      <div className="flex justify-between py-1 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Knotless Boho (Shoulder)</span>
-                        <span className="font-bold text-[#C48D46]">$280 - $340</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Knotless Boho (Mid-Back)</span>
-                        <span className="font-bold text-[#C48D46]">$340 - $400</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Knotless Boho (Waist)</span>
-                        <span className="font-bold text-[#C48D46]">$400 - $460</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Box Boho (Shoulder/Mid)</span>
-                        <span className="font-bold text-[#C48D46]">$240 - $340</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-3 border-t border-[#E8DFC8]">
-                    <a
-                      href="#booking"
-                      className="w-full text-center inline-block rounded-full bg-[#C48D46] py-2.5 text-xs font-bold text-white hover:bg-[#A87432] transition-all"
-                    >
-                      Book Boho Braids Now
-                    </a>
-                  </div>
-                </div>
-
-                {/* Stitch Braids */}
-                <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-7 flex flex-col justify-between shadow-sm">
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#C48D46]">
-                      Clean &amp; Sculpted Hold
-                    </span>
-                    <h3 className="font-display text-2xl font-bold text-[#2B231D] mt-1">
-                      Stitch Braids
-                    </h3>
-                    <p className="mt-2 text-xs sm:text-sm text-[#5C5046] leading-relaxed">
-                      Patented razor-sharp technique producing ultra-clean sculpted stitch lines and
-                      a tight, long-lasting hold that stays crisp.
-                    </p>
-
-                    <div className="mt-4 space-y-1.5 text-xs font-medium border-t border-[#E8DFC8] pt-3">
-                      <div className="flex justify-between py-1.5 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Short Stitch Braids</span>
-                        <span className="font-bold text-[#BA1296]">$80 - $120 (1.5-2.5h)</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Medium Stitch Braids</span>
-                        <span className="font-bold text-[#BA1296]">$120 - $180 (2.5-3.5h)</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Long Stitch Braids</span>
-                        <span className="font-bold text-[#BA1296]">$180 - $250 (3.5-5h)</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-3 border-t border-[#E8DFC8]">
-                    <a
-                      href="#booking"
-                      className="w-full text-center inline-block rounded-full bg-[#BA1296] py-2.5 text-xs font-bold text-white hover:bg-[#960d77] transition-all"
-                    >
-                      Book Stitch Braids Now
-                    </a>
-                  </div>
-                </div>
-
-                {/* Kids Braiding */}
-                <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-7 flex flex-col justify-between shadow-sm">
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#16857B]">
-                      Gentle &amp; Patient Styling
-                    </span>
-                    <h3 className="font-display text-2xl font-bold text-[#2B231D] mt-1">
-                      Kids Braiding
-                    </h3>
-                    <p className="mt-2 text-xs sm:text-sm text-[#5C5046] leading-relaxed">
-                      Gentle, patient styling for little ones with tension-free techniques, fun
-                      colorful beads, and comfortable appointments.
-                    </p>
-
-                    <div className="mt-4 space-y-1.5 text-xs font-medium border-t border-[#E8DFC8] pt-3">
-                      <div className="flex justify-between py-1 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Simple Cornrows (Kids)</span>
-                        <span className="font-bold text-[#C48D46]">$50 - $80</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Braids with Beads</span>
-                        <span className="font-bold text-[#C48D46]">$60 - $100</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Individual Braids (Kids)</span>
-                        <span className="font-bold text-[#C48D46]">$80 - $140</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-[#E8DFC8]/50">
-                        <span className="font-semibold">Knotless Braids (Kids)</span>
-                        <span className="font-bold text-[#C48D46]">$100 - $180</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-3 border-t border-[#E8DFC8]">
-                    <a
-                      href="#booking"
-                      className="w-full text-center inline-block rounded-full bg-[#C48D46] py-2.5 text-xs font-bold text-white hover:bg-[#A87432] transition-all"
-                    >
-                      Book Kids Braiding Now
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* CATEGORY 2: LOCS & EXTENSIONS */}
-        {/* ========================================================================= */}
-        <section
-          id="locs-extensions"
-          className="relative overflow-hidden bg-[#FAF8F5] py-16 lg:py-24 border-b border-[#E8DFC8]"
-        >
-          <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-            {/* Category Header */}
-            <div className="mb-14 border-b border-[#E8DFC8] pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#C48D46]/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.15em] text-[#C48D46] border border-[#C48D46]/30 mb-3">
-                  <Layers size={13} className="text-[#C48D46]" />
-                  <span>Category 02</span>
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-normal leading-tight text-[#2B231D]">
-                  Locs &amp; <span className="font-serif italic text-[#C48D46]">Extensions</span>
-                </h2>
-              </div>
-              <p className="text-sm font-medium text-[#5C5046] max-w-md">
-                From transformative starter locs and refined microlocs to protective faux locs and
-                seamless weave installations.
-              </p>
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-2">
-              {/* Faux Locs */}
-              <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                  <span className="text-xs font-bold text-[#C48D46] uppercase tracking-wider">
-                    Boho-Chic with a Protective Edge
-                  </span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                    Faux Locs
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                    All the beauty of natural locs without the long-term commitment. Created by
-                    wrapping extensions around your hair for a bold, versatile bohemian finish.
-                  </p>
-
-                  <div className="mt-4 rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8] text-xs">
-                    <p className="font-bold text-[#2B231D]">What's Included:</p>
-                    <p className="text-[#5C5046]">
-                      Consultation, extension prep, wrapping/crochet installation &amp; edge styling.
-                    </p>
-                  </div>
-
-                  <div className="mt-5 overflow-x-auto">
-                    <table className="w-full text-left text-xs font-medium">
-                      <thead>
-                        <tr className="border-b border-[#E8DFC8] text-[#8C7A6B] uppercase font-bold text-[10px]">
-                          <th className="pb-1.5">Style</th>
-                          <th className="pb-1.5">Length</th>
-                          <th className="pb-1.5">Price Range</th>
-                          <th className="pb-1.5">Duration</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#E8DFC8]/50">
-                        <tr>
-                          <td className="py-2 font-semibold text-[#2B231D]">Faux Locs</td>
-                          <td className="py-2">Shoulder</td>
-                          <td className="py-2 font-bold text-[#C48D46]">$200 - $280</td>
-                          <td className="py-2 text-[#5C5046]">4-6 hrs</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 font-semibold text-[#2B231D]">Faux Locs</td>
-                          <td className="py-2">Mid-Back</td>
-                          <td className="py-2 font-bold text-[#C48D46]">$280 - $360</td>
-                          <td className="py-2 text-[#5C5046]">6-8 hrs</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 font-semibold text-[#2B231D]">Faux Locs</td>
-                          <td className="py-2">Waist-Length</td>
-                          <td className="py-2 font-bold text-[#C48D46]">$360 - $450</td>
-                          <td className="py-2 text-[#5C5046]">8-10 hrs</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 font-semibold text-[#2B231D]">Distressed Locs</td>
-                          <td className="py-2">Shoulder / Mid-Back</td>
-                          <td className="py-2 font-bold text-[#C48D46]">$240 - $400</td>
-                          <td className="py-2 text-[#5C5046]">5-9 hrs</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                  <a
-                    href="#booking"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#C48D46] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#A87432] transition-all"
-                  >
-                    <Calendar size={14} />
-                    <span>Book Faux Locs Now</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Starter Locs */}
-              <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                  <span className="text-xs font-bold text-[#BA1296] uppercase tracking-wider">
-                    Begin Your Loc Journey with Confidence
-                  </span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                    Starter Locs
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                    Transformative loc journey with a solid foundation. Whether you choose comb
-                    coils, two-strand twists, or braid locs, we ensure healthy long-term growth.
-                  </p>
-
-                  <div className="mt-4 rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8] text-xs">
-                    <p className="font-bold text-[#2B231D]">What's Included:</p>
-                    <p className="text-[#5C5046]">
-                      Comprehensive consultation, parting assessment, starter products, &amp; 1st
-                      retwist scheduling.
-                    </p>
-                  </div>
-
-                  <div className="mt-5 overflow-x-auto">
-                    <table className="w-full text-left text-xs font-medium">
-                      <thead>
-                        <tr className="border-b border-[#E8DFC8] text-[#8C7A6B] uppercase font-bold text-[10px]">
-                          <th className="pb-1.5">Service</th>
-                          <th className="pb-1.5">Price Range</th>
-                          <th className="pb-1.5">Duration</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#E8DFC8]/50">
-                        <tr>
-                          <td className="py-2.5 font-semibold text-[#2B231D]">Comb Coils (Starter Locs)</td>
-                          <td className="py-2.5 font-bold text-[#BA1296]">$150 – $250</td>
-                          <td className="py-2.5 text-[#5C5046]">2-4 hrs</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2.5 font-semibold text-[#2B231D]">Two-Strand Twist Locs</td>
-                          <td className="py-2.5 font-bold text-[#BA1296]">$180 – $280</td>
-                          <td className="py-2.5 text-[#5C5046]">3-5 hrs</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2.5 font-semibold text-[#2B231D]">Braid Locs</td>
-                          <td className="py-2.5 font-bold text-[#BA1296]">$200 – $300</td>
-                          <td className="py-2.5 text-[#5C5046]">3-5 hrs</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2.5 font-semibold text-[#2B231D]">Loc Retwist (Maintenance)</td>
-                          <td className="py-2.5 font-bold text-[#BA1296]">$70 – $120</td>
-                          <td className="py-2.5 text-[#5C5046]">1-2 hrs</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                  <a
-                    href="#booking"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#BA1296] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#960d77] transition-all"
-                  >
-                    <Calendar size={14} />
-                    <span>Book Starter Locs Now</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Microlocs */}
-              <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                  <span className="text-xs font-bold text-[#C48D46] uppercase tracking-wider">
-                    Fine, Sleek, and Versatile
-                  </span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                    Microlocs
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                    Delicate, refined locs created with micro-partings for a lighter, ultra-flexible,
-                    and sophisticated aesthetic.
-                  </p>
-
-                  <div className="mt-4 rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8] text-xs">
-                    <p className="font-bold text-[#2B231D]">What's Included:</p>
-                    <p className="text-[#5C5046]">
-                      Scalp assessment, interlocking/twisting installation, micro-parting &amp;
-                      maintenance plan.
-                    </p>
-                  </div>
-
-                  <div className="mt-5 space-y-2 text-xs font-medium">
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Microloc Installation</span>
-                      <span className="font-bold text-[#C48D46]">$400 – $700 (8-12 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Microloc Retightening/Retwist</span>
-                      <span className="font-bold text-[#C48D46]">$100 – $200 (2-3 hrs)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                  <a
-                    href="#booking"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#C48D46] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#A87432] transition-all"
-                  >
-                    <Calendar size={14} />
-                    <span>Book Microlocs Now</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Extension Services */}
-              <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                  <span className="text-xs font-bold text-[#BA1296] uppercase tracking-wider">
-                    Sew-Ins, Wigs, &amp; Quick Weaves
-                  </span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                    Extension Services
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                    Looking for length, volume, or a fresh new look? Seamless weave blending and
-                    expert wig installations.
-                  </p>
-
-                  <div className="mt-4 rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8] text-xs">
-                    <p className="font-bold text-[#2B231D]">What's Included:</p>
-                    <p className="text-[#5C5046]">
-                      Consultation, foundation braiding, weave/wig installation, custom cut &amp;
-                      styling.
-                    </p>
-                  </div>
-
-                  <div className="mt-5 space-y-2 text-xs font-medium">
-                    <div className="flex justify-between py-1.5 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Sew-In Weave (Leave-Out)</span>
-                      <span className="font-bold text-[#BA1296]">$150 – $300 (2-4 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Quick Weave</span>
-                      <span className="font-bold text-[#BA1296]">$120 – $200 (2-3 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Custom Wig Installation</span>
-                      <span className="font-bold text-[#BA1296]">$150 – $250 (2-3 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Microlink Installation</span>
-                      <span className="font-bold text-[#BA1296]">$200 – $400 (3-5 hrs)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                  <a
-                    href="#booking"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#BA1296] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#960d77] transition-all"
-                  >
-                    <Calendar size={14} />
-                    <span>Book Extension Services Now</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* CATEGORY 3: NATURAL HAIR & TREATMENTS */}
-        {/* ========================================================================= */}
-        <section
-          id="natural-treatments"
-          className="relative overflow-hidden bg-white py-16 lg:py-24 border-b border-[#E8DFC8]"
-        >
-          <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-            {/* Category Header */}
-            <div className="mb-14 border-b border-[#E8DFC8] pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#16857B]/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.15em] text-[#16857B] border border-[#16857B]/20 mb-3">
-                  <Heart size={13} className="text-[#16857B]" />
-                  <span>Category 03</span>
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-normal leading-tight text-[#2B231D]">
-                  Natural Hair &amp;{" "}
-                  <span className="font-serif italic text-[#C48D46]">Treatments</span>
-                </h2>
-              </div>
-              <p className="text-sm font-medium text-[#5C5046] max-w-md">
-                Healthy hair begins with a nourished foundation. Restorative scalp therapies,
-                hydration rituals, and natural styling that honours your texture.
-              </p>
-            </div>
-
-            <div className="grid gap-8 lg:grid-cols-2">
-              {/* Natural Hair Styling */}
-              <div className="rounded-[28px] bg-[#FAF8F5] border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold text-[#C48D46] uppercase tracking-wider">
-                    Celebrating Your Natural Texture
-                  </span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                    Natural Hair Styling
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                    From defined twist-outs and bantu knots to sleek silk presses, we enhance your
-                    natural curl patterns and health.
-                  </p>
-
-                  <div className="mt-4 rounded-xl bg-white p-3.5 border border-[#E8DFC8] text-xs">
-                    <p className="font-bold text-[#2B231D]">What's Included:</p>
-                    <p className="text-[#5C5046]">
-                      Hair assessment, moisturizing prep, precision style execution, &amp; finishing
-                      sealant.
-                    </p>
-                  </div>
-
-                  <div className="mt-5 space-y-2 text-xs sm:text-sm font-medium">
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Twist-Out</span>
-                      <span className="font-bold text-[#C48D46]">$60 – $100 (1.5-2.5 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Braid-Out</span>
-                      <span className="font-bold text-[#C48D46]">$60 – $100 (1.5-2.5 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">
-                        Silk Press (Includes Wash &amp; Blow-Dry)
-                      </span>
-                      <span className="font-bold text-[#C48D46]">$90 – $150 (2-3 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Bantu Knot-Out</span>
-                      <span className="font-bold text-[#C48D46]">$70 – $110 (1.5-2.5 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Coily Set / Wash &amp; Go</span>
-                      <span className="font-bold text-[#C48D46]">$50 – $80 (1-2 hrs)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                  <a
-                    href="#booking"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#C48D46] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#A87432] transition-all"
-                  >
-                    <Calendar size={14} />
-                    <span>Book Natural Hair Styling Now</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Wash & Treatments */}
-              <div className="rounded-[28px] bg-[#FAF8F5] border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold text-[#16857B] uppercase tracking-wider">
-                    Deep Conditioning &amp; Scalp Care
-                  </span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                    Wash &amp; Treatments
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                    Cleanses, nourishes, and revitalizes your scalp with premium botanical masks and
-                    essential oils before protective styling.
-                  </p>
-
-                  <div className="mt-4 rounded-xl bg-white p-3.5 border border-[#E8DFC8] text-xs">
-                    <p className="font-bold text-[#2B231D]">What's Included:</p>
-                    <p className="text-[#5C5046]">
-                      Scalp analysis, gentle clarifying cleanse, deep conditioning mask, hydrating
-                      scalp oil &amp; blow-dry.
-                    </p>
-                  </div>
-
-                  <div className="mt-5 space-y-2 text-xs sm:text-sm font-medium">
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Hair Wash &amp; Deep Condition</span>
-                      <span className="font-bold text-[#16857B]">$35 – $50 (45-60 min)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Scalp Renewal Treatment</span>
-                      <span className="font-bold text-[#16857B]">$45 – $65 (45-60 min)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Hydrating Treatment</span>
-                      <span className="font-bold text-[#16857B]">$40 – $55 (45-60 min)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">
-                        Clarifying Wash (For Product Buildup)
-                      </span>
-                      <span className="font-bold text-[#16857B]">$40 – $55 (45-60 min)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                  <a
-                    href="#booking"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#16857B] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#126b63] transition-all"
-                  >
-                    <Calendar size={14} />
-                    <span>Book Wash &amp; Treatments Now</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* CATEGORY 4: SPECIAL OCCASIONS & DELUXE PACKAGES */}
-        {/* ========================================================================= */}
-        <section
-          id="special-occasions"
-          className="relative overflow-hidden bg-[#FAF8F5] py-16 lg:py-24 border-b border-[#E8DFC8]"
-        >
-          <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-            {/* Category Header */}
-            <div className="mb-14 border-b border-[#E8DFC8] pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#C48D46]/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.15em] text-[#C48D46] border border-[#C48D46]/30 mb-3">
-                  <Crown size={13} className="text-[#C48D46]" />
-                  <span>Category 04</span>
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-normal leading-tight text-[#2B231D]">
-                  Special Occasions &amp;{" "}
-                  <span className="font-serif italic text-[#C48D46]">Deluxe Packages</span>
-                </h2>
-              </div>
-              <p className="text-sm font-medium text-[#5C5046] max-w-md">
-                Unforgettable bridal, prom, and gala styling paired with all-inclusive deluxe pampering
-                experiences.
-              </p>
-            </div>
-
-            <div className="grid gap-8 lg:grid-cols-2">
-              {/* Special Occasion Updos */}
-              <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                  <span className="text-xs font-bold text-[#BA1296] uppercase tracking-wider">
-                    Bridal, Prom, &amp; Event Styling
-                  </span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                    Special Occasion Updos
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                    Make your big day memorable with regal braided crowns, romantic bridal buns, and
-                    secure all-day holds styled with luxury jewelry.
-                  </p>
-
-                  <div className="mt-4 rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8] text-xs">
-                    <p className="font-bold text-[#2B231D]">What's Included:</p>
-                    <p className="text-[#5C5046]">
-                      In-depth consultation, style design &amp; trial, high-hold products, &amp; hair
-                      jewelry placement.
-                    </p>
-                  </div>
-
-                  <div className="mt-5 space-y-2 text-xs sm:text-sm font-medium">
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Bridal Braided Updo</span>
-                      <span className="font-bold text-[#BA1296]">$150 – $300 (2-4 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Bridesmaid Updo</span>
-                      <span className="font-bold text-[#BA1296]">$100 – $180 (1.5-2.5 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Prom Updo</span>
-                      <span className="font-bold text-[#BA1296]">$100 – $200 (2-3 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Elegant Bun</span>
-                      <span className="font-bold text-[#BA1296]">$80 – $150 (1.5-2.5 hrs)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-[#E8DFC8]/50">
-                      <span className="font-bold text-[#2B231D]">Braided Crown</span>
-                      <span className="font-bold text-[#BA1296]">$100 – $180 (2-3 hrs)</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex gap-3 text-xs font-semibold text-[#8C7A6B]">
-                    <span>Hair Jewelry / Cuffs: +$10-$30</span>
-                    <span>•</span>
-                    <span>Trial Run: +$50</span>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                  <a
-                    href="#booking"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#BA1296] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#960d77] transition-all"
-                  >
-                    <Calendar size={14} />
-                    <span>Book Special Occasion Updos Now</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Deluxe Hair Packages */}
-              <div className="rounded-[28px] bg-white border border-[#E8DFC8] p-6 sm:p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                  <span className="text-xs font-bold text-[#C48D46] uppercase tracking-wider">
-                    The Complete Experience
-                  </span>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#2B231D] mt-1">
-                    Deluxe Hair Packages
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#5C5046] leading-relaxed font-normal">
-                    All-inclusive multi-step packages combining cleansing, deep nourishment, full
-                    installation, and finishing styling for a transformative experience.
-                  </p>
-
-                  <div className="mt-5 space-y-3">
-                    <div className="rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8]">
-                      <div className="flex justify-between items-center text-sm font-bold text-[#2B231D]">
-                        <span>The Signature Package</span>
-                        <span className="text-[#C48D46]">$260 – $340</span>
-                      </div>
-                      <p className="mt-1 text-xs text-[#5C5046]">
-                        Wash + Deep Condition + Medium Knotless Braids + Edge Finish (5-7 hrs)
-                      </p>
-                    </div>
-
-                    <div className="rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8]">
-                      <div className="flex justify-between items-center text-sm font-bold text-[#2B231D]">
-                        <span>The Bridal Package</span>
-                        <span className="text-[#C48D46]">$250 – $400</span>
-                      </div>
-                      <p className="mt-1 text-xs text-[#5C5046]">
-                        Consultation + Trial Run + Wash &amp; Mask + Bridal Updo + Hair Jewelry (3-5 hrs)
-                      </p>
-                    </div>
-
-                    <div className="rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8]">
-                      <div className="flex justify-between items-center text-sm font-bold text-[#2B231D]">
-                        <span>The Loc Launch Package</span>
-                        <span className="text-[#C48D46]">$250 – $380</span>
-                      </div>
-                      <p className="mt-1 text-xs text-[#5C5046]">
-                        Starter Locs + Deep Condition + Loc Products + 1 Free Retwist (4-6 hrs)
-                      </p>
-                    </div>
-
-                    <div className="rounded-xl bg-[#FAF8F5] p-3.5 border border-[#E8DFC8]">
-                      <div className="flex justify-between items-center text-sm font-bold text-[#2B231D]">
-                        <span>The Protective Style Package</span>
-                        <span className="text-[#C48D46]">$300 – $450</span>
-                      </div>
-                      <p className="mt-1 text-xs text-[#5C5046]">
-                        Wash + Scalp Treatment + Full Braid Installation + Braid Spray (5-8 hrs)
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E8DFC8]">
-                  <a
-                    href="#booking"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#C48D46] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#A87432] transition-all"
-                  >
-                    <Calendar size={14} />
-                    <span>Book Deluxe Packages Now</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* WHY BOOK WITH US? (VALUE MATRIX) */}
-        {/* ========================================================================= */}
-        <section className="relative overflow-hidden bg-white py-16 lg:py-24 border-b border-[#E8DFC8]">
-          <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-14">
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#C48D46]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#C48D46] border border-[#C48D46]/30 mb-4">
-                <ShieldCheck size={13} className="text-[#C48D46]" />
-                <span>The Doussou Quality Standard</span>
-              </div>
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-normal leading-tight text-[#2B231D]">
-                Why Book <span className="font-serif italic text-[#C48D46]">With Us?</span>
+          <div className="mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-8">
+            {/* Section Header */}
+            <div className="text-center mb-8 sm:mb-10">
+              <h2 className="text-3xl sm:text-4xl lg:text-[2.5rem] font-bold text-[#A81286] tracking-tight">
+                All Braiding &amp; Hair Services
               </h2>
-              <p className="mt-4 text-base sm:text-lg text-[#5C5046] font-medium leading-relaxed">
-                Experience unparalleled care, cleanliness, and artistry at our Glen Burnie sanctuary.
+              <p className="mt-2 text-sm sm:text-base text-neutral-600 max-w-2xl mx-auto">
+                Browse our complete collection of protective hairstyles, locs, twists, extensions, and natural hair care services.
+              </p>
+            </div>
+
+            {/* Search & Category Filter Controls */}
+            <div className="mb-10 space-y-4 max-w-4xl mx-auto">
+              {/* Search Bar */}
+              <div className="relative">
+                <Search
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Search any service or price (e.g. Knotless, Box Braids, Twists, Locs, Wash)..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-2xl border border-neutral-300 bg-white py-3.5 pl-11 pr-10 text-sm font-medium text-neutral-900 placeholder:text-neutral-400 focus:border-[#BA1296] focus:outline-none focus:ring-2 focus:ring-[#BA1296]/20 shadow-xs font-['Inter',sans-serif]"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-neutral-400 hover:text-neutral-700"
+                    aria-label="Clear search"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+
+              {/* Category Filter Pills with Counters */}
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {CATEGORIES.map((cat) => {
+                  const isSelected = selectedCategory === cat;
+                  const count =
+                    cat === "All"
+                      ? ALL_SERVICES.length
+                      : ALL_SERVICES.filter((s) => s.category === cat).length;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 font-['Inter',sans-serif] ${isSelected
+                          ? "bg-[#A81286] text-white shadow-xs scale-105"
+                          : "bg-white text-neutral-700 border border-neutral-200 hover:border-purple-300 hover:bg-purple-50/50"
+                        }`}
+                    >
+                      {cat} ({count})
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Filter info indicator */}
+              <div className="flex items-center justify-between text-xs text-neutral-500 px-1 font-['Inter',sans-serif]">
+                <span>
+                  Showing <strong className="text-neutral-900 font-bold">{filteredServices.length}</strong> of {ALL_SERVICES.length} services
+                </span>
+                {(searchQuery || selectedCategory !== "All") && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedCategory("All");
+                    }}
+                    className="text-[#A81286] font-semibold hover:underline"
+                  >
+                    Reset all filters
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Service Cards Grid - ALL SERVICES IN CARDS WITH INTER FONT */}
+            {filteredServices.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredServices.map((service) => (
+                  <div
+                    key={service.id}
+                    className="group relative overflow-hidden rounded-2xl bg-neutral-900 shadow-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col font-['Inter',sans-serif]"
+                  >
+                    {/* Photo Container */}
+                    <div className="relative aspect-[4/4.8] w-full overflow-hidden bg-neutral-800">
+                      <img
+                        src={service.image}
+                        alt={service.name}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        loading="lazy"
+                      />
+
+                      {/* Top Tag Badge (Font Inter) */}
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-black/65 backdrop-blur-md px-3 py-1 text-[11px] font-semibold text-white uppercase tracking-wider border border-white/20 font-['Inter',sans-serif]">
+                          <Sparkle size={10} className="text-[#F7D272]" />
+                          {service.tag}
+                        </span>
+                      </div>
+
+                      {/* Category Tag on Top Right */}
+                      <div className="absolute top-3 right-3 z-10">
+                        <span className="inline-block rounded-full bg-[#8E1077]/90 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider font-['Inter',sans-serif]">
+                          {service.category}
+                        </span>
+                      </div>
+
+                      {/* Purple Gradient Bottom Overlay (Matching Image 2 with Font Inter) */}
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#8E1077] via-[#9F1387]/95 to-transparent pt-16 pb-4 px-4 text-white text-center font-['Inter',sans-serif]">
+                        <h3 className="text-base sm:text-lg font-bold tracking-tight text-white drop-shadow-md font-['Inter',sans-serif]">
+                          {service.name} : {service.price}
+                        </h3>
+                        <p className="mt-1 text-xs text-purple-100 line-clamp-2 opacity-95 leading-relaxed font-['Inter',sans-serif]">
+                          {service.blurb}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Card Action Footer with Inter Font */}
+                    <div className="p-3 bg-[#8E1077] flex items-center justify-between gap-2 border-t border-purple-300/20 font-['Inter',sans-serif]">
+                      <span className="text-xs font-semibold text-purple-100 font-['Inter',sans-serif]">
+                        {service.price}
+                      </span>
+                      <a
+                        href="#booking"
+                        className="inline-flex items-center gap-1 rounded-full bg-white text-[#8E1077] px-3.5 py-1 text-xs font-bold transition-transform hover:scale-105 active:scale-95 shadow-xs font-['Inter',sans-serif]"
+                      >
+                        <span>Book Style</span>
+                        <ChevronRight size={13} />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-3xl bg-white p-12 text-center border border-neutral-200 shadow-sm max-w-xl mx-auto font-['Inter',sans-serif]">
+                <p className="text-lg font-bold text-neutral-800">No services match your search</p>
+                <p className="mt-1 text-sm text-neutral-500">
+                  Try searching for another style or reset the category filter.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory("All");
+                  }}
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#A81286] px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#8e0e7a]"
+                >
+                  Reset Search &amp; Filters
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* REDESIGNED: EXECUTIVE SERVICES & PRICE LIST TABLE (Ultra-Premium Menu) */}
+        {/* ========================================================================= */}
+        <section
+          id="price-list"
+          className="relative overflow-hidden bg-gradient-to-b from-neutral-950 via-[#19021C] to-neutral-950 py-16 sm:py-20 lg:py-28 scroll-mt-20 text-white font-['Inter',sans-serif] border-y border-purple-500/20"
+        >
+          {/* Ambient Lighting & Glows */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[850px] h-[360px] bg-gradient-to-b from-[#BA1296]/20 via-purple-800/10 to-transparent blur-[120px] pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-900/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#BA1296]/15 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Header */}
+            <div className="text-center mb-10 sm:mb-12">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#BA1296]/20 to-[#F7D272]/20 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-[#F7D272] border border-[#F7D272]/30 mb-4 shadow-[0_0_20px_rgba(247,210,114,0.12)]">
+                <Tag size={13} className="text-[#F7D272]" />
+                <span>Transparent Upfront Pricing</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-[2.85rem] font-extrabold tracking-tight text-white font-['Inter',sans-serif]">
+                Services &amp; <span className="bg-gradient-to-r from-[#FF72E1] via-[#F7D272] to-[#FFAAF8] bg-clip-text text-transparent">Price List Table</span>
+              </h2>
+              <p className="mt-3 text-sm sm:text-base lg:text-lg text-neutral-300 max-w-2xl mx-auto font-normal">
+                Quick-reference table of all our services and price ranges directly from our salon menu.
+              </p>
+
+              {/* Trust Guarantee Badges */}
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-purple-200">
+                <span className="inline-flex items-center gap-1.5">
+                  <CheckCircle2 size={15} className="text-[#F7D272]" /> No Hidden Chair Fees
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <CheckCircle2 size={15} className="text-[#F7D272]" /> 100% Upfront Quotes
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <CheckCircle2 size={15} className="text-[#F7D272]" /> Free Style Consultation
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <CheckCircle2 size={15} className="text-[#F7D272]" /> Quality Hair Available
+                </span>
+              </div>
+            </div>
+
+            {/* The Executive Salon Menu Card Board */}
+            <div className="rounded-[2.5rem] bg-gradient-to-b from-[#2B042F]/90 via-[#39063C]/95 to-[#1D0220] p-4 sm:p-7 lg:p-10 shadow-[0_25px_80px_rgba(0,0,0,0.7)] border border-purple-400/25 relative overflow-hidden backdrop-blur-2xl">
+              {/* Menu Controls: Search & Category Filter Pills */}
+              <div className="mb-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pb-6 border-b border-purple-500/20">
+                {/* Search Bar */}
+                <div className="relative flex-1 max-w-md">
+                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-300" />
+                  <input
+                    type="text"
+                    value={priceSearchQuery}
+                    onChange={(e) => setPriceSearchQuery(e.target.value)}
+                    placeholder="Search price menu (e.g. twist, braids, wash)..."
+                    className="w-full rounded-xl bg-white/10 border border-purple-400/30 pl-10 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-purple-300/60 focus:outline-none focus:ring-2 focus:ring-[#F7D272] focus:border-transparent transition-all"
+                  />
+                  {priceSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setPriceSearchQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-300 hover:text-white"
+                      title="Clear search"
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+
+                {/* Category Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  {PRICE_CATEGORIES.map((cat) => {
+                    const count =
+                      cat === "All"
+                        ? SALON_PRICE_LIST.length
+                        : SALON_PRICE_LIST.filter((s) => s.category === cat).length;
+                    const isActive = priceCategory === cat;
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setPriceCategory(cat)}
+                        className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all duration-150 ${
+                          isActive
+                            ? "bg-[#F7D272] text-[#3B073C] shadow-md shadow-amber-500/20 font-extrabold"
+                            : "bg-white/10 text-purple-100 hover:bg-white/15 border border-white/10"
+                        }`}
+                      >
+                        {cat} ({count})
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Dual-Column Editorial Menu Grid */}
+              {filteredPriceList.length > 0 ? (
+                (() => {
+                  const mid = Math.ceil(filteredPriceList.length / 2);
+                  const col1 = filteredPriceList.slice(0, mid);
+                  const col2 = filteredPriceList.slice(mid);
+
+                  return (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-3 font-['Inter',sans-serif]">
+                      {/* Column 1 */}
+                      <div className="space-y-2.5">
+                        <div className="hidden sm:flex items-center justify-between bg-[#1C021E]/80 border border-purple-500/25 rounded-xl px-4 py-2.5 mb-2 text-xs font-bold uppercase tracking-wider text-purple-200">
+                          <span>Service</span>
+                          <div className="flex items-center gap-6">
+                            <span>Cost</span>
+                            <span>Action</span>
+                          </div>
+                        </div>
+
+                        {col1.map((item) => (
+                          <div
+                            key={item.id}
+                            className={`group flex items-center justify-between gap-3 px-4 sm:px-5 py-3.5 rounded-xl transition-all duration-200 ${
+                              item.highlighted
+                                ? "bg-gradient-to-r from-[#8E1B85] via-[#9F1D95] to-[#8E1B85] border border-purple-300/35 text-white shadow-md shadow-purple-950/40 hover:from-[#9B1E92] hover:to-[#B022A5] hover:shadow-[0_4px_25px_rgba(168,18,134,0.45)] hover:-translate-y-0.5"
+                                : "bg-white/[0.04] border border-white/[0.07] text-white/95 hover:bg-white/[0.08] hover:border-purple-400/30 hover:-translate-y-0.5"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                              {item.highlighted ? (
+                                <span className="flex h-2 w-2 rounded-full bg-[#F7D272] shrink-0 animate-pulse" />
+                              ) : (
+                                <span className="flex h-1.5 w-1.5 rounded-full bg-purple-400/60 shrink-0" />
+                              )}
+                              <span className="font-semibold text-sm sm:text-[15px] truncate text-white">
+                                {item.name}
+                              </span>
+                              {item.note && (
+                                <span className="hidden sm:inline-block shrink-0 rounded-md bg-[#F7D272]/20 border border-[#F7D272]/40 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#FDE047]">
+                                  {item.note}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span
+                                className={`font-bold text-sm sm:text-base font-['Inter',sans-serif] tracking-tight ${
+                                  item.highlighted
+                                    ? "text-[#FDE047] drop-shadow-xs"
+                                    : "text-white/95 group-hover:text-[#FDE047] transition-colors"
+                                }`}
+                              >
+                                {item.price}
+                              </span>
+                              <a
+                                href="#booking"
+                                className={`inline-flex items-center justify-center rounded-lg px-3 py-1 text-xs font-bold transition-all active:scale-95 ${
+                                  item.highlighted
+                                    ? "bg-white/20 hover:bg-white hover:text-[#4A0A4B] text-white"
+                                    : "bg-white/10 hover:bg-white hover:text-[#4A0A4B] text-white"
+                                }`}
+                              >
+                                Book
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Column 2 */}
+                      <div className="space-y-2.5">
+                        <div className="hidden sm:flex items-center justify-between bg-[#1C021E]/80 border border-purple-500/25 rounded-xl px-4 py-2.5 mb-2 text-xs font-bold uppercase tracking-wider text-purple-200">
+                          <span>Service</span>
+                          <div className="flex items-center gap-6">
+                            <span>Cost</span>
+                            <span>Action</span>
+                          </div>
+                        </div>
+
+                        {col2.map((item) => (
+                          <div
+                            key={item.id}
+                            className={`group flex items-center justify-between gap-3 px-4 sm:px-5 py-3.5 rounded-xl transition-all duration-200 ${
+                              item.highlighted
+                                ? "bg-gradient-to-r from-[#8E1B85] via-[#9F1D95] to-[#8E1B85] border border-purple-300/35 text-white shadow-md shadow-purple-950/40 hover:from-[#9B1E92] hover:to-[#B022A5] hover:shadow-[0_4px_25px_rgba(168,18,134,0.45)] hover:-translate-y-0.5"
+                                : "bg-white/[0.04] border border-white/[0.07] text-white/95 hover:bg-white/[0.08] hover:border-purple-400/30 hover:-translate-y-0.5"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                              {item.highlighted ? (
+                                <span className="flex h-2 w-2 rounded-full bg-[#F7D272] shrink-0 animate-pulse" />
+                              ) : (
+                                <span className="flex h-1.5 w-1.5 rounded-full bg-purple-400/60 shrink-0" />
+                              )}
+                              <span className="font-semibold text-sm sm:text-[15px] truncate text-white">
+                                {item.name}
+                              </span>
+                              {item.note && (
+                                <span className="hidden sm:inline-block shrink-0 rounded-md bg-[#F7D272]/20 border border-[#F7D272]/40 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#FDE047]">
+                                  {item.note}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span
+                                className={`font-bold text-sm sm:text-base font-['Inter',sans-serif] tracking-tight ${
+                                  item.highlighted
+                                    ? "text-[#FDE047] drop-shadow-xs"
+                                    : "text-white/95 group-hover:text-[#FDE047] transition-colors"
+                                }`}
+                              >
+                                {item.price}
+                              </span>
+                              <a
+                                href="#booking"
+                                className={`inline-flex items-center justify-center rounded-lg px-3 py-1 text-xs font-bold transition-all active:scale-95 ${
+                                  item.highlighted
+                                    ? "bg-white/20 hover:bg-white hover:text-[#4A0A4B] text-white"
+                                    : "bg-white/10 hover:bg-white hover:text-[#4A0A4B] text-white"
+                                }`}
+                              >
+                                Book
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()
+              ) : (
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-10 text-center text-neutral-300">
+                  <p className="text-base font-bold text-white">No services match "{priceSearchQuery}"</p>
+                  <p className="mt-1 text-xs text-purple-200">
+                    Try searching for another style name or resetting your filter.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPriceSearchQuery("");
+                      setPriceCategory("All");
+                    }}
+                    className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#BA1296] px-5 py-2 text-xs font-bold text-white shadow-md hover:bg-[#8e0e7a]"
+                  >
+                    Reset Price Search
+                  </button>
+                </div>
+              )}
+
+              {/* ========================================================================= */}
+              {/* AUTHENTIC IMAGE 1 "EXAMPLES:" VISUAL SHOWCASE STRIP */}
+              {/* ========================================================================= */}
+              <div className="mt-10 pt-8 border-t border-purple-500/20">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={16} className="text-[#F7D272]" />
+                    <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
+                      Examples:{" "}
+                      <span className="font-normal text-purple-200 text-xs sm:text-sm">
+                        Visual style previews from our salon portfolio
+                      </span>
+                    </h3>
+                  </div>
+                  <a
+                    href="#all-services-grid"
+                    className="text-xs font-bold text-[#F7D272] hover:text-white transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>View all 32 visual cards above ↑</span>
+                  </a>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                  {EXAMPLES_SHOWCASE.map((ex) => (
+                    <a
+                      key={ex.name}
+                      href="#booking"
+                      className="group flex flex-col items-center text-center p-2.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-purple-400/50 hover:bg-white/[0.08] transition-all hover:-translate-y-1"
+                    >
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-purple-400/40 group-hover:border-[#F7D272] transition-colors shadow-md">
+                        <img
+                          src={ex.image}
+                          alt={ex.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+                      <span className="mt-2 text-[11px] font-bold text-white line-clamp-1 group-hover:text-[#F7D272] transition-colors">
+                        {ex.name}
+                      </span>
+                      <span className="text-[10px] font-semibold text-[#FDE047]">
+                        {ex.price}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Salon Policy & Hair Preparation Note */}
+              <div className="mt-6 rounded-2xl bg-gradient-to-r from-purple-950/60 via-purple-900/40 to-purple-950/60 p-4 sm:p-5 border border-purple-400/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-purple-200">
+                <div className="flex items-start sm:items-center gap-2.5">
+                  <Info size={16} className="text-[#F7D272] shrink-0 mt-0.5 sm:mt-0" />
+                  <span>
+                    <strong className="text-white">Salon Note:</strong> For <strong>Lock Extension</strong>, please supply your own hair or let us know during booking so we can prepare it for you. Pre-stretched braiding hair is available for select signature styles.
+                  </span>
+                </div>
+                <a
+                  href="#booking"
+                  className="inline-flex items-center gap-1.5 font-bold text-[#F7D272] hover:text-white transition-colors shrink-0"
+                >
+                  <span>Reserve appointment online →</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* WHY BOOK WITH US */}
+        {/* ========================================================================= */}
+        <section className="relative overflow-hidden bg-white py-16 lg:py-24 border-b border-neutral-200">
+          <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#BA1296]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#BA1296] border border-[#BA1296]/20 mb-4">
+                <ShieldCheck size={13} className="text-[#BA1296]" />
+                <span>Our Quality Commitment</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-bold text-neutral-900 tracking-tight">
+                Why Choose <span className="text-[#A81286]">Doussou Quality Braiding?</span>
+              </h2>
+              <p className="mt-3 text-sm sm:text-base text-neutral-600 leading-relaxed">
+                Experience unparalleled care, precision parting, and healthy protective hair styling.
               </p>
             </div>
 
@@ -1516,15 +1219,15 @@ function ServicesPage() {
                 return (
                   <div
                     key={item.feature}
-                    className="group rounded-[24px] bg-[#FAF8F5] p-6 sm:p-7 border border-[#E8DFC8] shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C48D46]/50 hover:shadow-lg"
+                    className="group rounded-2xl bg-purple-50/40 p-6 sm:p-7 border border-purple-100 transition-all duration-300 hover:-translate-y-1 hover:border-purple-300 hover:shadow-lg hover:bg-white"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#C48D46]/15 text-[#C48D46] mb-4 group-hover:bg-[#C48D46] group-hover:text-white transition-colors">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#BA1296]/10 text-[#BA1296] mb-4 group-hover:bg-[#BA1296] group-hover:text-white transition-colors">
                       <IconComp size={22} />
                     </div>
-                    <h3 className="font-display text-2xl font-bold text-[#2B231D]">
+                    <h3 className="text-xl font-bold text-neutral-900">
                       {item.feature}
                     </h3>
-                    <p className="mt-2 text-sm sm:text-base leading-relaxed text-[#5C5046] font-normal">
+                    <p className="mt-2 text-sm text-neutral-600 leading-relaxed">
                       {item.benefit}
                     </p>
                   </div>
@@ -1537,41 +1240,36 @@ function ServicesPage() {
         {/* ========================================================================= */}
         {/* UNIVERSAL ADD-ONS & SALON POLICIES */}
         {/* ========================================================================= */}
-        <section
-          id="addons-policies"
-          className="relative overflow-hidden bg-[#FAF8F5] py-16 lg:py-24 border-b border-[#E8DFC8]"
-        >
-          <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 items-start">
+        <section className="relative overflow-hidden bg-neutral-50 py-16 lg:py-24 border-b border-neutral-200">
+          <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-start">
               {/* Universal Service Add-Ons */}
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#BA1296]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#BA1296] border border-[#BA1296]/20 mb-4">
                   <Tag size={13} className="text-[#BA1296]" />
                   <span>Customize Your Look</span>
                 </div>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#2B231D]">
-                  Service Add-Ons{" "}
-                  <span className="font-serif italic text-[#C48D46]">(All Services)</span>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900">
+                  Service Add-Ons &amp; Enhancements
                 </h2>
-                <p className="mt-3 text-sm sm:text-base text-[#5C5046] font-medium leading-relaxed mb-6">
-                  Enhance your appointment with our signature add-on treatments, accessories, and
-                  scalp therapy rituals.
+                <p className="mt-3 text-sm sm:text-base text-neutral-600 leading-relaxed mb-6">
+                  Enhance your styling appointment with our signature add-on treatments, beads, curls, and scalp therapy rituals.
                 </p>
 
-                <div className="rounded-2xl bg-white border border-[#E8DFC8] overflow-hidden shadow-sm">
-                  <div className="divide-y divide-[#E8DFC8]/60">
+                <div className="rounded-2xl bg-white border border-neutral-200 overflow-hidden shadow-xs">
+                  <div className="divide-y divide-neutral-100">
                     {UNIVERSAL_ADDONS.map((addon) => (
                       <div
                         key={addon.name}
-                        className="p-4 sm:p-5 flex items-center justify-between gap-4 transition-colors hover:bg-[#FAF8F5]"
+                        className="p-4 sm:p-5 flex items-center justify-between gap-4 transition-colors hover:bg-purple-50/30"
                       >
                         <div>
-                          <p className="font-bold text-sm sm:text-base text-[#2B231D]">
+                          <p className="font-bold text-sm sm:text-base text-neutral-900">
                             {addon.name}
                           </p>
-                          <p className="text-xs text-[#8C7A6B] mt-0.5">{addon.detail}</p>
+                          <p className="text-xs text-neutral-500 mt-0.5">{addon.detail}</p>
                         </div>
-                        <span className="font-display text-lg font-bold text-[#C48D46] shrink-0">
+                        <span className="font-bold text-base sm:text-lg text-[#A81286] shrink-0">
                           {addon.price}
                         </span>
                       </div>
@@ -1582,81 +1280,63 @@ function ServicesPage() {
 
               {/* Service Policies */}
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#16857B]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#16857B] border border-[#16857B]/20 mb-4">
-                  <Info size={13} className="text-[#16857B]" />
+                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-600/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-emerald-700 border border-emerald-600/20 mb-4">
+                  <Info size={13} className="text-emerald-700" />
                   <span>Important Guidelines</span>
                 </div>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#2B231D]">
-                  Service <span className="font-serif italic text-[#C48D46]">Policies</span>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900">
+                  Studio Policies
                 </h2>
-                <p className="mt-3 text-sm sm:text-base text-[#5C5046] font-medium leading-relaxed mb-6">
-                  To ensure a seamless, punctual, and relaxing experience for all clients, please
-                  review our studio policies:
+                <p className="mt-3 text-sm sm:text-base text-neutral-600 leading-relaxed mb-6">
+                  To ensure a seamless, punctual, and relaxing experience for all our clients, please review our salon guidelines:
                 </p>
 
-                <div className="space-y-4">
-                  <div className="rounded-2xl bg-white p-5 border border-[#E8DFC8] shadow-xs">
-                    <h4 className="font-bold text-sm text-[#2B231D] flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#BA1296] text-white text-[11px]">
+                <div className="space-y-3.5">
+                  <div className="rounded-2xl bg-white p-4 sm:p-5 border border-neutral-200 shadow-2xs">
+                    <h4 className="font-bold text-sm text-neutral-900 flex items-center gap-2">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#A81286] text-white text-[11px]">
                         1
                       </span>
-                      Deposit Policy
+                      Fast &amp; Flexible Booking
                     </h4>
-                    <p className="mt-2 text-xs sm:text-sm text-[#5C5046] leading-relaxed">
-                      A non-refundable deposit may be required for bookings scheduled over 3 hours to
-                      secure your master stylist’s calendar.
+                    <p className="mt-1.5 text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                      We can often accommodate booking requests as early as one hour before your desired style. Online booking is quick and confirmed instantly.
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-white p-5 border border-[#E8DFC8] shadow-xs">
-                    <h4 className="font-bold text-sm text-[#2B231D] flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C48D46] text-white text-[11px]">
+                  <div className="rounded-2xl bg-white p-4 sm:p-5 border border-neutral-200 shadow-2xs">
+                    <h4 className="font-bold text-sm text-neutral-900 flex items-center gap-2">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#A81286] text-white text-[11px]">
                         2
                       </span>
-                      Punctuality &amp; Late Arrivals
+                      Punctuality &amp; Timing
                     </h4>
-                    <p className="mt-2 text-xs sm:text-sm text-[#5C5046] leading-relaxed">
-                      Please arrive on time. Late arrivals over 15 minutes may result in reduced
-                      styling time or rescheduling to maintain scheduled appointments.
+                    <p className="mt-1.5 text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                      Please arrive on time. Arriving promptly guarantees your full styling time and keeps all client schedules running smoothly.
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-white p-5 border border-[#E8DFC8] shadow-xs">
-                    <h4 className="font-bold text-sm text-[#2B231D] flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#16857B] text-white text-[11px]">
+                  <div className="rounded-2xl bg-white p-4 sm:p-5 border border-neutral-200 shadow-2xs">
+                    <h4 className="font-bold text-sm text-neutral-900 flex items-center gap-2">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#A81286] text-white text-[11px]">
                         3
                       </span>
-                      24-Hour Cancellation Notice
+                      Clean &amp; Prepared Hair
                     </h4>
-                    <p className="mt-2 text-xs sm:text-sm text-[#5C5046] leading-relaxed">
-                      We kindly ask for at least 24 hours advance notice if you need to cancel or
-                      reschedule your appointment.
+                    <p className="mt-1.5 text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                      Please arrive with your hair washed and blown out, or select our Wash &amp; Blow Dry service so we can prepare your hair before styling.
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-white p-5 border border-[#E8DFC8] shadow-xs">
-                    <h4 className="font-bold text-sm text-[#2B231D] flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2B231D] text-white text-[11px]">
+                  <div className="rounded-2xl bg-white p-4 sm:p-5 border border-neutral-200 shadow-2xs">
+                    <h4 className="font-bold text-sm text-neutral-900 flex items-center gap-2">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#A81286] text-white text-[11px]">
                         4
                       </span>
-                      Hair &amp; Supplies Included
+                      Children's Appointments
                     </h4>
-                    <p className="mt-2 text-xs sm:text-sm text-[#5C5046] leading-relaxed">
-                      Standard pre-stretched braiding hair is included in our pricing. Specialty,
-                      human hair curls, or custom ombre colors may require additional fees.
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-white p-5 border border-[#E8DFC8] shadow-xs">
-                    <h4 className="font-bold text-sm text-[#2B231D] flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C48D46] text-white text-[11px]">
-                        5
-                      </span>
-                      Children's Services
-                    </h4>
-                    <p className="mt-2 text-xs sm:text-sm text-[#5C5046] leading-relaxed">
-                      Children under the age of 12 must be accompanied by an adult throughout the
-                      duration of the styling appointment.
+                    <p className="mt-1.5 text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                      Children must be accompanied by an adult throughout their appointment. We provide patient, gentle care for our younger clients.
                     </p>
                   </div>
                 </div>
@@ -1668,49 +1348,37 @@ function ServicesPage() {
         {/* ========================================================================= */}
         {/* CALL TO ACTION BANNER */}
         {/* ========================================================================= */}
-        <section className="relative isolate overflow-hidden bg-plum-deep py-20 lg:py-24 text-white">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -left-20 top-0 h-[450px] w-[450px] rounded-full bg-[#BA1296]/30 blur-[130px]"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-20 bottom-0 h-[450px] w-[450px] rounded-full bg-[#C48D46]/30 blur-[130px]"
-          />
-
-          <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <section className="relative isolate overflow-hidden bg-gradient-to-r from-[#3B073C] via-[#5C105E] to-[#3B073C] py-16 lg:py-20 text-white">
+          <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <div className="mx-auto max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#E8C28A] border border-white/20 mb-6">
-                <Sparkles size={13} className="text-[#E8C28A]" />
-                <span>Ready to Transform Your Look?</span>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#F7D272] border border-white/20 mb-6">
+                <Sparkles size={13} className="text-[#F7D272]" />
+                <span>Ready for Your Transformation?</span>
               </div>
 
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-[3.25rem] font-normal leading-[1.15] text-white">
-                Book Your Appointment with{" "}
-                <span className="font-serif italic text-[#E8C28A] block sm:inline">
-                  Doussou Quality Braiding Today.
-                </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+                Book Your Appointment at{" "}
+                <span className="text-[#F7D272]">Doussou Quality Braiding Today</span>
               </h2>
 
-              <p className="mt-6 text-base sm:text-lg lg:text-xl text-white/90 font-medium leading-relaxed max-w-2xl mx-auto">
-                Our master stylists are ready to bring your vision to life. Experience precision,
-                scalp comfort, and a protective hairstyle that turns heads.
+              <p className="mt-5 text-sm sm:text-base lg:text-lg text-white/90 font-medium leading-relaxed max-w-2xl mx-auto">
+                With 6+ years of professional artistry, we offer meticulous care, tension-free parting, and stunning protective styles. We can often accommodate requests as early as one hour before your appointment!
               </p>
 
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
                 <a
                   href="#booking"
-                  className="inline-flex items-center gap-2.5 rounded-full bg-[#C48D46] px-8 py-4 text-sm font-bold text-white shadow-xl transition-all duration-300 hover:bg-[#b07d3b] hover:scale-105 active:scale-95"
+                  className="inline-flex items-center gap-2 rounded-full bg-white text-[#5C105E] px-8 py-3.5 text-sm font-bold shadow-xl transition-all duration-200 hover:bg-neutral-100 hover:scale-105 active:scale-95"
                 >
-                  <Calendar size={18} />
-                  <span>Book Your Appointment Now</span>
+                  <Calendar size={17} />
+                  <span>Book Appointment Online</span>
                 </a>
                 <a
                   href={CONTACT.phoneHref}
-                  className="inline-flex items-center gap-2 rounded-full bg-white/10 px-7 py-4 text-sm font-bold text-white border border-white/30 backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95"
+                  className="inline-flex items-center gap-2 rounded-full bg-white/10 px-7 py-3.5 text-sm font-bold text-white border border-white/30 backdrop-blur-md transition-all duration-200 hover:bg-white/20 hover:scale-105 active:scale-95"
                 >
                   <Phone size={16} />
-                  <span>Call Studio: {CONTACT.phone}</span>
+                  <span>Call: {CONTACT.phone}</span>
                 </a>
               </div>
             </div>
@@ -1720,7 +1388,9 @@ function ServicesPage() {
         {/* ========================================================================= */}
         {/* EMBEDDED BOOKING SECTION */}
         {/* ========================================================================= */}
-        <BookingForm />
+        <div id="booking" className="scroll-mt-24">
+          <BookingForm />
+        </div>
       </main>
 
       <Footer />
@@ -1728,9 +1398,10 @@ function ServicesPage() {
       {/* Mobile Sticky Booking CTA Button */}
       <a
         href="#booking"
-        className="fixed inset-x-4 bottom-4 z-40 flex items-center justify-center rounded-lg bg-plum px-6 py-3.5 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-primary-foreground shadow-[0_12px_30px_-14px_var(--plum-deep)] lg:hidden"
+        className="fixed inset-x-4 bottom-4 z-40 flex items-center justify-center gap-2 rounded-xl bg-[#A81286] px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-white shadow-2xl transition-transform active:scale-95 lg:hidden font-['Inter',sans-serif]"
       >
-        Book Appointment
+        <Calendar size={16} />
+        <span>Book Appointment</span>
       </a>
     </div>
   );

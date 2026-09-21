@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useId } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
-import { CONTACT } from "@/components/site/data";
+import { CONTACT, BOOKING_SERVICES_BY_CATEGORY, ALL_BOOKING_SERVICES_LIST } from "@/components/site/data";
 import {
   Calendar,
   Clock,
@@ -79,26 +79,7 @@ const schema = [
   },
 ];
 
-const SERVICES_LIST = [
-  "Knotless Braids",
-  "Box Braids",
-  "Feed-In Cornrows",
-  "Senegalese Twists",
-  "Boho Braids",
-  "Stitch Braids",
-  "Kids Braiding",
-  "Faux Locs",
-  "Starter Locs",
-  "Microlocs",
-  "Locs Retwist / Maintenance",
-  "Extension Services (Sew-In, Wigs)",
-  "Natural Hair Styling",
-  "Wash & Treatments",
-  "Special Occasion Updos",
-  "Deluxe Hair Package",
-  "Consultation Only",
-  "Other (Please Specify)",
-];
+const SERVICES_LIST = ALL_BOOKING_SERVICES_LIST;
 
 const ADDONS_LIST = [
   { id: "wash", name: "Hair Wash & Deep Condition", price: "+$25 - $35" },
@@ -531,12 +512,17 @@ function BookingPage() {
                       <select
                         value={formData.service}
                         onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                        className="w-full rounded-xl border border-[#E8DFC8] bg-white px-4 py-3 text-xs text-[#2B231D] outline-none focus:border-[#C48D46] font-medium"
+                        className="w-full rounded-xl border border-[#E8DFC8] bg-white px-4 py-3 text-xs text-[#2B231D] outline-none focus:border-[#C48D46] font-medium cursor-pointer"
                       >
-                        {SERVICES_LIST.map((srv) => (
-                          <option key={srv} value={srv}>
-                            {srv}
-                          </option>
+                        <option value="">Choose a service from our full salon menu…</option>
+                        {BOOKING_SERVICES_BY_CATEGORY.map((group) => (
+                          <optgroup key={group.category} label={`— ${group.category} —`}>
+                            {group.services.map((s) => (
+                              <option key={s.name} value={`${s.name} (${s.price})`}>
+                                {s.name} – {s.price}
+                              </option>
+                            ))}
+                          </optgroup>
                         ))}
                       </select>
                     </div>
