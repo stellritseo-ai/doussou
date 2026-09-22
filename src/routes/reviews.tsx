@@ -45,13 +45,13 @@ const PAGE_TITLE = "Client Reviews | What Our Clients Say About Doussou Quality 
 const PAGE_DESCRIPTION =
   "Read authentic reviews from 3,000+ happy clients at Doussou Quality Braiding in Glen Burnie, MD. See why we're rated 5.0 stars for our knotless braids, cornrows, and protective styles.";
 
-const schema = [
+const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
     name: "Doussou Quality Braiding",
     description: PAGE_DESCRIPTION,
-    telephone: CONTACT.phone,
+    telephone: CONTACT?.phone ?? "(301) 523-8593",
     address: {
       "@type": "PostalAddress",
       streetAddress: "337 S Hospital Dr",
@@ -390,7 +390,7 @@ export const Route = createFileRoute("/reviews")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(schema),
+        children: JSON.stringify(getSchema()),
       },
     ],
   }),

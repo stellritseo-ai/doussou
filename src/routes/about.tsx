@@ -39,7 +39,7 @@ const PAGE_TITLE = "About Doussou Quality Braiding | Premier Braiding Studio in 
 const PAGE_DESCRIPTION =
   "Learn the story behind Doussou Quality Braiding in Glen Burnie, MD. Discover our 6-year journey of mastering protective styles, our commitment to hair health, and why we are a top-rated salon.";
 
-const schema = [
+const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "AboutPage",
@@ -49,8 +49,8 @@ const schema = [
       "@type": "HairSalon",
       name: "Doussou Quality Braiding",
       description: PAGE_DESCRIPTION,
-      telephone: CONTACT.phone,
-      email: CONTACT.email,
+      telephone: CONTACT?.phone ?? "(301) 523-8593",
+      email: CONTACT?.email ?? "doussoukabba@gmail.com",
       priceRange: "$$",
       address: {
         "@type": "PostalAddress",
@@ -173,7 +173,7 @@ export const Route = createFileRoute("/about")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(schema),
+        children: JSON.stringify(getSchema()),
       },
     ],
   }),

@@ -57,14 +57,14 @@ const PAGE_TITLE = "Our Services & Price List – Doussou Quality Braiding | Gle
 const PAGE_DESCRIPTION =
   "Explore transparent upfront pricing and complete hair braiding services at Doussou Quality Braiding in Glen Burnie, MD. Over 6 years of professional artistry. View all service cards, prices, and book online.";
 
-const schema = [
+const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
     name: "Doussou Quality Braiding",
     description: PAGE_DESCRIPTION,
-    telephone: CONTACT.phone,
-    email: CONTACT.email,
+    telephone: CONTACT?.phone ?? "(301) 523-8593",
+    email: CONTACT?.email ?? "doussoukabba@gmail.com",
     address: {
       "@type": "PostalAddress",
       streetAddress: "337 S Hospital Dr",
@@ -538,7 +538,7 @@ export const Route = createFileRoute("/services")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(schema),
+        children: JSON.stringify(getSchema()),
       },
     ],
   }),

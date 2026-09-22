@@ -42,14 +42,14 @@ const PAGE_TITLE = "Contact Us | Doussou Quality Braiding – Glen Burnie, MD";
 const PAGE_DESCRIPTION =
   "Get in touch with Doussou Quality Braiding in Glen Burnie, MD. Call (301) 523-8593, email us, or visit our studio. Book your appointment for professional hair braiding today.";
 
-const schema = [
+const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
     name: "Doussou Quality Braiding",
     description: PAGE_DESCRIPTION,
-    telephone: CONTACT.phone,
-    email: CONTACT.email,
+    telephone: CONTACT?.phone ?? "(301) 523-8593",
+    email: CONTACT?.email ?? "doussoukabba@gmail.com",
     address: {
       "@type": "PostalAddress",
       streetAddress: "337 S Hospital Dr",
@@ -144,7 +144,7 @@ export const Route = createFileRoute("/contact")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(schema),
+        children: JSON.stringify(getSchema()),
       },
     ],
   }),

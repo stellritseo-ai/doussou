@@ -36,14 +36,14 @@ const PAGE_TITLE = "Book Your Appointment | Doussou Quality Braiding – Glen Bu
 const PAGE_DESCRIPTION =
   "Schedule your professional hair braiding appointment at Doussou Quality Braiding. Book online for knotless braids, cornrows, locs, and more. Serving Glen Burnie, MD.";
 
-const schema = [
+const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
     name: "Doussou Quality Braiding",
     description: PAGE_DESCRIPTION,
-    telephone: CONTACT.phone,
-    email: CONTACT.email,
+    telephone: CONTACT?.phone ?? "(301) 523-8593",
+    email: CONTACT?.email ?? "doussoukabba@gmail.com",
     address: {
       "@type": "PostalAddress",
       streetAddress: "337 S Hospital Dr",
@@ -161,7 +161,7 @@ export const Route = createFileRoute("/booking")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(schema),
+        children: JSON.stringify(getSchema()),
       },
     ],
   }),

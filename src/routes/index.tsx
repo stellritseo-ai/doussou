@@ -18,14 +18,14 @@ const TITLE = "Doussou Quality Braiding | Hair Braiding Salon in Glen Burnie, MD
 const DESCRIPTION =
   "Doussou Quality Braiding - Premier African hair braiding studio located at 337 S Hospital Dr, Glen Burnie, MD 21061. Knotless braids, box braids, cornrows, locs and natural styling. Book today.";
 
-const schema = [
+const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
     name: "Doussou Quality Braiding",
     description: DESCRIPTION,
-    telephone: CONTACT.phone,
-    email: CONTACT.email,
+    telephone: CONTACT?.phone ?? "(301) 523-8593",
+    email: CONTACT?.email ?? "doussoukabba@gmail.com",
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",
@@ -61,7 +61,7 @@ const schema = [
   {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
+    mainEntity: (FAQS ?? []).map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -88,7 +88,7 @@ export const Route = createFileRoute("/")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(schema),
+        children: JSON.stringify(getSchema()),
       },
     ],
   }),

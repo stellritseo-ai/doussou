@@ -68,7 +68,7 @@ const PAGE_TITLE = "Style Gallery | Doussou Quality Braiding — Glen Burnie, MD
 const PAGE_DESCRIPTION =
   "Explore our portfolio of over 30 authentic hair braiding and protective styling transformations. Knotless braids, stitch cornrows, faux locs, men's braids, and twists crafted with care in Glen Burnie, MD.";
 
-const schema = [
+const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "ImageGallery",
@@ -77,8 +77,8 @@ const schema = [
     provider: {
       "@type": "HairSalon",
       name: "Doussou Quality Braiding",
-      telephone: CONTACT.phone,
-      email: CONTACT.email,
+      telephone: CONTACT?.phone ?? "(301) 523-8593",
+      email: CONTACT?.email ?? "doussoukabba@gmail.com",
       address: {
         "@type": "PostalAddress",
         streetAddress: "337 S Hospital Dr",
@@ -495,7 +495,7 @@ export const Route = createFileRoute("/gallery")({
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify(schema),
+        children: JSON.stringify(getSchema()),
       },
     ],
   }),
