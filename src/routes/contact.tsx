@@ -14,6 +14,7 @@ import {
   MessageCircle,
   Instagram,
   Facebook,
+  Music2,
   Car,
   Bus,
   ShieldCheck,
@@ -36,39 +37,66 @@ import {
   PhoneCall,
   Volume2,
   Award,
+  Loader2,
 } from "lucide-react";
+import { submitFormToEmail } from "@/lib/send-form";
 
-const PAGE_TITLE = "Contact Us | Doussou Quality Braiding – Glen Burnie, MD";
+const PAGE_TITLE = "Contact & Directions | Doussou Quality Braiding Glen Burnie MD";
 const PAGE_DESCRIPTION =
-  "Get in touch with Doussou Quality Braiding in Glen Burnie, MD. Call (301) 523-8593, email us, or visit our studio. Book your appointment for professional hair braiding today.";
+  "Contact Doussou Quality Braiding at 337 S Hospital Dr, Glen Burnie, MD 21061. Call (301) 523-8593 for appointments, directions, parking, and consultation questions.";
+const CANONICAL = "https://www.doussouqualitybraiding.com/contact";
 
 const getSchema = () => [
   {
     "@context": "https://schema.org",
-    "@type": "HairSalon",
-    name: "Doussou Quality Braiding",
+    "@type": "ContactPage",
+    name: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
-    telephone: CONTACT?.phone ?? "(301) 523-8593",
-    email: CONTACT?.email ?? "doussoukabba@gmail.com",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "337 S Hospital Dr",
-      addressLocality: "Glen Burnie",
-      addressRegion: "MD",
-      postalCode: "21061",
-      addressCountry: "US",
+    url: CANONICAL,
+    mainEntity: {
+      "@type": "HairSalon",
+      "@id": "https://www.doussouqualitybraiding.com/#salon",
+      name: "Doussou Quality Braiding",
+      telephone: CONTACT?.phone ?? "(301) 523-8593",
+      email: CONTACT?.email ?? "doussoukabba@gmail.com",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "337 S Hospital Dr",
+        addressLocality: "Glen Burnie",
+        addressRegion: "MD",
+        postalCode: "21061",
+        addressCountry: "US",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 39.1557,
+        longitude: -76.6267,
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          opens: "09:30",
+          closes: "20:30",
+        },
+      ],
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 39.1557,
-      longitude: -76.6214,
-    },
-    openingHoursSpecification: [
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
       {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        opens: "09:30",
-        closes: "20:30",
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.doussouqualitybraiding.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Contact Us",
+        item: CANONICAL,
       },
     ],
   },
@@ -137,10 +165,13 @@ export const Route = createFileRoute("/contact")({
       },
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
+      { property: "og:url", content: CANONICAL },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: PAGE_TITLE },
+      { name: "twitter:description", content: PAGE_DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       {
         type: "application/ld+json",
@@ -163,6 +194,7 @@ function ContactPage() {
     bestTime: "Morning",
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formSubmitting, setFormSubmitting] = useState(false);
 
   const [callbackState, setCallbackState] = useState({
     name: "",
@@ -171,24 +203,54 @@ function ContactPage() {
     reason: "",
   });
   const [callbackSubmitted, setCallbackSubmitted] = useState(false);
+  const [callbackSubmitting, setCallbackSubmitting] = useState(false);
 
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
 
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormSubmitting(true);
+    await submitFormToEmail({
+      formType: "Contact Form Inquiry",
+      firstName: formState.firstName,
+      lastName: formState.lastName,
+      phone: formState.phone,
+      email: formState.email,
+      subject: formState.subject,
+      message: formState.message,
+      contactMethod: formState.contactMethod,
+      bestTime: formState.bestTime,
+    });
+    setFormSubmitting(false);
     setFormSubmitted(true);
   };
 
-  const handleCallbackSubmit = (e: React.FormEvent) => {
+  const handleCallbackSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setCallbackSubmitting(true);
+    await submitFormToEmail({
+      formType: "Quick Callback Request",
+      clientName: callbackState.name,
+      phone: callbackState.phone,
+      bestTime: callbackState.bestTime,
+      reason: callbackState.reason,
+    });
+    setCallbackSubmitting(false);
     setCallbackSubmitted(true);
   };
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setNewsletterSubmitting(true);
+    await submitFormToEmail({
+      formType: "Style Guide / Newsletter Subscription",
+      email: newsletterEmail,
+    });
+    setNewsletterSubmitting(false);
     setNewsletterSubmitted(true);
   };
 
@@ -521,10 +583,20 @@ function ContactPage() {
                     <div className="pt-4">
                       <button
                         type="submit"
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[#C48D46] px-9 py-3.5 text-xs font-bold text-white shadow-md transition-all duration-300 hover:bg-[#A87432] hover:scale-105"
+                        disabled={formSubmitting}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[#C48D46] px-9 py-3.5 text-xs font-bold text-white shadow-md transition-all duration-300 hover:bg-[#A87432] hover:scale-105 disabled:opacity-75 disabled:pointer-events-none cursor-pointer"
                       >
-                        <Send size={15} />
-                        <span>Send Message</span>
+                        {formSubmitting ? (
+                          <>
+                            <Loader2 size={15} className="animate-spin" />
+                            <span>Sending Message...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send size={15} />
+                            <span>Send Message</span>
+                          </>
+                        )}
                       </button>
                     </div>
                   </form>
@@ -602,9 +674,17 @@ function ContactPage() {
                       />
                       <button
                         type="submit"
-                        className="w-full rounded-xl bg-[#16857B] py-2.5 text-xs font-bold text-white transition-all hover:bg-[#126b63]"
+                        disabled={callbackSubmitting}
+                        className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#16857B] py-2.5 text-xs font-bold text-white transition-all hover:bg-[#126b63] disabled:opacity-75 disabled:pointer-events-none cursor-pointer"
                       >
-                        Request Callback
+                        {callbackSubmitting ? (
+                          <>
+                            <Loader2 size={13} className="animate-spin" />
+                            <span>Requesting Callback...</span>
+                          </>
+                        ) : (
+                          <span>Request Callback</span>
+                        )}
                       </button>
                     </form>
                   )}
@@ -617,6 +697,19 @@ function ContactPage() {
                   </h3>
                   <div className="space-y-3 text-xs">
                     <a
+                      href={CONTACT.socials.tiktok}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-3 rounded-xl bg-white border border-[#E8DFC8] transition-all hover:border-[#111111]"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Music2 size={16} className="text-[#111111]" />
+                        <span className="font-bold text-[#2B231D]">@doussouqualitybraiding</span>
+                      </div>
+                      <ExternalLink size={14} className="text-[#8C7A6B]" />
+                    </a>
+
+                    <a
                       href={CONTACT.socials.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -624,7 +717,7 @@ function ContactPage() {
                     >
                       <div className="flex items-center gap-2.5">
                         <Instagram size={16} className="text-[#BA1296]" />
-                        <span className="font-bold text-[#2B231D]">@DoussouQualityBraiding</span>
+                        <span className="font-bold text-[#2B231D]">@doussouweb</span>
                       </div>
                       <ExternalLink size={14} className="text-[#8C7A6B]" />
                     </a>
@@ -637,7 +730,7 @@ function ContactPage() {
                     >
                       <div className="flex items-center gap-2.5">
                         <Facebook size={16} className="text-[#C48D46]" />
-                        <span className="font-bold text-[#2B231D]">/DoussouQualityBraiding</span>
+                        <span className="font-bold text-[#2B231D]">/doussouqualitybraiding</span>
                       </div>
                       <ExternalLink size={14} className="text-[#8C7A6B]" />
                     </a>
@@ -1092,9 +1185,17 @@ function ContactPage() {
                     />
                     <button
                       type="submit"
-                      className="rounded-full bg-[#C48D46] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#A87432]"
+                      disabled={newsletterSubmitting}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#C48D46] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#A87432] disabled:opacity-75 disabled:pointer-events-none cursor-pointer"
                     >
-                      Subscribe
+                      {newsletterSubmitting ? (
+                        <>
+                          <Loader2 size={13} className="animate-spin" />
+                          <span>Subscribing...</span>
+                        </>
+                      ) : (
+                        <span>Subscribe</span>
+                      )}
                     </button>
                   </form>
                 )}

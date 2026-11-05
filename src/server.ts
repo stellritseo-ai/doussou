@@ -2,6 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { sendNotificationEmail, type FormSubmissionPayload } from "./lib/server-email";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -46,6 +47,19 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const url = new URL(request.url);
+    if (url.pathname === "/api/send-email" && request.method === "POST") {
+      try {
+        const body = (await request.json()) as FormSubmissionPayload;
+        const result = await sendNotificationEmail(body);
+        return Response.json(result);
+      } catch (err: unknown) {
+        console.error("Error sending notification email:", err);
+        const message = err instanceof Error ? err.message : "Failed to send email";
+        return Response.json({ success: false, error: message }, { status: 500 });
+      }
+    }
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

@@ -30,17 +30,22 @@ import {
   Star,
   ExternalLink,
   MessageCircle,
+  Loader2,
 } from "lucide-react";
+import { submitFormToEmail } from "@/lib/send-form";
 
-const PAGE_TITLE = "Book Your Appointment | Doussou Quality Braiding – Glen Burnie, MD";
+const PAGE_TITLE = "Book Hair Braiding Appointment | Doussou Quality Braiding Glen Burnie MD";
 const PAGE_DESCRIPTION =
-  "Schedule your professional hair braiding appointment at Doussou Quality Braiding. Book online for knotless braids, cornrows, locs, and more. Serving Glen Burnie, MD.";
+  "Schedule your hair braiding appointment at Doussou Quality Braiding in Glen Burnie, MD. Online booking for knotless braids, box braids, cornrows, locs, and twists. Walk-ins welcome.";
+const CANONICAL = "https://www.doussouqualitybraiding.com/booking";
 
 const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
+    "@id": "https://www.doussouqualitybraiding.com/#salon",
     name: "Doussou Quality Braiding",
+    url: CANONICAL,
     description: PAGE_DESCRIPTION,
     telephone: CONTACT?.phone ?? "(301) 523-8593",
     email: CONTACT?.email ?? "doussoukabba@gmail.com",
@@ -51,6 +56,11 @@ const getSchema = () => [
       addressRegion: "MD",
       postalCode: "21061",
       addressCountry: "US",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 39.1557,
+      longitude: -76.6267,
     },
     openingHoursSpecification: [
       {
@@ -76,6 +86,24 @@ const getSchema = () => [
         name: "Hair Braiding & Protective Styling Appointment",
       },
     },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.doussouqualitybraiding.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Book Appointment",
+        item: CANONICAL,
+      },
+    ],
   },
 ];
 
@@ -154,10 +182,13 @@ export const Route = createFileRoute("/booking")({
       },
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
+      { property: "og:url", content: CANONICAL },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: PAGE_TITLE },
+      { name: "twitter:description", content: PAGE_DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/booking" }],
+    links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       {
         type: "application/ld+json",
@@ -220,8 +251,33 @@ function BookingPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    await submitFormToEmail({
+      formType: "Comprehensive Appointment Booking",
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone,
+      email: formData.email,
+      service: `${formData.service} (Size: ${formData.braidSize}, Length: ${formData.length})`,
+      date: formData.preferredDate,
+      time: formData.preferredTime,
+      contactMethod: formData.contactMethod,
+      notes: [
+        formData.notes ? `Client Notes: ${formData.notes}` : "",
+        formData.specialRequests ? `Special Requests: ${formData.specialRequests}` : "",
+        formData.allergies ? `Allergies / Scalp Concerns: ${formData.allergies}` : "",
+        selectedAddons.length > 0 ? `Selected Addons: ${selectedAddons.join(", ")}` : "",
+        formData.altDate ? `Alternative Date: ${formData.altDate} at ${formData.altTime}` : "",
+        formData.comfortNeeds.length > 0 ? `Comfort Needs: ${formData.comfortNeeds.join(", ")}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    });
+    setSubmitting(false);
     setSubmitted(true);
   };
 
@@ -938,10 +994,20 @@ function BookingPage() {
                 <div className="pt-6 border-t border-[#E8DFC8] flex flex-col sm:flex-row items-center justify-between gap-4">
                   <button
                     type="submit"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#C48D46] px-10 py-4 text-sm font-bold text-white shadow-xl transition-all duration-300 hover:bg-[#A87432] hover:scale-105 active:scale-95"
+                    disabled={submitting}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#C48D46] px-10 py-4 text-sm font-bold text-white shadow-xl transition-all duration-300 hover:bg-[#A87432] hover:scale-105 active:scale-95 disabled:opacity-75 disabled:pointer-events-none cursor-pointer"
                   >
-                    <Send size={16} />
-                    <span>Submit Appointment Request</span>
+                    {submitting ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        <span>Submitting Request...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send size={16} />
+                        <span>Submit Appointment Request</span>
+                      </>
+                    )}
                   </button>
 
                   <a
@@ -1319,7 +1385,7 @@ function BookingPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <Check size={14} className="text-[#16857B] shrink-0 mt-0.5" />
-                    <span>Share your photos and tag @DoussouQualityBraiding</span>
+                    <span>Share your photos and tag @doussouweb</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Check size={14} className="text-[#16857B] shrink-0 mt-0.5" />

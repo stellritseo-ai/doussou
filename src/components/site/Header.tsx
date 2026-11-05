@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X, Phone, Clock, Facebook, Instagram } from "lucide-react";
+import { Menu, X, Phone, Clock, Facebook, Instagram, Music2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 import { CONTACT } from "./data";
@@ -15,7 +15,7 @@ export function Header() {
   });
 
   const isAboutPage = pathname === "/about" || pathname.startsWith("/about");
-  const isServicesPage = pathname === "/services" || pathname.startsWith("/services");
+  const isServicesPage = pathname === "/services" || pathname.startsWith("/services") || pathname.includes("-glen-burnie-md");
   const isReviewsPage = pathname === "/reviews" || pathname.startsWith("/reviews");
   const isBookingPage = pathname === "/booking" || pathname.startsWith("/booking");
   const isContactPage = pathname === "/contact" || pathname.startsWith("/contact");
@@ -287,22 +287,33 @@ export function Header() {
               transform: open ? "translateY(0)" : "translateY(20px)",
             }}
           >
-            <div className="flex gap-8">
+            <div className="flex gap-4">
               <a
                 href={CONTACT.socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Instagram"
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-white/40 text-[#2B231D] border border-white/50 backdrop-blur-md shadow-sm transition-all hover:bg-[#BA1296] hover:text-white hover:scale-110 hover:border-transparent"
               >
-                <Instagram size={24} strokeWidth={1.5} />
+                <Instagram size={22} strokeWidth={1.5} />
               </a>
               <a
                 href={CONTACT.socials.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Facebook"
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-white/40 text-[#2B231D] border border-white/50 backdrop-blur-md shadow-sm transition-all hover:bg-[#BA1296] hover:text-white hover:scale-110 hover:border-transparent"
               >
-                <Facebook size={24} strokeWidth={1.5} />
+                <Facebook size={22} strokeWidth={1.5} />
+              </a>
+              <a
+                href={CONTACT.socials.tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-white/40 text-[#2B231D] border border-white/50 backdrop-blur-md shadow-sm transition-all hover:bg-[#111111] hover:text-white hover:scale-110 hover:border-transparent"
+              >
+                <Music2 size={22} strokeWidth={1.5} />
               </a>
             </div>
 

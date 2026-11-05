@@ -6,18 +6,22 @@ import { CONTACT } from "./data";
 const NAV = [
   { label: "About Us", href: "/about", isLink: true },
   { label: "Our Services", href: "/services", isLink: true },
+  { label: "Braiding & Care Guide", href: "/braiding-guide-glen-burnie-md", isLink: true },
   { label: "Style Gallery", href: "/gallery", isLink: true },
   { label: "Client Reviews", href: "/reviews", isLink: true },
   { label: "Book Appointment", href: "/booking", isLink: true },
+  { label: "Contact & Location", href: "/contact", isLink: true },
 ];
 
 const SERVICE_LINKS = [
-  { label: "Knotless Braids", href: "/services#braids-twists" },
-  { label: "African Hair Braiding", href: "/services#braids-twists" },
-  { label: "Feed-In Cornrows", href: "/services#braids-twists" },
-  { label: "Box Braids", href: "/services#braids-twists" },
-  { label: "Locs & Extensions", href: "/services#locs-extensions" },
-  { label: "Scalp & Wash Rituals", href: "/services#natural-treatments" },
+  { label: "Knotless Braids Glen Burnie", href: "/knotless-braids-glen-burnie-md" },
+  { label: "Box Braids Glen Burnie", href: "/box-braids-glen-burnie-md" },
+  { label: "Feed-In Cornrows", href: "/cornrows-glen-burnie-md" },
+  { label: "Senegalese Twists", href: "/senegalese-twists-glen-burnie-md" },
+  { label: "Faux Locs & Soft Locs", href: "/faux-locs-glen-burnie-md" },
+  { label: "Kids Hair Braiding", href: "/kids-hair-braiding-glen-burnie-md" },
+  { label: "Loc Maintenance & Retwist", href: "/loc-maintenance-glen-burnie-md" },
+  { label: "Natural Hair Styling", href: "/natural-hair-styling-glen-burnie-md" },
 ];
 
 export function Footer() {
@@ -95,12 +99,12 @@ export function Footer() {
             <ul className="space-y-3 text-sm font-medium">
               {SERVICE_LINKS.map((s) => (
                 <li key={s.label}>
-                  <a
-                    href={s.href}
+                  <Link
+                    to={s.href}
                     className="text-white/70 transition-colors hover:text-[#C48D46]"
                   >
                     {s.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -128,15 +132,18 @@ export function Footer() {
                 <MapPin size={16} className="text-[#C48D46] shrink-0 mt-0.5" />
                 <span className="text-white/70 text-xs leading-relaxed">{CONTACT.fullAddress}</span>
               </li>
+              <li className="pt-2 text-xs text-white/50 leading-relaxed border-t border-white/10">
+                Serving Glen Burnie, Pasadena, Severn, Hanover, Baltimore &amp; Annapolis, MD.
+              </li>
             </ul>
 
             <div className="mt-6 flex flex-wrap gap-2">
-              <a
-                href="#booking"
+              <Link
+                to="/booking"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#BA1296] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all hover:bg-[#a00e80] hover:scale-105"
               >
                 <span>Book Appointment</span>
-              </a>
+              </Link>
               <a
                 href={CONTACT.socials.google}
                 target="_blank"

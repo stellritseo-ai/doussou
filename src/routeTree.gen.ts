@@ -12,9 +12,18 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BookingRouteImport } from './routes/booking'
+import { Route as BoxBraidsGlenBurnieMdRouteImport } from './routes/box-braids-glen-burnie-md'
+import { Route as BraidingGuideGlenBurnieMdRouteImport } from './routes/braiding-guide-glen-burnie-md'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CornrowsGlenBurnieMdRouteImport } from './routes/cornrows-glen-burnie-md'
+import { Route as FauxLocsGlenBurnieMdRouteImport } from './routes/faux-locs-glen-burnie-md'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as KidsHairBraidingGlenBurnieMdRouteImport } from './routes/kids-hair-braiding-glen-burnie-md'
+import { Route as KnotlessBraidsGlenBurnieMdRouteImport } from './routes/knotless-braids-glen-burnie-md'
+import { Route as LocMaintenanceGlenBurnieMdRouteImport } from './routes/loc-maintenance-glen-burnie-md'
+import { Route as NaturalHairStylingGlenBurnieMdRouteImport } from './routes/natural-hair-styling-glen-burnie-md'
 import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as SenegaleseTwistsGlenBurnieMdRouteImport } from './routes/senegalese-twists-glen-burnie-md'
 import { Route as ServicesRouteImport } from './routes/services'
 
 const IndexRoute = IndexRouteImport.update({
@@ -32,9 +41,30 @@ const BookingRoute = BookingRouteImport.update({
   path: '/booking',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoxBraidsGlenBurnieMdRoute = BoxBraidsGlenBurnieMdRouteImport.update({
+  id: '/box-braids-glen-burnie-md',
+  path: '/box-braids-glen-burnie-md',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BraidingGuideGlenBurnieMdRoute =
+  BraidingGuideGlenBurnieMdRouteImport.update({
+    id: '/braiding-guide-glen-burnie-md',
+    path: '/braiding-guide-glen-burnie-md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CornrowsGlenBurnieMdRoute = CornrowsGlenBurnieMdRouteImport.update({
+  id: '/cornrows-glen-burnie-md',
+  path: '/cornrows-glen-burnie-md',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FauxLocsGlenBurnieMdRoute = FauxLocsGlenBurnieMdRouteImport.update({
+  id: '/faux-locs-glen-burnie-md',
+  path: '/faux-locs-glen-burnie-md',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GalleryRoute = GalleryRouteImport.update({
@@ -42,11 +72,41 @@ const GalleryRoute = GalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KidsHairBraidingGlenBurnieMdRoute =
+  KidsHairBraidingGlenBurnieMdRouteImport.update({
+    id: '/kids-hair-braiding-glen-burnie-md',
+    path: '/kids-hair-braiding-glen-burnie-md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const KnotlessBraidsGlenBurnieMdRoute =
+  KnotlessBraidsGlenBurnieMdRouteImport.update({
+    id: '/knotless-braids-glen-burnie-md',
+    path: '/knotless-braids-glen-burnie-md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LocMaintenanceGlenBurnieMdRoute =
+  LocMaintenanceGlenBurnieMdRouteImport.update({
+    id: '/loc-maintenance-glen-burnie-md',
+    path: '/loc-maintenance-glen-burnie-md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const NaturalHairStylingGlenBurnieMdRoute =
+  NaturalHairStylingGlenBurnieMdRouteImport.update({
+    id: '/natural-hair-styling-glen-burnie-md',
+    path: '/natural-hair-styling-glen-burnie-md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ReviewsRoute = ReviewsRouteImport.update({
   id: '/reviews',
   path: '/reviews',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SenegaleseTwistsGlenBurnieMdRoute =
+  SenegaleseTwistsGlenBurnieMdRouteImport.update({
+    id: '/senegalese-twists-glen-burnie-md',
+    path: '/senegalese-twists-glen-burnie-md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -57,18 +117,36 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/box-braids-glen-burnie-md': typeof BoxBraidsGlenBurnieMdRoute
+  '/braiding-guide-glen-burnie-md': typeof BraidingGuideGlenBurnieMdRoute
   '/contact': typeof ContactRoute
+  '/cornrows-glen-burnie-md': typeof CornrowsGlenBurnieMdRoute
+  '/faux-locs-glen-burnie-md': typeof FauxLocsGlenBurnieMdRoute
   '/gallery': typeof GalleryRoute
+  '/kids-hair-braiding-glen-burnie-md': typeof KidsHairBraidingGlenBurnieMdRoute
+  '/knotless-braids-glen-burnie-md': typeof KnotlessBraidsGlenBurnieMdRoute
+  '/loc-maintenance-glen-burnie-md': typeof LocMaintenanceGlenBurnieMdRoute
+  '/natural-hair-styling-glen-burnie-md': typeof NaturalHairStylingGlenBurnieMdRoute
   '/reviews': typeof ReviewsRoute
+  '/senegalese-twists-glen-burnie-md': typeof SenegaleseTwistsGlenBurnieMdRoute
   '/services': typeof ServicesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/box-braids-glen-burnie-md': typeof BoxBraidsGlenBurnieMdRoute
+  '/braiding-guide-glen-burnie-md': typeof BraidingGuideGlenBurnieMdRoute
   '/contact': typeof ContactRoute
+  '/cornrows-glen-burnie-md': typeof CornrowsGlenBurnieMdRoute
+  '/faux-locs-glen-burnie-md': typeof FauxLocsGlenBurnieMdRoute
   '/gallery': typeof GalleryRoute
+  '/kids-hair-braiding-glen-burnie-md': typeof KidsHairBraidingGlenBurnieMdRoute
+  '/knotless-braids-glen-burnie-md': typeof KnotlessBraidsGlenBurnieMdRoute
+  '/loc-maintenance-glen-burnie-md': typeof LocMaintenanceGlenBurnieMdRoute
+  '/natural-hair-styling-glen-burnie-md': typeof NaturalHairStylingGlenBurnieMdRoute
   '/reviews': typeof ReviewsRoute
+  '/senegalese-twists-glen-burnie-md': typeof SenegaleseTwistsGlenBurnieMdRoute
   '/services': typeof ServicesRoute
 }
 export interface FileRoutesById {
@@ -76,9 +154,18 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/booking': typeof BookingRoute
+  '/box-braids-glen-burnie-md': typeof BoxBraidsGlenBurnieMdRoute
+  '/braiding-guide-glen-burnie-md': typeof BraidingGuideGlenBurnieMdRoute
   '/contact': typeof ContactRoute
+  '/cornrows-glen-burnie-md': typeof CornrowsGlenBurnieMdRoute
+  '/faux-locs-glen-burnie-md': typeof FauxLocsGlenBurnieMdRoute
   '/gallery': typeof GalleryRoute
+  '/kids-hair-braiding-glen-burnie-md': typeof KidsHairBraidingGlenBurnieMdRoute
+  '/knotless-braids-glen-burnie-md': typeof KnotlessBraidsGlenBurnieMdRoute
+  '/loc-maintenance-glen-burnie-md': typeof LocMaintenanceGlenBurnieMdRoute
+  '/natural-hair-styling-glen-burnie-md': typeof NaturalHairStylingGlenBurnieMdRoute
   '/reviews': typeof ReviewsRoute
+  '/senegalese-twists-glen-burnie-md': typeof SenegaleseTwistsGlenBurnieMdRoute
   '/services': typeof ServicesRoute
 }
 export interface FileRouteTypes {
@@ -87,27 +174,54 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/booking'
+    | '/box-braids-glen-burnie-md'
+    | '/braiding-guide-glen-burnie-md'
     | '/contact'
+    | '/cornrows-glen-burnie-md'
+    | '/faux-locs-glen-burnie-md'
     | '/gallery'
+    | '/kids-hair-braiding-glen-burnie-md'
+    | '/knotless-braids-glen-burnie-md'
+    | '/loc-maintenance-glen-burnie-md'
+    | '/natural-hair-styling-glen-burnie-md'
     | '/reviews'
+    | '/senegalese-twists-glen-burnie-md'
     | '/services'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/booking'
+    | '/box-braids-glen-burnie-md'
+    | '/braiding-guide-glen-burnie-md'
     | '/contact'
+    | '/cornrows-glen-burnie-md'
+    | '/faux-locs-glen-burnie-md'
     | '/gallery'
+    | '/kids-hair-braiding-glen-burnie-md'
+    | '/knotless-braids-glen-burnie-md'
+    | '/loc-maintenance-glen-burnie-md'
+    | '/natural-hair-styling-glen-burnie-md'
     | '/reviews'
+    | '/senegalese-twists-glen-burnie-md'
     | '/services'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/booking'
+    | '/box-braids-glen-burnie-md'
+    | '/braiding-guide-glen-burnie-md'
     | '/contact'
+    | '/cornrows-glen-burnie-md'
+    | '/faux-locs-glen-burnie-md'
     | '/gallery'
+    | '/kids-hair-braiding-glen-burnie-md'
+    | '/knotless-braids-glen-burnie-md'
+    | '/loc-maintenance-glen-burnie-md'
+    | '/natural-hair-styling-glen-burnie-md'
     | '/reviews'
+    | '/senegalese-twists-glen-burnie-md'
     | '/services'
   fileRoutesById: FileRoutesById
 }
@@ -115,9 +229,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BookingRoute: typeof BookingRoute
+  BoxBraidsGlenBurnieMdRoute: typeof BoxBraidsGlenBurnieMdRoute
+  BraidingGuideGlenBurnieMdRoute: typeof BraidingGuideGlenBurnieMdRoute
   ContactRoute: typeof ContactRoute
+  CornrowsGlenBurnieMdRoute: typeof CornrowsGlenBurnieMdRoute
+  FauxLocsGlenBurnieMdRoute: typeof FauxLocsGlenBurnieMdRoute
   GalleryRoute: typeof GalleryRoute
+  KidsHairBraidingGlenBurnieMdRoute: typeof KidsHairBraidingGlenBurnieMdRoute
+  KnotlessBraidsGlenBurnieMdRoute: typeof KnotlessBraidsGlenBurnieMdRoute
+  LocMaintenanceGlenBurnieMdRoute: typeof LocMaintenanceGlenBurnieMdRoute
+  NaturalHairStylingGlenBurnieMdRoute: typeof NaturalHairStylingGlenBurnieMdRoute
   ReviewsRoute: typeof ReviewsRoute
+  SenegaleseTwistsGlenBurnieMdRoute: typeof SenegaleseTwistsGlenBurnieMdRoute
   ServicesRoute: typeof ServicesRoute
 }
 
@@ -144,11 +267,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/box-braids-glen-burnie-md': {
+      id: '/box-braids-glen-burnie-md'
+      path: '/box-braids-glen-burnie-md'
+      fullPath: '/box-braids-glen-burnie-md'
+      preLoaderRoute: typeof BoxBraidsGlenBurnieMdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/braiding-guide-glen-burnie-md': {
+      id: '/braiding-guide-glen-burnie-md'
+      path: '/braiding-guide-glen-burnie-md'
+      fullPath: '/braiding-guide-glen-burnie-md'
+      preLoaderRoute: typeof BraidingGuideGlenBurnieMdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cornrows-glen-burnie-md': {
+      id: '/cornrows-glen-burnie-md'
+      path: '/cornrows-glen-burnie-md'
+      fullPath: '/cornrows-glen-burnie-md'
+      preLoaderRoute: typeof CornrowsGlenBurnieMdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faux-locs-glen-burnie-md': {
+      id: '/faux-locs-glen-burnie-md'
+      path: '/faux-locs-glen-burnie-md'
+      fullPath: '/faux-locs-glen-burnie-md'
+      preLoaderRoute: typeof FauxLocsGlenBurnieMdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gallery': {
@@ -158,11 +309,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kids-hair-braiding-glen-burnie-md': {
+      id: '/kids-hair-braiding-glen-burnie-md'
+      path: '/kids-hair-braiding-glen-burnie-md'
+      fullPath: '/kids-hair-braiding-glen-burnie-md'
+      preLoaderRoute: typeof KidsHairBraidingGlenBurnieMdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knotless-braids-glen-burnie-md': {
+      id: '/knotless-braids-glen-burnie-md'
+      path: '/knotless-braids-glen-burnie-md'
+      fullPath: '/knotless-braids-glen-burnie-md'
+      preLoaderRoute: typeof KnotlessBraidsGlenBurnieMdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loc-maintenance-glen-burnie-md': {
+      id: '/loc-maintenance-glen-burnie-md'
+      path: '/loc-maintenance-glen-burnie-md'
+      fullPath: '/loc-maintenance-glen-burnie-md'
+      preLoaderRoute: typeof LocMaintenanceGlenBurnieMdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/natural-hair-styling-glen-burnie-md': {
+      id: '/natural-hair-styling-glen-burnie-md'
+      path: '/natural-hair-styling-glen-burnie-md'
+      fullPath: '/natural-hair-styling-glen-burnie-md'
+      preLoaderRoute: typeof NaturalHairStylingGlenBurnieMdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reviews': {
       id: '/reviews'
       path: '/reviews'
       fullPath: '/reviews'
       preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senegalese-twists-glen-burnie-md': {
+      id: '/senegalese-twists-glen-burnie-md'
+      path: '/senegalese-twists-glen-burnie-md'
+      fullPath: '/senegalese-twists-glen-burnie-md'
+      preLoaderRoute: typeof SenegaleseTwistsGlenBurnieMdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -179,9 +365,18 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BookingRoute: BookingRoute,
+  BoxBraidsGlenBurnieMdRoute: BoxBraidsGlenBurnieMdRoute,
+  BraidingGuideGlenBurnieMdRoute: BraidingGuideGlenBurnieMdRoute,
   ContactRoute: ContactRoute,
+  CornrowsGlenBurnieMdRoute: CornrowsGlenBurnieMdRoute,
+  FauxLocsGlenBurnieMdRoute: FauxLocsGlenBurnieMdRoute,
   GalleryRoute: GalleryRoute,
+  KidsHairBraidingGlenBurnieMdRoute: KidsHairBraidingGlenBurnieMdRoute,
+  KnotlessBraidsGlenBurnieMdRoute: KnotlessBraidsGlenBurnieMdRoute,
+  LocMaintenanceGlenBurnieMdRoute: LocMaintenanceGlenBurnieMdRoute,
+  NaturalHairStylingGlenBurnieMdRoute: NaturalHairStylingGlenBurnieMdRoute,
   ReviewsRoute: ReviewsRoute,
+  SenegaleseTwistsGlenBurnieMdRoute: SenegaleseTwistsGlenBurnieMdRoute,
   ServicesRoute: ServicesRoute,
 }
 export const routeTree = rootRouteImport

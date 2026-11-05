@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react";
-import { Check, Mail, MapPin, Phone, Clock, Sparkles, Send } from "lucide-react";
+import { Check, Mail, MapPin, Phone, Clock, Sparkles, Send, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CONTACT, SERVICES, BOOKING_SERVICES_BY_CATEGORY } from "./data";
+import { submitFormToEmail } from "@/lib/send-form";
 
 type Values = {
   firstName: string;
@@ -75,15 +76,29 @@ export function BookingForm() {
   const [values, setValues] = useState<Values>(EMPTY);
   const [errors, setErrors] = useState<Partial<Record<keyof Values, string>>>({});
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const set = (key: keyof Values) => (e: { target: { value: string } }) =>
     setValues((v) => ({ ...v, [key]: e.target.value }));
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const next = validate(values);
     setErrors(next);
     if (Object.keys(next).length === 0) {
+      setSubmitting(true);
+      await submitFormToEmail({
+        formType: "Website Booking Form",
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phone: values.phone,
+        email: values.email,
+        service: values.service,
+        date: values.date,
+        time: values.time,
+        notes: values.message,
+      });
+      setSubmitting(false);
       setSent(true);
       setValues(EMPTY);
     }
@@ -324,10 +339,20 @@ export function BookingForm() {
                 <div className="sm:col-span-2 mt-2">
                   <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#C48D46] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:bg-[#b07d3b] hover:scale-[1.01] active:scale-[0.99]"
+                    disabled={submitting}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#C48D46] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:bg-[#b07d3b] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-75 disabled:pointer-events-none cursor-pointer"
                   >
-                    <Send size={16} />
-                    <span>Submit Appointment Request</span>
+                    {submitting ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        <span>Submitting Request...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send size={16} />
+                        <span>Submit Appointment Request</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </form>

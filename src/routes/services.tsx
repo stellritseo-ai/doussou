@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { BookingForm } from "@/components/site/BookingForm";
+import { ServiceBookingModal, type SelectedServiceData } from "@/components/site/ServiceBookingModal";
 import { CONTACT } from "@/components/site/data";
 import {
   Sparkles,
@@ -53,18 +54,22 @@ import bridalImg from "@/assets/style-bridal.jpg";
 import transformationImg from "@/assets/transformation.jpg";
 import cornrowsImg from "@/assets/style-cornrows.jpg";
 
-const PAGE_TITLE = "Our Services & Price List – Doussou Quality Braiding | Glen Burnie, MD";
+const PAGE_TITLE = "Hair Braiding Services & Price List | Doussou Quality Braiding Glen Burnie MD";
 const PAGE_DESCRIPTION =
-  "Explore transparent upfront pricing and complete hair braiding services at Doussou Quality Braiding in Glen Burnie, MD. Over 6 years of professional artistry. View all service cards, prices, and book online.";
+  "Browse transparent upfront prices for African hair braiding in Glen Burnie, MD at Doussou Quality Braiding. Knotless braids from $180, box braids from $200, cornrows, twists & locs. Book your style online.";
+const CANONICAL = "https://www.doussouqualitybraiding.com/services";
 
 const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
+    "@id": "https://www.doussouqualitybraiding.com/#salon",
     name: "Doussou Quality Braiding",
+    url: CANONICAL,
     description: PAGE_DESCRIPTION,
     telephone: CONTACT?.phone ?? "(301) 523-8593",
     email: CONTACT?.email ?? "doussoukabba@gmail.com",
+    priceRange: "$$",
     address: {
       "@type": "PostalAddress",
       streetAddress: "337 S Hospital Dr",
@@ -73,7 +78,44 @@ const getSchema = () => [
       postalCode: "21061",
       addressCountry: "US",
     },
-    areaServed: "Glen Burnie, Baltimore, Annapolis, and surrounding Maryland areas",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 39.1557,
+      longitude: -76.6267,
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "09:30",
+        closes: "20:30",
+      },
+    ],
+    sameAs: [
+      CONTACT.socials.facebook,
+      CONTACT.socials.instagram,
+      CONTACT.socials.tiktok,
+      CONTACT.socials.google,
+    ],
+    areaServed: "Glen Burnie, Pasadena, Severn, Hanover, Baltimore, Annapolis, and surrounding Anne Arundel County areas",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.doussouqualitybraiding.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Services & Pricing",
+        item: CANONICAL,
+      },
+    ],
   },
 ];
 
@@ -533,8 +575,13 @@ export const Route = createFileRoute("/services")({
       },
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
+      { property: "og:url", content: CANONICAL },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: PAGE_TITLE },
+      { name: "twitter:description", content: PAGE_DESCRIPTION },
     ],
+    links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       {
         type: "application/ld+json",
@@ -552,6 +599,16 @@ function ServicesPage() {
   // State for the Transparent Upfront Pricing / Salon Price List Table
   const [priceSearchQuery, setPriceSearchQuery] = useState("");
   const [priceCategory, setPriceCategory] = useState<string>("All");
+
+  // Booking Modal State with Auto-Selected Service
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
+  const [selectedServiceForModal, setSelectedServiceForModal] =
+    useState<SelectedServiceData | null>(null);
+
+  const handleOpenBookingModal = (service?: SelectedServiceData) => {
+    setSelectedServiceForModal(service || null);
+    setBookingModalOpen(true);
+  };
 
   const filteredServices = useMemo(() => {
     return ALL_SERVICES.filter((item) => {
@@ -662,9 +719,10 @@ function ServicesPage() {
                 </div>
               </a>
 
-              <Link
-                to="/booking"
-                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-[#E8DFC8] shadow-xs transition-all hover:border-[#16857B] hover:shadow-md hover:-translate-y-1"
+              <button
+                type="button"
+                onClick={() => handleOpenBookingModal()}
+                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-[#E8DFC8] shadow-xs transition-all hover:border-[#16857B] hover:shadow-md hover:-translate-y-1 text-left cursor-pointer"
               >
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#16857B]/15 text-[#16857B]">
                   <Calendar size={20} />
@@ -675,7 +733,7 @@ function ServicesPage() {
                   </h2>
                   <p className="text-[11px] text-[#8C7A6B]">Instant Appointment Slots</p>
                 </div>
-              </Link>
+              </button>
 
               <a
                 href={CONTACT.phoneHref}
@@ -784,6 +842,42 @@ function ServicesPage() {
                 })}
               </div>
 
+              {/* Dedicated Glen Burnie Landing Pages Navigation */}
+              <div className="pt-2 text-center">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500 block mb-2">
+                  Explore Dedicated Style Guides &amp; Glen Burnie Landing Pages:
+                </span>
+                <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+                  <Link to="/knotless-braids-glen-burnie-md" className="text-xs bg-[#FAF5ED] hover:bg-[#EADFCB] text-[#4A1525] px-3 py-1 rounded-full border border-[#EADFCB] font-medium transition-colors">
+                    Knotless Braids
+                  </Link>
+                  <Link to="/box-braids-glen-burnie-md" className="text-xs bg-[#FAF5ED] hover:bg-[#EADFCB] text-[#4A1525] px-3 py-1 rounded-full border border-[#EADFCB] font-medium transition-colors">
+                    Box Braids
+                  </Link>
+                  <Link to="/cornrows-glen-burnie-md" className="text-xs bg-[#FAF5ED] hover:bg-[#EADFCB] text-[#4A1525] px-3 py-1 rounded-full border border-[#EADFCB] font-medium transition-colors">
+                    Feed-In Cornrows
+                  </Link>
+                  <Link to="/senegalese-twists-glen-burnie-md" className="text-xs bg-[#FAF5ED] hover:bg-[#EADFCB] text-[#4A1525] px-3 py-1 rounded-full border border-[#EADFCB] font-medium transition-colors">
+                    Senegalese Twists
+                  </Link>
+                  <Link to="/faux-locs-glen-burnie-md" className="text-xs bg-[#FAF5ED] hover:bg-[#EADFCB] text-[#4A1525] px-3 py-1 rounded-full border border-[#EADFCB] font-medium transition-colors">
+                    Faux &amp; Soft Locs
+                  </Link>
+                  <Link to="/kids-hair-braiding-glen-burnie-md" className="text-xs bg-[#FAF5ED] hover:bg-[#EADFCB] text-[#4A1525] px-3 py-1 rounded-full border border-[#EADFCB] font-medium transition-colors">
+                    Kids Braiding
+                  </Link>
+                  <Link to="/loc-maintenance-glen-burnie-md" className="text-xs bg-[#FAF5ED] hover:bg-[#EADFCB] text-[#4A1525] px-3 py-1 rounded-full border border-[#EADFCB] font-medium transition-colors">
+                    Loc Maintenance
+                  </Link>
+                  <Link to="/natural-hair-styling-glen-burnie-md" className="text-xs bg-[#FAF5ED] hover:bg-[#EADFCB] text-[#4A1525] px-3 py-1 rounded-full border border-[#EADFCB] font-medium transition-colors">
+                    Natural Hair Care
+                  </Link>
+                  <Link to="/braiding-guide-glen-burnie-md" className="text-xs bg-[#BA1296]/10 hover:bg-[#BA1296]/20 text-[#BA1296] px-3 py-1 rounded-full border border-[#BA1296]/30 font-semibold transition-colors">
+                    ★ Braiding &amp; Prep Guide
+                  </Link>
+                </div>
+              </div>
+
               {/* Filter info indicator */}
               <div className="flex items-center justify-between text-xs text-neutral-500 px-1 font-['Inter',sans-serif]">
                 <span>
@@ -852,13 +946,23 @@ function ServicesPage() {
                       <span className="text-xs font-semibold text-purple-100 font-['Inter',sans-serif]">
                         {service.price}
                       </span>
-                      <a
-                        href="#booking"
-                        className="inline-flex items-center gap-1 rounded-full bg-white text-[#8E1077] px-3.5 py-1 text-xs font-bold transition-transform hover:scale-105 active:scale-95 shadow-xs font-['Inter',sans-serif]"
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleOpenBookingModal({
+                            name: service.name,
+                            price: service.price,
+                            category: service.category,
+                            image: service.image,
+                            blurb: service.blurb,
+                            tag: service.tag,
+                          })
+                        }
+                        className="inline-flex items-center gap-1 rounded-full bg-white text-[#8E1077] px-3.5 py-1 text-xs font-bold transition-transform hover:scale-105 active:scale-95 shadow-xs font-['Inter',sans-serif] cursor-pointer"
                       >
                         <span>Book Style</span>
                         <ChevronRight size={13} />
-                      </a>
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -1033,16 +1137,24 @@ function ServicesPage() {
                               >
                                 {item.price}
                               </span>
-                              <a
-                                href="#booking"
-                                className={`inline-flex items-center justify-center rounded-lg px-3 py-1 text-xs font-bold transition-all active:scale-95 ${
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleOpenBookingModal({
+                                    name: item.name,
+                                    price: item.price,
+                                    category: item.category,
+                                    blurb: item.note,
+                                  })
+                                }
+                                className={`inline-flex items-center justify-center rounded-lg px-3 py-1 text-xs font-bold transition-all active:scale-95 cursor-pointer ${
                                   item.highlighted
                                     ? "bg-white/20 hover:bg-white hover:text-[#4A0A4B] text-white"
                                     : "bg-white/10 hover:bg-white hover:text-[#4A0A4B] text-white"
                                 }`}
                               >
                                 Book
-                              </a>
+                              </button>
                             </div>
                           </div>
                         ))}
@@ -1093,16 +1205,24 @@ function ServicesPage() {
                               >
                                 {item.price}
                               </span>
-                              <a
-                                href="#booking"
-                                className={`inline-flex items-center justify-center rounded-lg px-3 py-1 text-xs font-bold transition-all active:scale-95 ${
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleOpenBookingModal({
+                                    name: item.name,
+                                    price: item.price,
+                                    category: item.category,
+                                    blurb: item.note,
+                                  })
+                                }
+                                className={`inline-flex items-center justify-center rounded-lg px-3 py-1 text-xs font-bold transition-all active:scale-95 cursor-pointer ${
                                   item.highlighted
                                     ? "bg-white/20 hover:bg-white hover:text-[#4A0A4B] text-white"
                                     : "bg-white/10 hover:bg-white hover:text-[#4A0A4B] text-white"
                                 }`}
                               >
                                 Book
-                              </a>
+                              </button>
                             </div>
                           </div>
                         ))}
@@ -1153,10 +1273,17 @@ function ServicesPage() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
                   {EXAMPLES_SHOWCASE.map((ex) => (
-                    <a
+                    <button
                       key={ex.name}
-                      href="#booking"
-                      className="group flex flex-col items-center text-center p-2.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-purple-400/50 hover:bg-white/[0.08] transition-all hover:-translate-y-1"
+                      type="button"
+                      onClick={() =>
+                        handleOpenBookingModal({
+                          name: ex.name,
+                          price: ex.price,
+                          image: ex.image,
+                        })
+                      }
+                      className="group flex flex-col items-center text-center p-2.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-purple-400/50 hover:bg-white/[0.08] transition-all hover:-translate-y-1 cursor-pointer"
                     >
                       <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-purple-400/40 group-hover:border-[#F7D272] transition-colors shadow-md">
                         <img
@@ -1171,7 +1298,7 @@ function ServicesPage() {
                       <span className="text-[10px] font-semibold text-[#FDE047]">
                         {ex.price}
                       </span>
-                    </a>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -1366,13 +1493,14 @@ function ServicesPage() {
               </p>
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                <a
-                  href="#booking"
-                  className="inline-flex items-center gap-2 rounded-full bg-white text-[#5C105E] px-8 py-3.5 text-sm font-bold shadow-xl transition-all duration-200 hover:bg-neutral-100 hover:scale-105 active:scale-95"
+                <button
+                  type="button"
+                  onClick={() => handleOpenBookingModal()}
+                  className="inline-flex items-center gap-2 rounded-full bg-white text-[#5C105E] px-8 py-3.5 text-sm font-bold shadow-xl transition-all duration-200 hover:bg-neutral-100 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   <Calendar size={17} />
                   <span>Book Appointment Online</span>
-                </a>
+                </button>
                 <a
                   href={CONTACT.phoneHref}
                   className="inline-flex items-center gap-2 rounded-full bg-white/10 px-7 py-3.5 text-sm font-bold text-white border border-white/30 backdrop-blur-md transition-all duration-200 hover:bg-white/20 hover:scale-105 active:scale-95"
@@ -1396,13 +1524,21 @@ function ServicesPage() {
       <Footer />
 
       {/* Mobile Sticky Booking CTA Button */}
-      <a
-        href="#booking"
-        className="fixed inset-x-4 bottom-4 z-40 flex items-center justify-center gap-2 rounded-xl bg-[#A81286] px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-white shadow-2xl transition-transform active:scale-95 lg:hidden font-['Inter',sans-serif]"
+      <button
+        type="button"
+        onClick={() => handleOpenBookingModal()}
+        className="fixed inset-x-4 bottom-4 z-40 flex items-center justify-center gap-2 rounded-xl bg-[#A81286] px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-white shadow-2xl transition-transform active:scale-95 lg:hidden font-['Inter',sans-serif] cursor-pointer"
       >
         <Calendar size={16} />
         <span>Book Appointment</span>
-      </a>
+      </button>
+
+      {/* Interactive Booking Modal with Auto-Selected Service */}
+      <ServiceBookingModal
+        isOpen={bookingModalOpen}
+        onClose={() => setBookingModalOpen(false)}
+        service={selectedServiceForModal}
+      />
     </div>
   );
 }

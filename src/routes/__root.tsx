@@ -82,9 +82,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Doussou Quality Braiding - Premier African hair braiding studio located at 337 S Hospital Dr, Glen Burnie, MD 21061.",
+          "Doussou Quality Braiding - Premier African hair braiding studio located at 337 S Hospital Dr, Glen Burnie, MD 21061. Authentic knotless braids, box braids, cornrows, locs, and natural styling.",
       },
       { name: "author", content: "Doussou Quality Braiding" },
+      { name: "geo.region", content: "US-MD" },
+      { name: "geo.placename", content: "Glen Burnie, Maryland" },
+      { name: "geo.position", content: "39.1557;-76.6267" },
+      { name: "ICBM", content: "39.1557, -76.6267" },
+      {
+        property: "og:site_name",
+        content: "Doussou Quality Braiding",
+      },
+      { property: "og:locale", content: "en_US" },
       {
         property: "og:title",
         content: "Doussou Quality Braiding | Premier Hair Braiding, Glen Burnie MD",
@@ -92,10 +101,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Doussou Quality Braiding - Premier African hair braiding studio located at 337 S Hospital Dr, Glen Burnie, MD 21061.",
+          "Premier African hair braiding studio in Glen Burnie, MD. Specializing in knotless braids, box braids, feed-in cornrows, twists, and loc maintenance with scalp care.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://www.doussouqualitybraiding.com/og-image.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:title",
+        content: "Doussou Quality Braiding | Glen Burnie, MD",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Premier African hair braiding studio in Glen Burnie, MD. Master stylists crafting knotless braids, box braids, and protective styles.",
+      },
+      { name: "twitter:image", content: "https://www.doussouqualitybraiding.com/og-image.jpg" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -112,7 +132,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: logo, type: "image/png" },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "icon", href: "/fav.png", type: "image/png", sizes: "512x512" },
+      { rel: "icon", href: "/fav-192x192.png", type: "image/png", sizes: "192x192" },
+      { rel: "icon", href: "/fav-96x96.png", type: "image/png", sizes: "96x96" },
+      { rel: "icon", href: "/fav-48x48.png", type: "image/png", sizes: "48x48" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
+      { rel: "manifest", href: "/site.webmanifest" },
     ],
   }),
   shellComponent: RootShell,

@@ -14,19 +14,23 @@ import { BookingForm } from "@/components/site/BookingForm";
 import { Footer } from "@/components/site/Footer";
 import { CONTACT, FAQS } from "@/components/site/data";
 
-const TITLE = "Doussou Quality Braiding | Hair Braiding Salon in Glen Burnie, MD";
+const TITLE = "Doussou Quality Braiding | African Hair Braiding Salon in Glen Burnie, MD";
 const DESCRIPTION =
-  "Doussou Quality Braiding - Premier African hair braiding studio located at 337 S Hospital Dr, Glen Burnie, MD 21061. Knotless braids, box braids, cornrows, locs and natural styling. Book today.";
+  "Premier African hair braiding salon in Glen Burnie, MD at 337 S Hospital Dr. Expert knotless braids, box braids, cornrows, twists & locs with tension-free scalp care. Walk-ins welcome & online booking.";
+const CANONICAL = "https://www.doussouqualitybraiding.com/";
 
 const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
+    "@id": "https://www.doussouqualitybraiding.com/#salon",
     name: "Doussou Quality Braiding",
+    url: CANONICAL,
     description: DESCRIPTION,
     telephone: CONTACT?.phone ?? "(301) 523-8593",
     email: CONTACT?.email ?? "doussoukabba@gmail.com",
     priceRange: "$$",
+    image: "https://www.doussouqualitybraiding.com/og-image.jpg",
     address: {
       "@type": "PostalAddress",
       streetAddress: "337 S Hospital Dr",
@@ -35,28 +39,127 @@ const getSchema = () => [
       postalCode: "21061",
       addressCountry: "US",
     },
-    areaServed: "Glen Burnie, Maryland",
-    openingHours: ["Mo-Fr 08:00-19:00", "Sa 08:00-18:00"],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5",
-      reviewCount: "142",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 39.1557,
+      longitude: -76.6267,
     },
+    areaServed: [
+      { "@type": "City", name: "Glen Burnie" },
+      { "@type": "City", name: "Pasadena" },
+      { "@type": "City", name: "Severn" },
+      { "@type": "City", name: "Hanover" },
+      { "@type": "City", name: "Baltimore" },
+      { "@type": "City", name: "Annapolis" },
+      { "@type": "AdministrativeArea", name: "Anne Arundel County" },
+    ],
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "09:30",
+        closes: "20:30",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Sunday"],
+        opens: "10:00",
+        closes: "17:00",
+        description: "By appointment only",
+      },
+    ],
+    sameAs: [
+      CONTACT.socials.facebook,
+      CONTACT.socials.instagram,
+      CONTACT.socials.tiktok,
+      CONTACT.socials.google,
+    ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Braiding Services",
+      name: "African Hair Braiding & Protective Styling Services",
       itemListElement: [
-        "Knotless Braiding",
-        "Box Braids",
-        "Cornrow Braiding",
-        "Locs & Extensions",
-        "Natural Hair Styling",
-        "Wash & Treatments",
-      ].map((name) => ({
-        "@type": "Offer",
-        itemOffered: { "@type": "Service", name, areaServed: "Glen Burnie, MD" },
-      })),
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Knotless Braids Glen Burnie MD",
+            url: "https://www.doussouqualitybraiding.com/knotless-braids-glen-burnie-md",
+            description: "Featherlight, tension-free knotless braids with natural scalp parting.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Box Braids Glen Burnie MD",
+            url: "https://www.doussouqualitybraiding.com/box-braids-glen-burnie-md",
+            description: "Classic and versatile box braids in small, medium, and large parts.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Cornrows & Stitch Braids Glen Burnie MD",
+            url: "https://www.doussouqualitybraiding.com/cornrows-glen-burnie-md",
+            description: "Precision feed-in cornrows and stitch patterns for women, men, and teens.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Senegalese Twists Maryland",
+            url: "https://www.doussouqualitybraiding.com/senegalese-twists-glen-burnie-md",
+            description: "Smooth, lustrous rope twists crafted with silky extensions.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Faux Locs & Soft Locs",
+            url: "https://www.doussouqualitybraiding.com/faux-locs-glen-burnie-md",
+            description: "Bohemian faux locs and butterfly locs installed without heavy weight.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Kids Hair Braiding Glen Burnie",
+            url: "https://www.doussouqualitybraiding.com/kids-hair-braiding-glen-burnie-md",
+            description: "Gentle, patient, pain-free braiding with colorful beads for children.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Loc Maintenance & Retwist",
+            url: "https://www.doussouqualitybraiding.com/loc-maintenance-glen-burnie-md",
+            description: "Palm rolling, interlocking, and starter loc establishment.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Natural Hair Styling & Scalp Care",
+            url: "https://www.doussouqualitybraiding.com/natural-hair-styling-glen-burnie-md",
+            description: "Deep conditioning, natural twists, wash and takedown services.",
+          },
+        },
+      ],
     },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://www.doussouqualitybraiding.com/#website",
+    url: CANONICAL,
+    name: "Doussou Quality Braiding",
+    description: DESCRIPTION,
   },
   {
     "@context": "https://schema.org",
@@ -81,10 +184,13 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
+      { property: "og:url", content: CANONICAL },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       {
         type: "application/ld+json",

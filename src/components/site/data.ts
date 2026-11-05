@@ -12,19 +12,36 @@ export const CONTACT = {
   phone: "(301) 523-8593",
   phoneHref: "tel:+13015238593",
   email: "doussoukabba@gmail.com",
+  website: "https://www.doussouqualitybraiding.com",
   city: "Glen Burnie, Maryland",
+  state: "MD",
+  zip: "21061",
   address: "337 S Hospital Dr, Glen Burnie, MD 21061",
   fullAddress: "337 S Hospital Dr, Glen Burnie, MD, United States, 21061",
+  geo: {
+    latitude: 39.1557,
+    longitude: -76.6267,
+  },
+  serviceAreas: [
+    "Glen Burnie, MD",
+    "Pasadena, MD",
+    "Severn, MD",
+    "Hanover, MD",
+    "Linthicum Heights, MD",
+    "Millersville, MD",
+    "Baltimore, MD",
+    "Annapolis, MD",
+    "Anne Arundel County, MD",
+  ],
   socials: {
-    facebook: "https://www.facebook.com/p/Doussou-Quality-Braiding-100041383156533/",
-    tiktok: "https://www.tiktok.com/@doussouqualitybraiding?fbclid=IwY2xjawTnBtBwZG9mAWV4dG4DYWVtAjEwAGJyaWQRMXRJWGdqTW12T3ZjblNQR1hzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeQusziexbcwUTQWD6YydsYPmzILZGXItpqqrv24ZQtDQOpQgbTLvIzJE9SrU_aem_khCs1tcq7VDD1U9k5DWbNg",
-    instagram: "https://www.instagram.com/doussouweb/?hl=en",
+    facebook: "https://www.facebook.com/doussouqualitybraiding",
+    tiktok: "https://www.tiktok.com/@doussouqualitybraiding",
+    instagram: "https://www.instagram.com/doussouweb",
     google: "https://www.google.com/search?q=Doussou+Quality+Braiding&oq=Doussou+Quality+Braiding&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIICAEQRRgnGDsyCAgCEAAYFhgeMg0IAxAAGIYDGIAEGIoFMg0IBBAAGIYDGIAEGIoFMgYIBRBFGDwyBggGEEUYPTIGCAcQRRg80gEHMzM3ajBqN6gCALACAA&sourceid=chrome&source=chrome.ob&ie=UTF-8",
   },
   hours: [
-    { day: "Monday – Friday", time: "8:00 AM – 7:00 PM" },
-    { day: "Saturday", time: "8:00 AM – 6:00 PM" },
-    { day: "Sunday", time: "By appointment" },
+    { day: "Monday – Saturday", time: "9:30 AM – 8:30 PM" },
+    { day: "Sunday", time: "By appointment only" },
   ],
 };
 
@@ -172,26 +189,58 @@ export const REASONS = [
 
 export const TESTIMONIALS = [
   { name: "Amara", stars: 5, quote: "The most comfortable knotless braids I have ever had. Six weeks in and they still look like day one. The team takes real pride in the work." },
-  { name: "Jasmine", stars: 5, quote: "Immaculate parts, zero tension and such a warm space. I drove from Saint Paul and I would happily do it again every month." },
-  { name: "Dee", stars: 5, quote: "She listened to exactly what I wanted, then made it better. My cornrows were flawless for my sister's wedding." },
+  { name: "Jasmine", stars: 5, quote: "Immaculate parts, zero tension and such a warm space. I drove from Baltimore and I would happily do it again every month." },
+  { name: "Dee", stars: 5, quote: "She listened to exactly what I wanted, then made it better. My cornrows were flawless for my sister's wedding in Annapolis." },
   { name: "Nia", stars: 5, quote: "My daughter is nervous about getting her hair done and she was completely at ease. Gentle, patient and beautiful results." },
 ];
 
 export const FAQS = [
   {
     q: "Where is Doussou Quality Braiding located?",
-    a: "Doussou Quality Braiding is located at 337 S Hospital Dr, Glen Burnie, MD 21061, serving Anne Arundel County and the wider Maryland area.",
+    a: "Doussou Quality Braiding is located at 337 S Hospital Dr, Glen Burnie, MD 21061, conveniently situated near Baltimore, Pasadena, Severn, Hanover, and Annapolis.",
   },
   {
-    q: "What braiding services do you offer?",
-    a: "Knotless braids, box braids, cornrows, locs, extensions, natural hair styling, wash and deep conditioning treatments, and special occasion styling.",
+    q: "How do I book an appointment?",
+    a: "You can book directly through our online booking form on this website, click 'Book Style' on any service card, or call our studio directly at (301) 523-8593.",
   },
   {
-    q: "How long do knotless braids last?",
-    a: "With proper aftercare, knotless braids typically last six to eight weeks. We include personalised aftercare guidance with every appointment.",
+    q: "Does the salon offer knotless braids?",
+    a: "Yes! Knotless braids are our signature specialty. We offer Bohemian Knotless, Goddess Knotless, Small, Medium, Large, and various lengths from shoulder to waist-length, installed with zero scalp tension.",
   },
   {
-    q: "Do I need an appointment?",
-    a: "Yes, appointments are recommended. Submit the booking request form or call the studio and we will confirm your preferred date and time.",
+    q: "How much do box braids and knotless braids cost?",
+    a: "Box braids start from $200–$250 depending on size and length. Knotless braids start from $180 to $250. We provide 100% upfront quotes with no hidden chair fees.",
+  },
+  {
+    q: "Does the salon braid children's hair?",
+    a: "Yes! We specialize in gentle, patient kids' braiding starting from $65. We offer pain-free parting with colorful beads, cuffs, and kid-friendly protective styles.",
+  },
+  {
+    q: "What types of protective hairstyles are available?",
+    a: "We offer knotless braids, traditional box braids, stitch cornrows, feed-in braids, Senegalese rope twists, kinky twists, faux locs, soft locs, crochet installs, sew-in extensions, wig installs, and loc retwists.",
+  },
+  {
+    q: "Do I need to bring my own braiding hair?",
+    a: "Standard pre-stretched synthetic braiding hair extensions are included with our full braiding services. If you require specialty colors, human hair curls, or specific custom textures, you may also bring your own.",
+  },
+  {
+    q: "How long does a knotless braiding appointment take?",
+    a: "Depending on your selected size and length, appointments typically take 3 to 7 hours. Our experienced braiders work efficiently with precise, clean parting to ensure your maximum comfort.",
+  },
+  {
+    q: "Does the salon accept walk-ins?",
+    a: "Yes! While advance appointments are recommended, walk-ins and same-day requests are warmly welcomed based on daily chair availability. Please call (301) 523-8593 before heading over to confirm same-day openings.",
+  },
+  {
+    q: "What are the salon's business hours?",
+    a: "We are open Monday through Saturday from 9:30 AM to 8:30 PM. Sunday appointments are available upon advance request.",
+  },
+  {
+    q: "How should I prepare my hair before my appointment?",
+    a: "Please arrive with your hair thoroughly washed, conditioned, detangled, and blown out straight from root to tip, free of heavy oils or butters so we can achieve clean, precise parts.",
+  },
+  {
+    q: "Does the salon offer loc maintenance?",
+    a: "Yes, we provide full loc care including starter locs ($85–$120), loc retwisting & maintenance ($80–$100), interlocking ($300+), and loc extensions ($200–$300).",
   },
 ];

@@ -20,6 +20,7 @@ import {
   Search,
   Instagram,
   Facebook,
+  Music2,
   ExternalLink,
   ThumbsUp,
   Share2,
@@ -41,17 +42,21 @@ import knotlessImg from "@/assets/style-knotless.jpg";
 import boxbraidsImg from "@/assets/style-boxbraids.jpg";
 import cornrowsImg from "@/assets/style-cornrows.jpg";
 
-const PAGE_TITLE = "Client Reviews | What Our Clients Say About Doussou Quality Braiding";
+const PAGE_TITLE = "Client Reviews & Testimonials | Doussou Quality Braiding Glen Burnie MD";
 const PAGE_DESCRIPTION =
-  "Read authentic reviews from 3,000+ happy clients at Doussou Quality Braiding in Glen Burnie, MD. See why we're rated 5.0 stars for our knotless braids, cornrows, and protective styles.";
+  "Read genuine client testimonials for Doussou Quality Braiding in Glen Burnie, MD. Highly rated for knotless braids, feed-in cornrows, Senegalese twists, and tension-free scalp care.";
+const CANONICAL = "https://www.doussouqualitybraiding.com/reviews";
 
 const getSchema = () => [
   {
     "@context": "https://schema.org",
     "@type": "HairSalon",
+    "@id": "https://www.doussouqualitybraiding.com/#salon",
     name: "Doussou Quality Braiding",
+    url: CANONICAL,
     description: PAGE_DESCRIPTION,
     telephone: CONTACT?.phone ?? "(301) 523-8593",
+    email: CONTACT?.email ?? "doussoukabba@gmail.com",
     address: {
       "@type": "PostalAddress",
       streetAddress: "337 S Hospital Dr",
@@ -60,13 +65,37 @@ const getSchema = () => [
       postalCode: "21061",
       addressCountry: "US",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5.0",
-      bestRating: "5",
-      ratingCount: "142",
-      reviewCount: "142",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 39.1557,
+      longitude: -76.6267,
     },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "09:30",
+        closes: "20:30",
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.doussouqualitybraiding.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Client Reviews",
+        item: CANONICAL,
+      },
+    ],
   },
 ];
 
@@ -383,10 +412,13 @@ export const Route = createFileRoute("/reviews")({
       },
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
+      { property: "og:url", content: CANONICAL },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: PAGE_TITLE },
+      { name: "twitter:description", content: PAGE_DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/reviews" }],
+    links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       {
         type: "application/ld+json",
@@ -454,25 +486,25 @@ function ReviewsPage() {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#C48D46]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[#C48D46] border border-[#C48D46]/30 mb-5 shadow-xs">
                   <Star size={13} fill="currentColor" className="text-[#C48D46]" />
-                  <span>5.0 Star Rated Salon • 3,000+ Happy Clients</span>
+                  <span>Top-Rated African Braiding Studio • Glen Burnie, MD</span>
                 </div>
 
                 <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.6rem] font-normal leading-[1.12] tracking-tight text-[#2B231D]">
-                  Trusted by Women{" "}
+                  Trusted by Clients{" "}
                   <span className="font-serif italic text-[#C48D46] block sm:inline">
                     Who Love Their Style
                   </span>
                 </h1>
 
                 <p className="mt-5 text-lg sm:text-xl font-serif italic text-[#2B231D] leading-relaxed">
-                  Real reviews from real clients. Discover why Doussou Quality Braiding is the
-                  premier choice for protective styling in Glen Burnie, Maryland.
+                  Real reviews from real clients. Discover why Doussou Quality Braiding is a
+                  trusted choice for protective styling in Glen Burnie, Maryland.
                 </p>
 
                 <p className="mt-4 text-sm sm:text-base text-[#5C5046] font-medium leading-relaxed max-w-xl">
                   Every braid, twist, and loc is delivered with gentle tension, precision parting,
                   and an unwavering commitment to hair health. Read authentic testimonials from our
-                  cherished clients across Maryland, Washington D.C., and beyond.
+                  clients across Glen Burnie, Baltimore, Annapolis, and surrounding areas.
                 </p>
 
                 {/* Metric Summary Bar */}
@@ -482,31 +514,31 @@ function ReviewsPage() {
                       5.0 ★
                     </p>
                     <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-[#2B231D]">
-                      Average Rating
+                      Client Feedback
                     </p>
                   </div>
                   <div className="rounded-2xl bg-white p-4 border border-[#E8DFC8] shadow-xs">
                     <p className="text-2xl sm:text-3xl font-display font-bold text-[#BA1296]">
-                      100+
+                      Google
                     </p>
                     <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-[#2B231D]">
-                      Google Reviews
+                      Verified Reviews
                     </p>
                   </div>
                   <div className="rounded-2xl bg-white p-4 border border-[#E8DFC8] shadow-xs">
                     <p className="text-2xl sm:text-3xl font-display font-bold text-[#16857B]">
-                      3,000+
+                      100%
                     </p>
                     <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-[#2B231D]">
-                      Clients Served
+                      Scalp Comfort Focus
                     </p>
                   </div>
                   <div className="rounded-2xl bg-white p-4 border border-[#E8DFC8] shadow-xs">
                     <p className="text-2xl sm:text-3xl font-display font-bold text-[#2B231D]">
-                      6+ Yrs
+                      Glen Burnie
                     </p>
                     <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-[#2B231D]">
-                      Glen Burnie Studio
+                      Studio Location
                     </p>
                   </div>
                 </div>
@@ -888,7 +920,7 @@ function ReviewsPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-[#C48D46] font-bold">•</span>
-                      <span>📍 Tag <strong>@DoussouQualityBraiding</strong> or use <strong>#DoussouBraids</strong></span>
+                      <span>📍 Tag <strong>@doussouweb</strong> or use <strong>#DoussouBraids</strong></span>
                     </li>
                   </ul>
                 </div>
@@ -958,11 +990,34 @@ function ReviewsPage() {
                         Tag Us on Instagram
                       </h4>
                       <p className="text-xs text-[#8C7A6B]">
-                        Post your hairstyle and tag @DoussouQualityBraiding
+                        Post your hairstyle and tag @doussouweb
                       </p>
                     </div>
                   </div>
                   <ExternalLink size={18} className="text-[#8C7A6B] group-hover:text-[#16857B]" />
+                </a>
+
+                {/* TikTok Card */}
+                <a
+                  href={CONTACT.socials.tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between p-6 rounded-2xl bg-white border border-[#E8DFC8] shadow-xs transition-all duration-300 hover:border-[#111111] hover:shadow-md hover:-translate-y-1"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#111111]/10 text-[#111111]">
+                      <Music2 size={22} />
+                    </div>
+                    <div>
+                      <h4 className="font-display text-xl font-bold text-[#2B231D]">
+                        Watch on TikTok
+                      </h4>
+                      <p className="text-xs text-[#8C7A6B]">
+                        Follow transformations @doussouqualitybraiding
+                      </p>
+                    </div>
+                  </div>
+                  <ExternalLink size={18} className="text-[#8C7A6B] group-hover:text-[#111111]" />
                 </a>
               </div>
             </div>

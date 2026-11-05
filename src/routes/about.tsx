@@ -37,7 +37,8 @@ import kidsImg from "@/assets/style-kids.jpg";
 
 const PAGE_TITLE = "About Doussou Quality Braiding | Premier Braiding Studio in Glen Burnie, MD";
 const PAGE_DESCRIPTION =
-  "Learn the story behind Doussou Quality Braiding in Glen Burnie, MD. Discover our 6-year journey of mastering protective styles, our commitment to hair health, and why we are a top-rated salon.";
+  "Learn the story behind Doussou Quality Braiding in Glen Burnie, MD. Discover our journey of mastering protective styles, our commitment to hair health, and why we are a top-rated salon.";
+const CANONICAL = "https://www.doussouqualitybraiding.com/about";
 
 const getSchema = () => [
   {
@@ -45,6 +46,7 @@ const getSchema = () => [
     "@type": "AboutPage",
     name: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
+    url: CANONICAL,
     mainEntity: {
       "@type": "HairSalon",
       name: "Doussou Quality Braiding",
@@ -60,14 +62,45 @@ const getSchema = () => [
         postalCode: "21061",
         addressCountry: "US",
       },
-      areaServed: "Glen Burnie, Maryland",
-      openingHours: ["Mo-Fr 08:00-19:00", "Sa 08:00-18:00"],
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "5.0",
-        reviewCount: "142",
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 39.1557,
+        longitude: -76.6267,
       },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          opens: "09:30",
+          closes: "20:30",
+        },
+      ],
+      sameAs: [
+        CONTACT.socials.facebook,
+        CONTACT.socials.instagram,
+        CONTACT.socials.tiktok,
+        CONTACT.socials.google,
+      ],
+      areaServed: "Glen Burnie, Maryland",
     },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.doussouqualitybraiding.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "About Us",
+        item: CANONICAL,
+      },
+    ],
   },
 ];
 
@@ -166,10 +199,13 @@ export const Route = createFileRoute("/about")({
       },
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
+      { property: "og:url", content: CANONICAL },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: PAGE_TITLE },
+      { name: "twitter:description", content: PAGE_DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       {
         type: "application/ld+json",

@@ -36,22 +36,22 @@ export function Services() {
         <div className="mb-12">
           <div className="flex flex-wrap justify-center gap-3">
             {[
-              "Knotless Braids",
-              "Box Braids",
-              "Feed-In Cornrows",
-              "Faux Locs",
-              "Twist-Outs",
-              "Scalp Treatments",
-              "Kids Braiding",
-              "Special Occasion Updos",
-            ].map((tag) => (
-              <a
-                key={tag}
-                href="#booking"
+              { label: "Knotless Braids", href: "/knotless-braids-glen-burnie-md" },
+              { label: "Box Braids", href: "/box-braids-glen-burnie-md" },
+              { label: "Feed-In Cornrows", href: "/cornrows-glen-burnie-md" },
+              { label: "Senegalese Twists", href: "/senegalese-twists-glen-burnie-md" },
+              { label: "Faux & Soft Locs", href: "/faux-locs-glen-burnie-md" },
+              { label: "Kids Braiding", href: "/kids-hair-braiding-glen-burnie-md" },
+              { label: "Loc Maintenance", href: "/loc-maintenance-glen-burnie-md" },
+              { label: "Natural Hair Styling", href: "/natural-hair-styling-glen-burnie-md" },
+            ].map((chip) => (
+              <Link
+                key={chip.label}
+                to={chip.href}
                 className="rounded-full bg-white border border-[#E8DFC8] px-4 py-2 text-xs font-semibold text-[#2B231D] shadow-2xs transition-all hover:bg-[#C48D46] hover:text-white hover:border-[#C48D46] hover:scale-105"
               >
-                {tag}
-              </a>
+                {chip.label}
+              </Link>
             ))}
           </div>
         </div>

@@ -64,9 +64,10 @@ import img6703 from "@/assets/gallery/6703.jpg";
 import imgSec1 from "@/assets/gallery/Sec1.png";
 import imgEstimateBg from "@/assets/gallery/Estimate-bg.png";
 
-const PAGE_TITLE = "Style Gallery | Doussou Quality Braiding — Glen Burnie, MD";
+const PAGE_TITLE = "Hair Braiding Style Gallery | Doussou Quality Braiding Glen Burnie MD";
 const PAGE_DESCRIPTION =
-  "Explore our portfolio of over 30 authentic hair braiding and protective styling transformations. Knotless braids, stitch cornrows, faux locs, men's braids, and twists crafted with care in Glen Burnie, MD.";
+  "Explore authentic hair braiding photographs from Doussou Quality Braiding in Glen Burnie, MD. Knotless braids, feed-in cornrows, Senegalese twists, faux locs, and children's styles.";
+const CANONICAL = "https://www.doussouqualitybraiding.com/gallery";
 
 const getSchema = () => [
   {
@@ -74,8 +75,10 @@ const getSchema = () => [
     "@type": "ImageGallery",
     name: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
+    url: CANONICAL,
     provider: {
       "@type": "HairSalon",
+      "@id": "https://www.doussouqualitybraiding.com/#salon",
       name: "Doussou Quality Braiding",
       telephone: CONTACT?.phone ?? "(301) 523-8593",
       email: CONTACT?.email ?? "doussoukabba@gmail.com",
@@ -87,7 +90,30 @@ const getSchema = () => [
         postalCode: "21061",
         addressCountry: "US",
       },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 39.1557,
+        longitude: -76.6267,
+      },
     },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.doussouqualitybraiding.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Style Gallery",
+        item: CANONICAL,
+      },
+    ],
   },
 ];
 
@@ -490,8 +516,13 @@ export const Route = createFileRoute("/gallery")({
       },
       { property: "og:title", content: PAGE_TITLE },
       { property: "og:description", content: PAGE_DESCRIPTION },
+      { property: "og:url", content: CANONICAL },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: PAGE_TITLE },
+      { name: "twitter:description", content: PAGE_DESCRIPTION },
     ],
+    links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
       {
         type: "application/ld+json",
